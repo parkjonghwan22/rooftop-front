@@ -10,9 +10,9 @@ export const useMarket = () => {
         const fetchMarket = async () => {
             const network = 'http://localhost:8545';
             const provider = new ethers.JsonRpcProvider(network);
-            const marketAddress = '0x21da33ca000f6E0CC2Aa9528Bf39512058B4BeA6'
+            const marketAddress = '0x1D4A5bfE57d8028575D6937B1bf3356B2395b644'
 
-            const privateKey = '0xd63d1be500e3d4ef49a6473a22b69ea6d5f4203b1af086a3a6e5eb52e2ad3538';
+            const privateKey = '0x2603fefd91a89b8724b732029bc2b6c271481a200868e39d6a1cfe604b820c49';
             const wallet = new ethers.Wallet(privateKey, provider);
 
             const marketInstance = new ethers.Contract(marketAddress, MarketABI.abi, wallet)
