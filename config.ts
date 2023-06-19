@@ -1,6 +1,6 @@
 const config = {
     PT: 'http',
-    HOST: '127.0.0.1',
+    HOST: 'localhost',
     PORT: 3000,
     BACKEND_PORT: 3005,
     IMG_PORT: 3005,

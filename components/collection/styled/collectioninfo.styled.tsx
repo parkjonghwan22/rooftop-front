@@ -1,3 +1,5 @@
+import Image from "next/image";
+import Link from "next/link";
 import tw from "tailwind-styled-components"
 import { useWindowSize } from "@utils/hooks/useWindowSize"; 
 import { Icon } from '@iconify/react';
@@ -10,10 +12,18 @@ export const SectionA = tw.div`
     flex flex-col px-6
 `
 
-export const Logo = ({ src }: { src: string }) => {
+interface LogoProps {
+    src: string,
+    link: string,
+    collectionAddress: string
+}
+
+export const Logo = ({ src, link, collectionAddress }: LogoProps ) => {
     return (
-        <div className="min-w-40">
-            <img src={src} className="w-40 h-40 rounded-md object-cover" />
+        <div className="min-w-40 cursor-pointer">
+            <Link href={{ pathname: `${link}`, query: { ca: `${collectionAddress}` }}} as={link}>
+                <Image src={src} alt="" width={200} height={200} className="w-40 h-40 rounded-md object-cover" />
+            </Link>
         </div>
     )
 }

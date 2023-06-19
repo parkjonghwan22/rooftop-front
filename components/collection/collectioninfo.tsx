@@ -37,7 +37,7 @@ export const CollectionInfo = ({ address }: { address: string }) => {
         <>
             {collections.map((collection) => (
                 <SectionWrap key={collection.address}>
-                    <Logo src={collection.logo} />
+                    <Logo src={collection.logo} link={collection.url} collectionAddress={collection.address} />
                     <SectionA>
                         <CollectionName name={collection.name} verified={true} />
                         <Description description={collection.description} />
