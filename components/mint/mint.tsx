@@ -58,7 +58,7 @@ export const Mint = ({ collectionAddress, royalty }: MintProps) => {
 
             // const gasPrice = ethers.parseUnits('20000', 'gwei');
             const creatorFee = parseFloat(royalty.replace("%", "")) * 10;
-            const addOnMarket = await market.addNftToMarket(collectionAddress, latestTokenId, 5, metaData, creatorFee)
+            const addOnMarket = await market.addNftToMarket(collectionAddress, latestTokenId, 4, metaData, creatorFee)
             console.log(`addOnMarket::`, addOnMarket)
 
             const getNFTs = await market.getAllTokensInCollection(collectionAddress)

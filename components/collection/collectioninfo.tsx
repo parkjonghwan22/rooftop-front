@@ -20,7 +20,7 @@ export const CollectionInfo = ({ address }: { address: string }) => {
     const getCollections = async () => {
         try {
             const { data } = await request.get(`collection/${address}`);
-            console.log(data);
+            // console.log(data);
             if (data) setCollections(data);
         } catch (error) {
             console.log(error);
