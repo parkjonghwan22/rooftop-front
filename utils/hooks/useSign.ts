@@ -7,6 +7,7 @@ export const useSign = () => {
     const { address, isConnected } = useAccount()
     const [isDefinitelyConnected, setIsDefinitelyConnected] = useState(false);
     const [user, setUser] = useState<UserType | null>(null)
+    const [currentAddress, setCurrentAddress] = useState<`0x${string}` | undefined>()
 
     const getUser = async () => {
         try {
@@ -23,10 +24,11 @@ export const useSign = () => {
         if (isConnected) {
             setIsDefinitelyConnected(true);
             getUser()
+            setCurrentAddress(address)
         } else {
             setIsDefinitelyConnected(false);
         }
     }, [address]);
 
-    return { user }
+    return { user, address: currentAddress }
 }

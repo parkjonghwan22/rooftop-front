@@ -1,10 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from '@components/common/button';
 import { CheckBox } from "@components/common/checkbox/checkbox"
 import { FileInputBox, InputBox, TextArea, InputCheck } from "@components/common/input";
 import { LaunchPadWrapper, FormContainer, SectionTitle, Label } from './styled/launchpad.styled';
 import { useInput } from '@utils/hooks/useInput';
-import { useFactory } from "@utils/hooks/useFactory";
+import { useEthers } from "@utils/hooks/useEthers";
 import request from "@utils/request";
 import { LoadingSpinner } from "@components/common/loading/loading";
 import { Alert } from "@components/common/alert";
@@ -14,7 +14,8 @@ interface LaunchPadProps {
 }
 
 export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
-    const { factory, signer } = useFactory()
+    const { factory, provider, signer } = useEthers()
+
     const [collectionLogo, setCollectionLogo] = useState("");
     const [creatorFee, setCreatorFee] = useState("0%");
     const [isDuplicated, setIsDuplicated] = useState(false);
@@ -52,6 +53,8 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
         try {
             e.preventDefault();
             setIsLoading(true)
+            if (!factory || !signer) return
+
             const factoryTransaction = await factory.getDeployTransaction(collectionName.value, collectionSymbol.value);
             const deployedTransaction = await signer.sendTransaction(factoryTransaction);
             const receipt = await deployedTransaction.wait();
@@ -81,6 +84,14 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
             alert(e);
         }
     }
+
+
+    useEffect(() => {
+        if (signer)
+            console.log(factory, provider, signer)
+
+      }, [factory, provider, signer]);
+    
 
     return (
         <>
