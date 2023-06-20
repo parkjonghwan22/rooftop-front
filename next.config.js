@@ -5,6 +5,6 @@ const nextConfig = {
   images: {
     domains: ['127.0.0.1', 'localhost', 'roof-top.shop', 'i.seadn.io'],
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
