@@ -3,8 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['127.0.0.1', 'localhost', 'roof-top.store'],
+    domains: ["127.0.0.1", "localhost", "roof-top.shop"],
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
