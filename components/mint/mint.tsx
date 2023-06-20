@@ -1,8 +1,7 @@
 import { ethers } from 'ethers'
-import MarketABI from '@contracts/Marketplace.json'
 import TokenABI from '@contracts/RTToken.json';
 import { useMarket } from '@utils/hooks/useMarket'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useEthers } from '@utils/hooks/useEthers';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -13,7 +12,9 @@ interface MintProps {
 }
 
 export const Mint = ({ collectionAddress, royalty }: MintProps) => {
-    const { provider, market, marketAddress } = useMarket()
+
+    const { market } = useMarket()
+    const { signer } = useEthers()
     const [latestTokenId, setLatestTokenId] = useState()
     const [metaData, setMetaData] = useState('')
 
@@ -21,7 +22,8 @@ export const Mint = ({ collectionAddress, royalty }: MintProps) => {
     const success = () => toast.success('Image Uploaded!')
 
     const handleClick = async () => {
-        const signer = await provider.getSigner()
+        if (!signer) return
+
         const instance = await new ethers.Contract(collectionAddress, TokenABI.abi, signer)
         console.log(instance)
         const mintPrice = await instance.mint_price()
@@ -38,22 +40,25 @@ export const Mint = ({ collectionAddress, royalty }: MintProps) => {
         const receipt = await mintTx.wait()
         console.log(receipt)
 
-        const lastTokenId = await instance.getLatestTokenId()
-        console.log(`lastTokenId::`, lastTokenId)
-        if (lastTokenId) setLatestTokenId(lastTokenId)
+        const newTokenId = await instance.getLatestTokenId()
+        console.log(`lastTokenId::`, newTokenId)
 
-        const tokenURI = await instance.tokenURI(lastTokenId)
+        if (newTokenId) setLatestTokenId(newTokenId)
+
+        const tokenURI = await instance.tokenURI(newTokenId)
         setMetaData(tokenURI)
 
-        const ownerOf = await instance.ownerOf(lastTokenId)
+        const ownerOf = await instance.ownerOf(newTokenId)
         console.log(`ownerOf::`, ownerOf)
         console.log(`mintPrice`, mintPrice)
 
-        const approval = await instance.setApprovalForAll(marketAddress, true)
-        console.log(`approval::`, approval)
+        // const approval = await instance.setApprovalForAll(marketAddress, true)
+        // console.log(`approval::`, approval)
     }
 
     const handleClick2 = async () => {
+        if (!latestTokenId) return
+
         try {
             // const gasPrice = ethers.parseUnits('20000', 'gwei');
             const creatorFee = parseFloat(royalty.replace('%', '')) * 10
@@ -83,6 +88,13 @@ export const Mint = ({ collectionAddress, royalty }: MintProps) => {
             console.log(e)
         }
     }
+
+    useEffect(()=> {
+        if (!market) return
+        market.lowestPriceByCollection(collectionAddress).then(console.log).catch(console.log)
+
+        // market.TokenOnSale(1).then(console.log).catch((err : Error)=> console.log(`err:::`, err))
+    }, [market])
 
     return (
         <>
