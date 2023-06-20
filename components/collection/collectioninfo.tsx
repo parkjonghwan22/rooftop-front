@@ -45,7 +45,7 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                     </SectionA>
                 </SectionWrap>
             ))}
-            <Mint collectionAddress={collections[0].address} royalty={collections[0].creatorFee} />
+            {/* <Mint collectionAddress={collections[0].address} royalty={collections[0].creatorFee} /> */}
         </>
     );
 };
