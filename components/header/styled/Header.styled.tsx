@@ -3,17 +3,6 @@ import { StyledOptions, StyledProps } from "@utils/types/style.interface";
 import { Icon } from "@iconify/react";
 import tw from "tailwind-styled-components";
 
-export const HeaderWrap = tw.header`
-    text-gray-500 dark:text-gray-100 body-font dark:bg-gray-900 fixed top-0 left-0 right-0
-`;
-
-export const HeaderContainer = tw.div`
-  container  mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center
-`;
-
-const TitleWrap = tw.div`
-  flex title-font font-medium items-center mb-4 md:mb-0
-`;
 
 const Logo = tw.svg`
   w-10 h-10 text-white p-2 bg-red-500 rounded-full
@@ -21,7 +10,7 @@ const Logo = tw.svg`
 
 export const TitleContainer = () => {
   return (
-    <TitleWrap>
+    <div className="flex items-center">
       <Logo
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -29,66 +18,17 @@ export const TitleContainer = () => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
-        className="w-10 h-10 text-white p-2 bg-red-500 rounded-full"
+        className="w-8 h-8 text-white p-2 bg-red-500 rounded-full"
         viewBox="0 0 24 24"
       >
         <path d="M19 16h3L12 7L2 16h3l7-6.31L19 16M7 8.81V7H4v4.5l3-2.69Z"></path>
       </Logo>
-      <span className="ml-3 text-xl">ROOFTOP</span>
-    </TitleWrap>
+      <span className="pl-2 self-center text-xl font-semibold whitespace-nowrap dark:text-white">ROOFTOP</span>
+    </div>
   );
 };
 
-export const SearchContainer = tw.nav`
-  md:ml-auto mx-auto flex flex-wrap items-center text-base justify-center w-450
-`;
 
-export const SearchBox = () => {
-  return (
-    <>
-      <form className="w-full">
-        <label
-          htmlFor="default-search"
-          className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
-        >
-          Search
-        </label>
-        <div className="relative">
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <svg
-              aria-hidden="true"
-              className="w-5 h-5 text-gray-500 dark:text-gray-400"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              ></path>
-            </svg>
-          </div>
-          <input
-            type="search"
-            id="default-search"
-            className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:outline-none "
-            placeholder="Search items, collections, accounts"
-            required
-          />
-          <button
-            type="submit"
-            className="text-white absolute right-2.5 bottom-2.5 bg-red-500 hover:bg-gray-400 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-500 dark:hover:bg-gray-400 dark:focus:ring-blue-800"
-          >
-            Search
-          </button>
-        </div>
-      </form>
-    </>
-  );
-};
 
 const backgroundColors: StyledOptions = {
   red: "bg-red-500",

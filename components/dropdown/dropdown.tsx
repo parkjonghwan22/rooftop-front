@@ -4,6 +4,8 @@ import { ShowBalance } from "@components/addressInfo";
 import { Icon } from '@iconify/react'
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useDisconnect } from "wagmi";
+import { useRouter } from "next/router";
 
 
 
@@ -32,7 +34,15 @@ interface MenuProps {
 
 
 const DropDownMenu = ({ setIsOpenMenu }: MenuProps) => {
+    const { disconnect } = useDisconnect();
+    const router = useRouter();
+    
     const menuRef = useRef<HTMLDivElement>(null);
+
+    const handleLogout = () => {
+        disconnect()
+        router.push('/');
+    }
 
     useEffect(() => {
         const handleClose = (e: MouseEvent) => {
@@ -66,6 +76,11 @@ const DropDownMenu = ({ setIsOpenMenu }: MenuProps) => {
                     <Link href="/settings" className="flex item-center">
                         <Icon icon="mdi:settings" className="text-lg mr-2" />Settings
                     </Link>
+                </NavLink>
+                <NavLink>
+                    <button className="flex item-center" onClick={handleLogout}>
+                        <Icon icon="akar-icons:link-chain" className="text-lg mr-2" />Disconnect
+                    </button>
                 </NavLink>
             </NavContainer>
             <div className="py-2">

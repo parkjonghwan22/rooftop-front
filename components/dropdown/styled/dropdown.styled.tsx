@@ -6,11 +6,11 @@ export const DropDownWrapper = tw.div`
 `
 
 export const Button = tw.button`
-    flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-500 dark:text-white hover:dark:bg-gray-800 py-1.5 px-1
+    flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-300 dark:text-white hover:dark:bg-gray-700 py-1.5 px-1 transition duration-150 
 `
 
 export const MenuWrapper = tw.div`
-    absolute w-52 translate-y-[3%] translate-x-[-15%] bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-600
+    absolute w-52 translate-y-[4%] translate-x-[-20%] bg-white divide-y divide-gray-100 rounded-lg shadow dark:bg-gray-800 dark:divide-gray-600
 `
 
 export const TopContainer = tw.div`
