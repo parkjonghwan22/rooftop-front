@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import { RootLayout } from "@components/layout/layout"
 import { useEffect } from 'react';
+import { Collection } from '@components/collection/collection';
 
 
 const CollectionPage = () => {
@@ -14,8 +15,7 @@ const CollectionPage = () => {
 
   return (
     <RootLayout>
-        <p>Collection ID, CA: {_id} {ca}</p>
-        {/* 페이지 내용 및 컴포넌트 */}
+        <Collection />
     </RootLayout>
   );
 };

@@ -1,8 +1,9 @@
 import { ethers } from 'ethers'
 import MarketABI from '@contracts/Marketplace.json'
-import TokenABI from '@contracts/LTToken.json'
+import TokenABI from '@contracts/RTToken.json';
 import { useMarket } from '@utils/hooks/useMarket'
 import { useState } from 'react'
+import { useEthers } from '@utils/hooks/useEthers';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -12,9 +13,7 @@ interface MintProps {
 }
 
 export const Mint = ({ collectionAddress, royalty }: MintProps) => {
-    const network = 'http://localhost:8545'
-    const provider = new ethers.JsonRpcProvider(network)
-    const { market, marketAddress } = useMarket()
+    const { provider, market, marketAddress } = useMarket()
     const [latestTokenId, setLatestTokenId] = useState()
     const [metaData, setMetaData] = useState('')
 
