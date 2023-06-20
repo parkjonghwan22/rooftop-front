@@ -3,18 +3,30 @@ import type { AppProps } from 'next/app'
 import { ThemeProvider } from 'next-themes'
 import { SessionProvider } from 'next-auth/react'
 import { WagmiConfig } from 'wagmi'
-import { config } from "../wagmi-config";
+import { config } from '../wagmi-config'
+import { ToastContainer } from 'react-toastify'
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
-  return (
-    <ThemeProvider attribute='class'>
-      <SessionProvider session={session}>
-        <WagmiConfig config={config}>
-          <Component {...pageProps} />
-        </WagmiConfig>
-      </SessionProvider>
-    </ThemeProvider>
-  )
+    return (
+        <ThemeProvider attribute="class">
+            <SessionProvider session={session}>
+                <WagmiConfig config={config}>
+                    <ToastContainer
+                        position="top-right"
+                        autoClose={3000}
+                        hideProgressBar={false}
+                        closeOnClick
+                        rtl={false}
+                        pauseOnFocusLoss
+                        draggable
+                        pauseOnHover
+                        theme="light"
+                    />
+                    <Component {...pageProps} />
+                </WagmiConfig>
+            </SessionProvider>
+        </ThemeProvider>
+    )
 }
 
 export default MyApp
