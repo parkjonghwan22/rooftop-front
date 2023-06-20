@@ -6,7 +6,6 @@ const Home: NextPage = () => {
 
   return (
     <RootLayout>
-      <div>hello world</div>
     </RootLayout>  
   )
 }

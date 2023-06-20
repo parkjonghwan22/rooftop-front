@@ -2,7 +2,7 @@ import tw from "tailwind-styled-components"
 
 
 export const DropDownWrapper = tw.div`
-    relative
+    relative z-10
 `
 
 export const Button = tw.button`

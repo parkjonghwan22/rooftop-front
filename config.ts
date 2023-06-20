@@ -8,10 +8,16 @@
 // export default config
 
 const config = {
-    API_URL: 'https://nest-deploy-c764d61cc1b8.herokuapp.com',
-    PORT: 3000,
+    API_URL: 'http://127.0.0.1:3005',
 }
 export default config
+
+
+
+// const config = {
+//     API_URL: 'https://nest-deploy-c764d61cc1b8.herokuapp.com',
+// }
+// export default config
 
 
 

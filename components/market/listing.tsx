@@ -3,16 +3,16 @@ import { ethers } from 'ethers';
 import MarketABI from '../../contracts/Marketplace.json';
 
 interface MarketToken {
-    id: string;
-    NFTaddress: string;
-    seller: string;
-    tokenId: string;
-    price: string;
-  }
-  
-  export const Listing = () => {
-    const [marketTokens, setMarketTokens] = useState<MarketToken[]>([]);
-  
+  id: string;
+  NFTaddress: string;
+  seller: string;
+  tokenId: string;
+  price: string;
+}
+
+export const Listing = () => {
+  const [marketTokens, setMarketTokens] = useState<MarketToken[]>([]);
+
   useEffect(() => {
     const fetchMarketTokens = async () => {
 
