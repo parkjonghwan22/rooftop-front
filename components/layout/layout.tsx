@@ -2,7 +2,7 @@ import Footer from "@components/footer/footer";
 import Header from "@components/header/header";
 
 const ContentLayout = ({ children }: { children: React.ReactNode }) => {
-  return <div className="pt-10">{children}</div>;
+  return <div className="pt-10 mt-10">{children}</div>;
 };
 
 export const RootLayout = ({ children }: { children: React.ReactNode }) => {

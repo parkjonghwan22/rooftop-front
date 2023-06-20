@@ -4,11 +4,11 @@ import { Icon } from "@iconify/react";
 import tw from "tailwind-styled-components";
 
 export const HeaderWrap = tw.header`
-    text-gray-500 dark:text-gray-100 dark:bg-gray-900 body-font
+    text-gray-500 dark:text-gray-100 body-font dark:bg-gray-900 fixed top-0 left-0 right-0
 `;
 
 export const HeaderContainer = tw.div`
-  container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center
+  container  mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center
 `;
 
 const TitleWrap = tw.div`
@@ -74,7 +74,7 @@ export const SearchBox = () => {
           <input
             type="search"
             id="default-search"
-            className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            className="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:outline-none "
             placeholder="Search items, collections, accounts"
             required
           />
