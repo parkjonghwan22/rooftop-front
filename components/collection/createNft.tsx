@@ -8,7 +8,8 @@ import { LoadingSpinner } from '@components/common/loading/loading'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { FileNftInputBox } from '@components/common/input/fileNftInputBox'
-import { useMint } from '@utils/hooks/useMint'
+import { NFTMint } from './nftmint'
+
 
 interface MintProps {
     collectionAddress: string
@@ -24,10 +25,9 @@ export const CreateNft = ({
     collectionAddress,
     royalty,
 }: CreateNftProps & MintProps) => {
-    const [isFocused, setIsFocused] = useState('')
-    const [isDuplicated, setIsDuplicated] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [nftImage, setNftImage] = useState('')
+    const [metaData, setMetaData] = useState('')
 
     const nftName = useInput('')
     const nftPrice = useInput('')
@@ -35,31 +35,14 @@ export const CreateNft = ({
 
     const success = () => toast.success('Image Uploaded!')
 
-    const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        try {
-            const inputId = e.target.id
-            setIsFocused(inputId)
-
-            const { data } = await request.post('collection/check', {
-                [`${inputId}`]: e.target.value,
-            })
-            !data ? setIsDuplicated(true) : setIsDuplicated(false)
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     const handlePinataSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
         setIsLoading(true)
-        if (nftImage) {
-            setIsLoading(false)
-            console.log('nftImage IPFSHASH', nftImage)
-        }
 
         try {
-            if (isLoading) return
+            if (!nftImage) return
 
             fetch('/api/verify', {
                 method: 'POST',
@@ -73,13 +56,15 @@ export const CreateNft = ({
                 .then((data) => {
                     console.log('mint3 resData', data)
                     const tokenURI = `ipfs://${data.IpfsHash}`
-                    const { newToken } = useMint({
-                        tokenURI,
-                        collectionAddress,
-                        royalty,
-                        tokenPrice: nftPrice.value as string | number,
-                    })
-                    console.log('new Token : ', newToken)
+                    setMetaData(tokenURI)
+                    setIsLoading(false)
+                    // const { newToken } = useMint({
+                        //     tokenURI,
+                        //     collectionAddress,
+                        //     royalty,
+                        //     tokenPrice: nftPrice.value as string | number,
+                        // })
+                        // console.log('new Token : ', newToken)
                 })
                 .catch((error) => console.log(error))
         } catch (e: any) {
@@ -98,7 +83,6 @@ export const CreateNft = ({
                     <InputBox
                         value={nftName.value}
                         onChange={nftName.onChange}
-                        onInput={handleInputChange}
                         name="name"
                         icon="mdi:collection"
                         placeholder="Please write down the NFT name"
@@ -108,7 +92,6 @@ export const CreateNft = ({
                     <InputBox
                         value={nftPrice.value}
                         onChange={nftPrice.onChange}
-                        onInput={handleInputChange}
                         name="price"
                         icon="mdi:collection"
                         placeholder="Please write down the NFT price"
@@ -129,15 +112,20 @@ export const CreateNft = ({
                         name="file-upload"
                         type="file"
                     />
-                    {isLoading ? (
+                    {isLoading && !metaData && (
                         <Button type="submit" color="blue" disabled>
                             <LoadingSpinner /> Uploading...
                         </Button>
-                    ) : (
+                    )}
+                    {!isLoading && !metaData && 
                         <Button type="submit" color="blue">
                             NFT Registration
                         </Button>
-                    )}
+                    } 
+                    {!isLoading && metaData && 
+                    <NFTMint collectionAddress={collectionAddress} royalty={royalty} price={nftPrice.value as string | number} metaData={metaData}  >
+                        List NFT on Market
+                    </NFTMint>}
                 </NftFormContainer>
             </CreateNftWrapper>
         </>
