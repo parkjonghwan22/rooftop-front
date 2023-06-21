@@ -35,7 +35,6 @@ export const CreateNft = ({
 
     const success = () => toast.success('Image Uploaded!')
 
-
     const handlePinataSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
