@@ -5,22 +5,24 @@ import { useState, useEffect } from 'react'
 import { useEthers } from '@utils/hooks/useEthers'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { Button } from '@components/common/button'
+import { LoadingSpinner } from '@components/common/loading/loading'
 
 interface MintProps {
-    tokenURI: string
+    metaData: string
     collectionAddress: string
     royalty: string
-    tokenPrice: number | string
+    price: number | string
+    children : string | React.ReactNode
 }
 
-export const useMint = ({ collectionAddress, royalty, tokenURI, tokenPrice }: MintProps) => {
+export const NFTMint = ({ collectionAddress, royalty, metaData, price, children }: MintProps) => {
     const { market } = useMarket()
     const { signer } = useEthers()
     const [latestTokenId, setLatestTokenId] = useState<number>()
-    const [metaData, setMetaData] = useState<string>('')
-    const [newToken, setNewToken] = useState<string>('')
+    const [isLoading, setIsLoading] = useState(false)
 
-    const minting = async (tokenMetadata: string) => {
+    const handleMint = async () => {
         if (!signer) return
 
         try {
@@ -28,23 +30,20 @@ export const useMint = ({ collectionAddress, royalty, tokenURI, tokenPrice }: Mi
             const mintPrice = await instance.mint_price()
             const account = await signer.address
 
-            const mintTx = await instance._minting(tokenMetadata, {
+            const mintTx = await instance._minting(metaData, {
                 value: mintPrice,
                 from: account,
             })
 
             const receipt = await mintTx.wait()
             const newTokenId = await instance.getLatestTokenId()
-            if (newTokenId) setLatestTokenId(newTokenId.toNumber())
-
-            const tokenURI = await instance.tokenURI(newTokenId)
-            setMetaData(tokenURI)
+            if (newTokenId) setLatestTokenId(newTokenId)
         } catch (e: unknown) {
             console.log(e as Error)
         }
     }
 
-    const tokenOnMarket = async (price: number | string) => {
+    const tokenOnMarket = async (price: string | number) => {
         if (!latestTokenId) return
 
         try {
@@ -57,8 +56,7 @@ export const useMint = ({ collectionAddress, royalty, tokenURI, tokenPrice }: Mi
                 metaData,
                 creatorFee
             )
-
-            if (addOnMarket.hash) setNewToken(addOnMarket.hash)
+            console.log(addOnMarket)
         } catch (e) {
             console.log(e)
         }
@@ -66,15 +64,18 @@ export const useMint = ({ collectionAddress, royalty, tokenURI, tokenPrice }: Mi
 
     useEffect(() => {
         if (!market || !signer) return
-        market.lowestPriceByCollection(collectionAddress).then(console.log).catch(console.log)
-        minting(tokenURI)
     }, [market, signer])
 
     useEffect(() => {
-        if (metaData && latestTokenId && tokenPrice) {
-            tokenOnMarket(tokenPrice)
+        if (latestTokenId) {
+            tokenOnMarket(price)
         }
-    }, [metaData, latestTokenId, tokenPrice])
+    }, [latestTokenId])
 
-    return { newToken }
+    return (
+        <Button color="green" onClick={handleMint}>
+          {isLoading ? <LoadingSpinner /> : null}
+          {isLoading ? 'Pending...' : children}
+        </Button>
+      )
 }
