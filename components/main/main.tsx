@@ -1,6 +1,5 @@
 import Category from "./styled/category";
 import Collection from "./styled/collection";
-import NFT from "./styled/nft";
 import Slide from "./styled/slide";
 
 const Main = () => {
@@ -9,7 +8,6 @@ const Main = () => {
       <Slide />
       <Category />
       <Collection />
-      <NFT />
     </>
   );
 };

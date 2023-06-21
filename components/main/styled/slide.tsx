@@ -2,7 +2,7 @@ import tw from "tailwind-styled-components";
 import Image from "next/image";
 
 export const SlideWrap = tw.div`
-mx-auto w-1100 h-450 rounded-lg mt-10 overflow-hidden dark:bg-gray-900 bg-gary-100 shadow-xl
+mx-auto w-1100 h-450 rounded-lg overflow-hidden dark:bg-gray-900 bg-gary-100 shadow-xl
 `;
 
 export const SlideBox = tw.div`
