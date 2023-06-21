@@ -81,12 +81,16 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                             width="20rem"
                             height="1.5rem"
                         >
-                            <CreateNft setIsOpenModal={setIsOpenModal} />
+                            <CreateNft
+                                setIsOpenModal={setIsOpenModal}
+                                collectionAddress={collection.address}
+                                royalty={collection.creatorFee}
+                            />
                         </Modal>
                     </SectionB>
                 </SectionWrap>
             ))}
-            <Mint collectionAddress={collections[0].address} royalty={collections[0].creatorFee} />
+            {/* <Mint collectionAddress={collections[0].address} royalty={collections[0].creatorFee} /> */}
         </>
     )
 }

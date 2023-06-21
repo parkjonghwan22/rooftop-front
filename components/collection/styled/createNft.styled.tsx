@@ -4,7 +4,7 @@ export const CreateNftWrapper = tw.div`
 relative w-96 max-w-md px-3 py-6 lg:px-8
 `
 
-export const NftFormContainer = tw.div`
+export const NftFormContainer = tw.form`
     space-y-3
 `
 
