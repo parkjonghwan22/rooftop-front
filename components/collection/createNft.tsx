@@ -24,8 +24,6 @@ export const CreateNft = ({
     collectionAddress,
     royalty,
 }: CreateNftProps & MintProps) => {
-    const [isFocused, setIsFocused] = useState('')
-    const [isDuplicated, setIsDuplicated] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
     const [nftImage, setNftImage] = useState('')
 
@@ -34,20 +32,6 @@ export const CreateNft = ({
     const nftDescription = useInput('')
 
     const success = () => toast.success('Image Uploaded!')
-
-    const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        try {
-            const inputId = e.target.id
-            setIsFocused(inputId)
-
-            const { data } = await request.post('collection/check', {
-                [`${inputId}`]: e.target.value,
-            })
-            !data ? setIsDuplicated(true) : setIsDuplicated(false)
-        } catch (error) {
-            console.log(error)
-        }
-    }
 
     const handlePinataSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
@@ -98,7 +82,6 @@ export const CreateNft = ({
                     <InputBox
                         value={nftName.value}
                         onChange={nftName.onChange}
-                        onInput={handleInputChange}
                         name="name"
                         icon="mdi:collection"
                         placeholder="Please write down the NFT name"
@@ -108,7 +91,6 @@ export const CreateNft = ({
                     <InputBox
                         value={nftPrice.value}
                         onChange={nftPrice.onChange}
-                        onInput={handleInputChange}
                         name="price"
                         icon="mdi:collection"
                         placeholder="Please write down the NFT price"
