@@ -19,9 +19,11 @@ interface LogoProps {
 }
 
 export const Logo = ({ src, link, collectionAddress }: LogoProps ) => {
+
     return (
         <div className="min-w-40 cursor-pointer">
-            <Link href={{ pathname: `${link}`, query: { ca: `${collectionAddress}` }}} as={link}>
+            {/* <Link href={{ pathname: `${link}`, query: { ca: `${collectionAddress}` }}} as={link}> */}
+            <Link href={`collections/${collectionAddress}`}>
                 <Image src={src} alt="" width={200} height={200} className="w-40 h-40 rounded-md object-cover" />
             </Link>
         </div>
