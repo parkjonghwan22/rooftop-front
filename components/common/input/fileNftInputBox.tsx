@@ -29,7 +29,6 @@ export const FileNftInputBox = ({ state, setState, id, name, type }: FileNftInpu
         console.log(body, file)
 
         try {
-            pending()
             fetch('/api/verify-image', {
                 method: 'POST',
                 body: JSON.stringify({
