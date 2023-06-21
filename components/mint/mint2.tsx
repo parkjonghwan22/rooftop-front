@@ -60,30 +60,39 @@ export const Mint = ({ collectionAddress, royalty }: MintProps) => {
         if (!latestTokenId) return
 
         try {
-            // const gasPrice = ethers.parseUnits('20000', 'gwei');
-            const creatorFee = parseFloat(royalty.replace('%', '')) * 10
-            const addOnMarket = await market.addNftToMarket(
-                collectionAddress,
-                latestTokenId,
-                4,
-                metaData,
-                creatorFee
-            )
-            console.log(`addOnMarket::`, addOnMarket)
 
-            const getNFTs = await market.getAllTokensInCollection(collectionAddress)
-            console.log(`getNFTs::`, getNFTs)
-            for (const id in getNFTs) console.log(getNFTs[id])
+            const getNFT = await market.TokenOnSale(9)
+            console.log(getNFT)
 
-            const testMarket2 = await market.lowestPriceByCollection(collectionAddress)
-            console.log(`test2::`, testMarket2)
 
-            const testMarket3 = await market.totalSalesByCollection(collectionAddress)
-            console.log(`test3::`, testMarket3)
-            console.log(`collectionAddress::`, collectionAddress)
+            // // const gasPrice = ethers.parseUnits('20000', 'gwei');
+            // const creatorFee = parseFloat(royalty.replace('%', '')) * 10
+            // const addOnMarket = await market.addNftToMarket(
+            //     collectionAddress,
+            //     latestTokenId,
+            //     4,
+            //     metaData,
+            //     creatorFee
+            // )
+            // console.log(`addOnMarket::`, addOnMarket)
 
-            const testMarket1 = await market.marketAddress()
-            console.log(`test1::`, testMarket1)
+
+
+            // const getNFTs = await market.getAllTokensInCollection(collectionAddress)
+            // console.log(`getNFTs::`, getNFTs)
+            // for (const id in getNFTs) console.log(getNFTs[id])
+
+
+
+            // const testMarket2 = await market.lowestPriceByCollection(collectionAddress)
+            // console.log(`test2::`, testMarket2)
+
+            // const testMarket3 = await market.totalSalesByCollection(collectionAddress)
+            // console.log(`test3::`, testMarket3)
+            // console.log(`collectionAddress::`, collectionAddress)
+
+            // const testMarket1 = await market.marketAddress()
+            // console.log(`test1::`, testMarket1)
         } catch (e) {
             console.log(e)
         }
