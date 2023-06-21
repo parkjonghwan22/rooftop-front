@@ -3,12 +3,17 @@ import request from '@utils/request'
 import {
     SectionWrap,
     SectionA,
+    SectionB,
     Logo,
     CollectionName,
     Description,
     CollectionDatas,
 } from './styled/collectioninfo.styled'
 import { Mint } from '@components/mint/mint'
+import { Icon } from '@iconify/react'
+import { Button } from '@components/common/button'
+import { Modal } from '@components/common/modal/Modal'
+import { CreateNft } from '@components/collection/createNft'
 
 interface Collection {
     address: string
@@ -23,7 +28,7 @@ interface Collection {
 
 export const CollectionInfo = ({ address }: { address: string }) => {
     const [collections, setCollections] = useState<Collection[]>([])
-
+    const [isOpenModal, setIsOpenModal] = useState(false)
     const getCollections = async () => {
         try {
             const { data } = await request.get(`collection/${address}`)
@@ -59,6 +64,26 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                             follows={0}
                         />
                     </SectionA>
+                    <SectionB>
+                        <Button
+                            onClick={() => {
+                                setIsOpenModal(true)
+                            }}
+                            color="blue"
+                            size="w-150 h-16"
+                        >
+                            NFT Mint
+                            <Icon icon="iconamoon:enter" className="text-lg ml-2" />
+                        </Button>
+                        <Modal
+                            isOpenModal={isOpenModal}
+                            setIsOpenModal={setIsOpenModal}
+                            width="20rem"
+                            height="1.5rem"
+                        >
+                            <CreateNft setIsOpenModal={setIsOpenModal} />
+                        </Modal>
+                    </SectionB>
                 </SectionWrap>
             ))}
             <Mint collectionAddress={collections[0].address} royalty={collections[0].creatorFee} />
