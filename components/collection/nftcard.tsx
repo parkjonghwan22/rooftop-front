@@ -1,11 +1,19 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export const NFTCard = () => {
+  const router = useRouter();
+  const { _id } = router.query;
+  // console.log(router.pathname, _id)
+
   return (
     <div className="relative w-80 h-fit mb-10 mx-5 rounded-lg shadow-lg dark:bg-gray-800 overflow-hidden">
-      <div className="hover:transform hover:scale-105 transition duration-300 cursor-pointer">
-        <img src="https://i.seadn.io/gcs/files/0b2e05b9d571fac5a229998b7322fed5.png?auto=format&dpr=1&w=640" className="w-full h-full object-cover" />
-      </div>
+      <Link href={`/collections/${_id}/nft/1`}>
+        <div className="hover:transform hover:scale-105 transition duration-300 cursor-pointer">
+          <img src="https://i.seadn.io/gcs/files/0b2e05b9d571fac5a229998b7322fed5.png?auto=format&dpr=1&w=640" className="w-full h-full object-cover" />
+        </div>
+      </Link>
       <div className="px-5 pt-4 pb-5">
         <div className="absolute top-5 left-5 text-white bg-red-600 px-2.5 py-1.5 rounded-lg text-sm font-semibold">경매 종료 시간 : 1시간 후</div>
         <div className="flex items-center h-8">

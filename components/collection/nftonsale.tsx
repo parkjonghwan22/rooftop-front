@@ -1,3 +1,3 @@
 export const NFTOnSale = () => {
-    return <></>
+    return <>sale</>
 }

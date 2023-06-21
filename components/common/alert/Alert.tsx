@@ -48,7 +48,7 @@ export const Alert = ({ isOpenAlert, setIsOpenAlert, children, width, height, co
       setTimeout(() => {
         setIsVisible(false) 
         setIsOpenAlert(false)}
-        , 3000);
+        , 4000);
 
     }
   }, [isOpenAlert]);

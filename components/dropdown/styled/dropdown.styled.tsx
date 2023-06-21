@@ -6,7 +6,7 @@ export const DropDownWrapper = tw.div`
 `
 
 export const Button = tw.button`
-    flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-blue-600 dark:hover:text-blue-300 dark:text-white hover:dark:bg-gray-700 py-1.5 px-1 transition duration-150 
+    flex items-center text-sm font-medium text-gray-900 rounded-full hover:text-green-600 dark:hover:text-green-300 dark:text-white hover:dark:bg-gray-700 py-1.5 px-1 transition duration-150 
 `
 
 export const MenuWrapper = tw.div`
