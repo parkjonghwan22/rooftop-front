@@ -23,7 +23,7 @@ const Slide = () => {
             alt="test"
             width={1000}
             height={1000}
-            className="object-fill w-80 h-80 border-4"
+            className="object-fill w-80 h-80 border-4 ml-20"
           />
           <div className="w-full h-80 ml-20 mt-11">
             <div className="flex flex-wrap">
