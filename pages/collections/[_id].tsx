@@ -64,16 +64,12 @@ const CollectionPage = () => {
       enabled: !!market && !!_id,
     }
   );
+  const isLoading = collectionLoading || nftsLoading
 
-
-  // 로딩 컴포넌트 필요
+  if (isLoading) return <p>Loading...</p> // 로딩 컴포넌트 필요
   return (
     <RootLayout>
-      {(collectionLoading || nftsLoading) ? (
-        <p>Loading...</p>
-      ) : (
         <Collection collectionData={collectionData} tokenData={tokenData} />
-      )}
     </RootLayout>
   );
 };
