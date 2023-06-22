@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react'
 import { VerifiedMarker } from '@components/common/marker/verify'
 
 export const SectionWrap = tw.div`
-    flex flex-row w-full p-6 mb-6 rounded-lg bg-white dark:border-gray-700 dark:bg-gray-800 drop-shadow-lg
+    flex flex-row w-full p-6 mb-6 rounded-lg bg-white dark:border-gray-700 dark:bg-gray-800 shadow
 `
 
 export const SectionA = tw.div`
