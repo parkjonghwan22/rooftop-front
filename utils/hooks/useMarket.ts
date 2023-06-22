@@ -15,7 +15,6 @@ export const useMarket = () => {
           const fetchMarket = async () => {
             const signer = await walletProvider.getSigner();
 
-    
             const marketInstance = await new ethers.Contract(marketAddress, MarketABI.abi, signer)
             setMarket(marketInstance);
           };

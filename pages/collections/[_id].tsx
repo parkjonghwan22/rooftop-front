@@ -49,32 +49,22 @@ const CollectionPage = () => {
         }
     }
 
-    const { data: collectionData, isLoading: collectionLoading } = useQuery(
-        ['collection', _id],
-        () => getCollection(_id as string),
-        {
-            enabled: !!_id,
-        }
-    )
+  const { data: tokenData, isLoading: nftsLoading } = useQuery(
+    ['nfts', _id],
+    () => getNfts(_id as string),
+    {
+      enabled: !!market && !!_id,
+    }
+  );
+  const isLoading = collectionLoading || nftsLoading
 
-    const { data: tokenData, isLoading: nftsLoading } = useQuery(
-        ['nfts', _id],
-        () => getNfts(_id as string),
-        {
-            enabled: !!market && !!_id,
-        }
-    )
+  if (isLoading) return <p>Loading...</p> // 로딩 컴포넌트 필요
+  return (
+    <RootLayout>
+        <Collection collectionData={collectionData} tokenData={tokenData} />
+    </RootLayout>
+  );
+};
 
-    // 로딩 컴포넌트 필요
-    return (
-        <RootLayout>
-            {collectionLoading || nftsLoading ? (
-                <p>Loading...</p>
-            ) : (
-                <Collection collectionData={collectionData} tokenData={tokenData} />
-            )}
-        </RootLayout>
-    )
-}
 
 export default CollectionPage
