@@ -2,7 +2,7 @@ import { useInput } from '@utils/hooks/useInput'
 import { CreateNftWrapper, NftFormContainer, NftTitle, NftLabel } from './styled/createNft.styled'
 import request from '@utils/request'
 import React, { useState } from 'react'
-import { InputBox, TextArea } from '@components/common/input'
+import { InputBox, PriceInputBox, TextArea } from '@components/common/input'
 import { Button } from '@components/common/button'
 import { LoadingSpinner } from '@components/common/loading/loading'
 import { toast } from 'react-toastify'
@@ -57,13 +57,6 @@ export const CreateNft = ({
                     const tokenURI = `ipfs://${data.IpfsHash}`
                     setMetaData(tokenURI)
                     setIsLoading(false)
-                    // const { newToken } = useMint({
-                        //     tokenURI,
-                        //     collectionAddress,
-                        //     royalty,
-                        //     tokenPrice: nftPrice.value as string | number,
-                        // })
-                        // console.log('new Token : ', newToken)
                 })
                 .catch((error) => console.log(error))
         } catch (e: any) {
@@ -88,14 +81,13 @@ export const CreateNft = ({
                     />
 
                     <NftLabel htmlFor="NftPrice">NFT Price</NftLabel>
-                    <InputBox
+                    <PriceInputBox
                         value={nftPrice.value}
                         onChange={nftPrice.onChange}
                         name="price"
-                        icon="mdi:collection"
-                        placeholder="Please write down the NFT price"
+                        icon="cryptocurrency-color:matic"
+                        placeholder="0.000"
                     />
-
                     <NftLabel htmlFor="NftDescription">Description</NftLabel>
                     <TextArea
                         value={nftDescription.value}

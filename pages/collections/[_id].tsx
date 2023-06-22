@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router';
 import { RootLayout } from "@components/layout/layout"
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Collection } from '@components/collection/collection';
 import { useMarket } from '@utils/hooks/useMarket';
+import { useQuery } from 'react-query';
 import request from '@utils/request';
 import { CollectionData } from '@utils/types/collection.interface';
 
@@ -10,17 +11,13 @@ const CollectionPage = () => {
   const router = useRouter();
   const { _id } = router.query;
   const { market } = useMarket();
-  const [isLoading, setIsLoading] = useState(true);
-  const [collectionData, setCollectionData] = useState({} as CollectionData);
-  const [tokenData, setTokenData] = useState([]);
 
-  const getCollection = async () => {
+  const getCollection = async (collectionAddress: string) => {
     try {
-      const collectionAddress = _id;
       const { data } = await request.get(`collection/${collectionAddress}`);
-      setCollectionData(data[0]);
-    } catch (error) {
-      console.log(error);
+      return data[0];
+    } catch (error: unknown) {
+      throw new Error(error as string);
     }
   }
 
@@ -45,34 +42,34 @@ const CollectionPage = () => {
   
         return obj;
       });
-  
-      setTokenData(result);
-      setIsLoading(false);
+
+      return result;
     } catch (error: unknown) {
-      console.log(error);
-      setIsLoading(false);
+      throw new Error(error as string);
     }
   };
 
-  useEffect(() => {
-    if (_id) {
-      setIsLoading(true);
-      getCollection();
+  const { data: collectionData, isLoading: collectionLoading } = useQuery(
+    ['collection', _id],
+    () => getCollection(_id as string),
+    {
+      enabled: !!_id,
     }
-  }, [_id]);
+  );
 
-  useEffect(() => {
-    if (!market || !_id) return;
+  const { data: tokenData, isLoading: nftsLoading } = useQuery(
+    ['nfts', _id],
+    () => getNfts(_id as string),
+    {
+      enabled: !!market && !!_id,
+    }
+  );
 
-    setIsLoading(true);
-    getNfts(_id as string);
-  }, [market, _id]);
 
   // 로딩 컴포넌트 필요
-
   return (
     <RootLayout>
-      {isLoading ? (
+      {(collectionLoading || nftsLoading) ? (
         <p>Loading...</p>
       ) : (
         <Collection collectionData={collectionData} tokenData={tokenData} />

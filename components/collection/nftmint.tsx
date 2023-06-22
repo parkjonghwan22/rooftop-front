@@ -45,6 +45,7 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
 
     const tokenOnMarket = async (price: string | number) => {
         if (!latestTokenId) return
+        const priceInWei = ethers.parseEther(price.toString()); // 10 ** 18
 
         try {
             // const gasPrice = ethers.parseUnits('20000', 'gwei');
@@ -52,7 +53,7 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
             const addOnMarket = await market.addNftToMarket(
                 collectionAddress,
                 latestTokenId,
-                price,
+                priceInWei,
                 metaData,
                 creatorFee
             )
