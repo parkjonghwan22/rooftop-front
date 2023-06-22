@@ -9,7 +9,6 @@ import {
     Description,
     CollectionDatas,
 } from './styled/collectioninfo.styled'
-import { Mint } from '@components/mint/mint'
 import { Icon } from '@iconify/react'
 import { Button } from '@components/common/button'
 import { Modal } from '@components/common/modal/Modal'
@@ -90,7 +89,6 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                     </SectionB>
                 </SectionWrap>
             ))}
-            {/* <Mint collectionAddress={collections[0].address} royalty={collections[0].creatorFee} /> */}
         </>
     )
 }
