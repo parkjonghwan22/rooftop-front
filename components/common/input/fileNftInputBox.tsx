@@ -29,6 +29,7 @@ export const FileNftInputBox = ({ state, setState, id, name, type }: FileNftInpu
         console.log(body, file)
 
         try {
+            pending()
             fetch('/api/verify-image', {
                 method: 'POST',
                 body: JSON.stringify({
@@ -41,6 +42,7 @@ export const FileNftInputBox = ({ state, setState, id, name, type }: FileNftInpu
                 .then((data) => {
                     setState(data.IpfsHash)
                     setPreviewImage(URL.createObjectURL(file))
+                    URL.revokeObjectURL(previewImage)
                 })
                 .catch((error) => console.log(error))
         } catch (e: any) {
