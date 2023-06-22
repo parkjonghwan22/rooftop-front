@@ -25,7 +25,7 @@ const ImageSlider = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
-    arrow: false,
+    arrows: false,
   };
 
   return (

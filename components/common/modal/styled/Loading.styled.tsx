@@ -6,5 +6,5 @@ export const LoadingWrapper = tw.div`
 `;
 
 export const LoadingContent = tw.div<StyledProps>`
-  relative z-99 rounded-lg shadow bg-white w-1/2 h-3/4 opacity-70 
+  relative z-99 rounded-lg shadow bg-white dark:bg-gray-500 w-1/2 h-3/4 opacity-70 
 `;

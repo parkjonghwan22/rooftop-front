@@ -46,7 +46,7 @@ export const LoadingModal = ({
     <LoadingWrapper>
       <LoadingContent ref={modalRef} width={width} height={height}>
         <Icon
-          icon="ph:x"
+          icon=""
           onClick={() => setIsOpenModal(false)}
           className="ml-auto text-lg cursor-pointer"
         />
