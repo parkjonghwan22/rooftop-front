@@ -6,9 +6,13 @@ const Category = () => {
     <>
       <div className="mx-auto w-full h-650 mt-10">
         <div className="shadow-lg rounded-sm  border-gray-200">
-          <header className="px-5 py-4 border-b border-gray-100 flex ">
-            <h2 className="font-semibold text-3xl mr-10">Trending</h2>
-            <h2 className="font-semibold  text-3xl">Top</h2>
+          <header className=" border-b border-gray-100">
+            <div className="flex bg-gray-200 opacity-90 w-1/6 rounded-lg justify-center text-center">
+              <h2 className="font-semibold text-2xl w-1/2 px-2 py-1">
+                Trending
+              </h2>
+              <h2 className="font-semibold  text-2xl w-1/2 px-2 py-1">Top</h2>
+            </div>
           </header>
           <div className="flex ">
             <table className="w-full">
