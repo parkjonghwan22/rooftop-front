@@ -10,7 +10,7 @@ const Category = () => {
             <h2 className="font-semibold text-3xl mr-10">Trending</h2>
             <h2 className="font-semibold  text-3xl">Top</h2>
           </header>
-          <div className="flex">
+          <div className="flex ">
             <table className="w-full">
               <thead className="text-xm font-semibold uppercase text-gray-400">
                 <tr>
@@ -156,7 +156,7 @@ const Category = () => {
                 </tr>
               </tbody>
             </table>
-            <table className="w-full">
+            <table className="md:w-full md:visible w-0 invisible  ">
               <thead className="text-xm font-semibold uppercase text-gray-400 ">
                 <tr>
                   <th className="p-2">
