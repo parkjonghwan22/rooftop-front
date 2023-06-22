@@ -62,7 +62,7 @@ const NftPage = () => {
   );
   const isLoading = collectionLoading || nftLoading
 
-  if (isLoading || !tokenData) return <p>Loading...</p> // 로딩 컴포넌트 필요
+  if (isLoading || !tokenData) return <p>Loading...</p> // 로딩 컴포넌트 필요!
   return (
     <RootLayout>
       <NFT collectionData={collectionData} token={tokenData} />
