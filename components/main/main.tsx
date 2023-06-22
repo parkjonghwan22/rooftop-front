@@ -4,11 +4,11 @@ import Slide from "./styled/slide";
 
 const Main = () => {
   return (
-    <>
+    <div className="mx-auto flex flex-col items-center">
       <Slide />
       <Category />
       <Collection />
-    </>
+    </div>
   );
 };
 
