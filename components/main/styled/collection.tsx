@@ -21,7 +21,7 @@ const Collection = () => {
                 className="object-fill w-72 h-60 mx-auto rounded-t-lg"
               />
             </div>
-            <div className="rounded-b-lg w-72 h-32 mx-auto bg-gray-800 opacity-90">
+            <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90 ">
               <div className="text-xl text-center pt-4 pb-4 font-bold">
                 Missed Yet Anthor..
               </div>
@@ -47,7 +47,7 @@ const Collection = () => {
                 className="object-fill w-72 h-60 mx-auto rounded-t-lg"
               />
             </div>
-            <div className="rounded-b-lg w-72 h-32 mx-auto bg-gray-800 opacity-90">
+            <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90">
               <div className="text-xl text-center pt-4 pb-4 font-bold">
                 Missed Yet Anthor..
               </div>
@@ -73,7 +73,7 @@ const Collection = () => {
                 className="object-fill w-72 h-60 mx-auto rounded-t-lg"
               />
             </div>
-            <div className="rounded-b-lg w-72 h-32 mx-auto bg-gray-800 opacity-90">
+            <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90">
               <div className="text-xl text-center pt-4 pb-4 font-bold">
                 Missed Yet Anthor..
               </div>
@@ -99,7 +99,7 @@ const Collection = () => {
                 className="object-fill w-72 h-60 mx-auto rounded-t-lg"
               />
             </div>
-            <div className="rounded-b-lg w-72 h-32 mx-auto bg-gray-800 opacity-90">
+            <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90">
               <div className="text-xl text-center pt-4 pb-4 font-bold">
                 Missed Yet Anthor..
               </div>
@@ -125,7 +125,7 @@ const Collection = () => {
                 className="object-fill w-72 h-60 mx-auto rounded-t-lg "
               />
             </div>
-            <div className="rounded-b-lg w-72 h-32 mx-auto bg-gray-800 opacity-90">
+            <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90">
               <div className="text-xl text-center pt-4 pb-4 font-bold">
                 Missed Yet Anthor..
               </div>
@@ -151,7 +151,7 @@ const Collection = () => {
                 className="object-fill w-72 h-60 mx-auto rounded-t-lg "
               />
             </div>
-            <div className="rounded-b-lg w-72 h-32 mx-auto bg-gray-800 opacity-90">
+            <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90">
               <div className="text-xl text-center pt-4 pb-4 font-bold">
                 Missed Yet Anthor..
               </div>
@@ -177,7 +177,7 @@ const Collection = () => {
                 className="object-fill w-72 h-60 mx-auto rounded-t-lg"
               />
             </div>
-            <div className="rounded-b-lg w-72 h-32 mx-auto bg-gray-800 opacity-90">
+            <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90">
               <div className="text-xl text-center pt-4 pb-4 font-bold">
                 Missed Yet Anthor..
               </div>
@@ -203,7 +203,7 @@ const Collection = () => {
                 className="object-fill w-72 h-60 mx-auto rounded-t-lg"
               />
             </div>
-            <div className="rounded-b-lg w-72 h-32 mx-auto bg-gray-800 opacity-90">
+            <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90">
               <div className="text-xl text-center pt-4 pb-4 font-bold">
                 Missed Yet Anthor..
               </div>
@@ -229,7 +229,7 @@ const Collection = () => {
                 className="object-fill w-72 h-60 mx-auto rounded-t-lg"
               />
             </div>
-            <div className="rounded-b-lg w-72 h-32 mx-auto bg-gray-800 opacity-90">
+            <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90">
               <div className="text-xl text-center pt-4 pb-4 font-bold">
                 Missed Yet Anthor..
               </div>
@@ -255,7 +255,7 @@ const Collection = () => {
                 className="object-fill w-72 h-60 mx-auto rounded-t-lg"
               />
             </div>
-            <div className="rounded-b-lg w-72 h-32 mx-auto bg-gray-800 opacity-90">
+            <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90">
               <div className="text-xl text-center pt-4 pb-4 font-bold">
                 Missed Yet Anthor..
               </div>

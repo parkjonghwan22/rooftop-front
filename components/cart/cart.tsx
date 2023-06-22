@@ -7,18 +7,18 @@ const Cart = () => {
     <>
       <div className="mx-auto w-5/6">
         <div className=" flex flex-col flex flex-col ">
-          <header className="px-5 py-4 border-b border-gray-400">
-            <h2 className=" font-semibold text-3xl mb-8 ">My Cart</h2>
+          <header className="pl-20 py-4 border-b-2 border-gray-200 dark:border-gray-400">
+            <h2 className=" font-semibold text-3xl mb-5 ">My Cart</h2>
           </header>
           <div>
-            <div className="flex border-b border-gray-400 pl-16 pt-7 pb-7 ">
+            <div className="flex pt-3 pb-3 my-5 justify-center shadow-lg">
               <div>
                 <Image
                   src="http://localhost:3000/test3.png"
                   alt="test"
                   width={1000}
                   height={1000}
-                  className="object-fill w-60 h-52 rounded-lg"
+                  className="object-fill w-48 h-44 rounded-lg"
                 />
               </div>
               <div className="w-2/6 flex flex-col justify-center pl-9">
@@ -45,20 +45,20 @@ const Cart = () => {
                 </div>
               </div>
               <div className="mt-20">
-                <div className="bg-red-500 px-4 py-2 rounded-lg font-bold">
+                <div className="bg-red-500 px-4 py-2 rounded-lg font-bold hover:bg-gray-400 hover:text-white">
                   Remove
                 </div>
               </div>
               <div className="text-xl font-bold mt-20 ml-64">0.2187 ETH</div>
             </div>
-            <div className="flex border-b border-gray-400 pl-16 pt-7 pb-7 ">
+            <div className="flex pt-3 pb-3 my-5 justify-center shadow-lg">
               <div>
                 <Image
                   src="http://localhost:3000/test5.png"
                   alt="test"
                   width={1000}
                   height={1000}
-                  className="object-fill w-60 h-52 rounded-lg"
+                  className="object-fill w-48 h-44 rounded-lg"
                 />
               </div>
               <div className="w-2/6 flex flex-col justify-center pl-9">
@@ -85,20 +85,20 @@ const Cart = () => {
                 </div>
               </div>
               <div className="mt-20">
-                <div className="bg-red-500 px-4 py-2 rounded-lg font-bold">
+                <div className="bg-red-500 px-4 py-2 rounded-lg font-bold hover:bg-gray-400 hover:text-white">
                   Remove
                 </div>
               </div>
               <div className="text-xl font-bold mt-20 ml-64">0.2187 ETH</div>
             </div>
-            <div className="flex border-b border-gray-400 pl-16 pt-7 pb-7 ">
+            <div className="flex pt-3 pb-3 my-5 justify-center shadow-lg">
               <div>
                 <Image
                   src="http://localhost:3000/test8.png"
                   alt="test"
                   width={1000}
                   height={1000}
-                  className="object-fill w-60 h-52 rounded-lg"
+                  className="object-fill w-48 h-44 rounded-lg"
                 />
               </div>
               <div className="w-2/6 flex flex-col justify-center pl-9">
@@ -125,21 +125,25 @@ const Cart = () => {
                 </div>
               </div>
               <div className="mt-20">
-                <div className="bg-red-500 px-4 py-2 rounded-lg font-bold">
+                <div className="bg-red-500 px-4 py-2 rounded-lg font-bold hover:bg-gray-400 hover:text-white">
                   Remove
                 </div>
               </div>
               <div className="text-xl font-bold mt-20 ml-64">0.2187 ETH</div>
             </div>
           </div>
-          <div>
-            <div>Total Price</div>
-            <div>$ ...</div>
+
+          <div className="md:flex justify-end w-full mx-auto border-t-2 border-gray-200 dark:border-gray-400 pt-8">
+            <div className="text-3xl font-bold">Total Price</div>
+            <div className="w-1/5 text-right md:mr-24">
+              <div className="text-2xl font-bold">0.23 ETH</div>
+              <div className="text-gray-400 ">$442.03</div>
+            </div>
           </div>
-          <div>
-            <div>Send to a different Wallet</div>
-            <div>input</div>
-            <div>Complete purchase</div>
+          <div className="mr-24 flex justify-end">
+            <div className="mt-4 bg-blue-500 rounded-lg px-20 py-3 text-2xl font-bold text-center hover:bg-gray-400 text-white">
+              Complete purchase
+            </div>
           </div>
         </div>
       </div>
