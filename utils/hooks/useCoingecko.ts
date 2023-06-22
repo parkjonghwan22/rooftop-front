@@ -8,7 +8,7 @@ export const useCoingecko = () => {
     const API_URL = 'https://api.coingecko.com/api/v3/coins/markets'
     const CURRENCY = 'krw'
     const COIN_ID = 'matic-network'
-    const TARGET_PRICE = 3
+    const TARGET_PRICE = 3 // 환산받을 MATIC
 
     /**
      * Coingecko Test
@@ -36,7 +36,7 @@ export const useCoingecko = () => {
 
     useEffect(() => {
         fetchData()
-    }, [])
+    }, [maticPrice])
 
     return { amount, maticPrice }
 }
