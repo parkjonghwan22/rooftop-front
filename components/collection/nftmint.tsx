@@ -13,7 +13,7 @@ interface MintProps {
     collectionAddress: string
     royalty: string
     price: number | string
-    children : string | React.ReactNode
+    children: string | React.ReactNode
 }
 
 export const NFTMint = ({ collectionAddress, royalty, metaData, price, children }: MintProps) => {
@@ -74,8 +74,8 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
 
     return (
         <Button color="green" onClick={handleMint}>
-          {isLoading ? <LoadingSpinner /> : null}
-          {isLoading ? 'Pending...' : children}
+            {isLoading ? <LoadingSpinner /> : null}
+            {isLoading ? 'Pending...' : children}
         </Button>
-      )
+    )
 }

@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
                 <WagmiConfig config={config}>
                     <ToastContainer
                         position="top-left"
-                        autoClose={9000}
+                        autoClose={4000}
                         hideProgressBar={false}
                         closeOnClick
                         rtl={false}
