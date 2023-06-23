@@ -75,9 +75,9 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                             <Icon icon="carbon:intent-request-create" className="text-lg mr-1.5" />
                             New NFT
                         </Button>
+
                     </SectionB>
                 </SectionWrap>
-
             ))}
             <Modal
                 isOpenModal={isOpenModal}
