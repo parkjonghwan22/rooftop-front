@@ -70,27 +70,27 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                                 setIsOpenModal(true)
                             }}
                             color="blue"
-                            size="w-150 h-16"
+                            size="w-28 h-10"
                         >
-                            NFT Mint
-                            <Icon icon="iconamoon:enter" className="text-lg ml-2" />
+                            <Icon icon="carbon:intent-request-create" className="text-lg mr-1.5" />
+                            New NFT
                         </Button>
                     </SectionB>
-                    <Modal
-                        isOpenModal={isOpenModal}
-                        setIsOpenModal={setIsOpenModal}
-                        width="20rem"
-                        height="1.5rem"
-                    >
-                        <CreateNft
-                            setIsOpenModal={setIsOpenModal}
-                            collectionAddress={collection.address}
-                            royalty={collection.creatorFee}
-                        />
-                    </Modal>
                 </SectionWrap>
 
             ))}
+            <Modal
+                isOpenModal={isOpenModal}
+                setIsOpenModal={setIsOpenModal}
+                width="20rem"
+                height="1.5rem"
+            >
+                <CreateNft
+                    setIsOpenModal={setIsOpenModal}
+                    collectionAddress={collections[0].address}
+                    royalty={collections[0].creatorFee}
+                />
+            </Modal>
         </>
     )
 }

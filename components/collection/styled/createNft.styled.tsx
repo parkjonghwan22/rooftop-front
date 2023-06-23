@@ -1,7 +1,7 @@
 import tw from 'tailwind-styled-components'
 
 export const CreateNftWrapper = tw.div`
-relative w-96 max-w-md px-3 py-6 lg:px-8
+    relative w-96 max-w-md px-3 py-6 lg:px-8
 `
 
 export const NftFormContainer = tw.form`

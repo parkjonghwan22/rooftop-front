@@ -66,7 +66,7 @@ export const CollectionDatas = ({
     const isScreenSmall = windowSize.width < 820
 
     return (
-        <div className="mt-2 flex flex-row items-center space-x-5">
+        <div className="mt-2 flex flex-row items-center space-x-6 invisible w-0 lg:visible lg:w-full">
             {!isScreenSmall && (
                 <>
                     <CollectionData
