@@ -9,6 +9,7 @@ import { useMarket } from '@utils/hooks/useMarket';
 import { useAccount } from 'wagmi';
 import { NFTActivity } from './nftactivity';
 import { useIpfs } from '@utils/hooks/useIpfs';
+import { useCoinGecko } from '@utils/hooks/useCoingecko';
 
 interface NftProps {
     collectionData: CollectionData
@@ -19,8 +20,10 @@ export const NFTSale = ({ collectionData, token }: NftProps) => {
     const { address } = useAccount()
     const { market } = useMarket()
     const { metaData, imageUrl , isLoading } = useIpfs(token)
+    const { convertKRW } = useCoinGecko()
     const [isOpenAlert, setIsOpenAlert] = useState(false)
     const slicedAddress = token.seller.slice(0, 6) + "..." + token.seller.slice(-4);
+
 
     const handleBuy= async () => {
         const response = await market.buyNft(token.id, {
@@ -29,7 +32,18 @@ export const NFTSale = ({ collectionData, token }: NftProps) => {
         })
         const receipt = await response.wait()
         console.log(receipt)
-    }
+
+
+        const buyEventFilter = market.filters.Buy();
+        market.on(buyEventFilter, (seller: any, buyer: any, tokenId: any, price: any) => {
+          console.log("Buy event occurred:");
+          console.log("Seller:", seller);
+          console.log("Buyer:", buyer);
+          console.log("Token ID:", tokenId);
+          console.log("Price:", price);
+        });
+      };
+    
     
     const handleCopy = () => {
         navigator.clipboard.writeText(token.seller);
@@ -57,7 +71,7 @@ export const NFTSale = ({ collectionData, token }: NftProps) => {
                         <div className="mt-5 flex flex-col items-center justify-between space-y-4 border-t border-b border-gray-200 dark:border-gray-400 py-4 sm:flex-row sm:space-y-0">
                             <div className="flex flex-col justify-center items-center">
                                 <h1 className="text-3xl font-bold flex items-center"><Icon icon="cryptocurrency-color:matic" className="mr-2" />{token.price / (10 ** 18)}</h1>
-                                <span className="text-sm text-gray-500 dark:text-gray-400">300￦</span>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">{convertKRW(token.price)}￦</span>
                             </div>
 
                             <button onClick={handleBuy} type="button" className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-800">

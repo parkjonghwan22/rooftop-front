@@ -10,15 +10,13 @@ export const useMarket = () => {
     useEffect(() => {
         if (window.ethereum) {
           const walletProvider = new ethers.BrowserProvider(window.ethereum as any);
- 
-    
           const fetchMarket = async () => {
             const signer = await walletProvider.getSigner();
-
+      
             const marketInstance = await new ethers.Contract(marketAddress, MarketABI.abi, signer)
             setMarket(marketInstance);
           };
-    
+      
           fetchMarket();
         }
     }, []);
