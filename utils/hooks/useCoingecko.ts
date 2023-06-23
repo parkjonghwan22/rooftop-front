@@ -2,8 +2,8 @@ import axios from 'axios'
 import { useEffect, useState } from 'react'
 
 export const useCoingecko = () => {
-    const [maticPrice, setMaticPrice] = useState<number | undefined>() // 1 MATIC 가격
-    const [amount, setAmount] = useState<number | undefined>() // 내가가지고있는 MATIC 이랑 1 MATIC 가격 곱하기
+    const [maticPrice, setMaticPrice] = useState() // 1 MATIC 가격
+    const [amount, setAmount] = useState() // 내가가지고있는 MATIC 이랑 1 MATIC 가격 곱하기
 
     const API_URL = 'https://api.coingecko.com/api/v3/coins/markets'
     const CURRENCY = 'krw'
@@ -23,10 +23,6 @@ export const useCoingecko = () => {
 
             setMaticPrice(response.data[0].current_price)
             console.log('현재 1matic 가격 836: ', maticPrice)
-
-            if (maticPrice !== undefined) {
-                setAmount(TARGET_PRICE * maticPrice)
-            }
         })
     }
 
@@ -36,7 +32,7 @@ export const useCoingecko = () => {
 
     useEffect(() => {
         fetchData()
-    }, [maticPrice])
+    }, [])
 
-    return { amount, maticPrice }
+    return { maticPrice }
 }

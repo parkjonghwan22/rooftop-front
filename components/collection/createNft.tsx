@@ -10,7 +10,6 @@ import 'react-toastify/dist/ReactToastify.css'
 import { FileNftInputBox } from '@components/common/input/fileNftInputBox'
 import { NFTMint } from './nftmint'
 
-
 interface MintProps {
     collectionAddress: string
     royalty: string
@@ -108,15 +107,21 @@ export const CreateNft = ({
                             <LoadingSpinner /> Uploading...
                         </Button>
                     )}
-                    {!isLoading && !metaData && 
+                    {!isLoading && !metaData && (
                         <Button type="submit" color="blue">
                             NFT Registration
                         </Button>
-                    } 
-                    {!isLoading && metaData && 
-                    <NFTMint collectionAddress={collectionAddress} royalty={royalty} price={nftPrice.value as string | number} metaData={metaData}  >
-                        List NFT on Market
-                    </NFTMint>}
+                    )}
+                    {!isLoading && metaData && (
+                        <NFTMint
+                            collectionAddress={collectionAddress}
+                            royalty={royalty}
+                            price={nftPrice.value as string | number}
+                            metaData={metaData}
+                        >
+                            List NFT on Market
+                        </NFTMint>
+                    )}
                 </NftFormContainer>
             </CreateNftWrapper>
         </>

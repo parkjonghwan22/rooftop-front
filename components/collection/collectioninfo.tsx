@@ -75,21 +75,20 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                             NFT Mint
                             <Icon icon="iconamoon:enter" className="text-lg ml-2" />
                         </Button>
-                    </SectionB>
-                    <Modal
-                        isOpenModal={isOpenModal}
-                        setIsOpenModal={setIsOpenModal}
-                        width="20rem"
-                        height="1.5rem"
-                    >
-                        <CreateNft
+                        <Modal
+                            isOpenModal={isOpenModal}
                             setIsOpenModal={setIsOpenModal}
-                            collectionAddress={collection.address}
-                            royalty={collection.creatorFee}
-                        />
-                    </Modal>
+                            width="20rem"
+                            height="1.5rem"
+                        >
+                            <CreateNft
+                                setIsOpenModal={setIsOpenModal}
+                                collectionAddress={collection.address}
+                                royalty={collection.creatorFee}
+                            />
+                        </Modal>
+                    </SectionB>
                 </SectionWrap>
-
             ))}
         </>
     )
