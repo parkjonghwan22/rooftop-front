@@ -21,9 +21,10 @@ export const FileInputBox = ({ state, setState }: FileInputProps) => {
             const { data } = await request.post("file/upload", body, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
+            console.log(`data :`, data)
             setState(data.fileUrl);
-        } catch (e) {
-            console.error(e);
+        } catch (error) {
+            console.error(`error :`, error);
         }
     };
 

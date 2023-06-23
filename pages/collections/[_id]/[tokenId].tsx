@@ -1,4 +1,4 @@
-import { NFT } from '@components/collection/nft';
+import { NFTSale } from '@components/collection';
 import { RootLayout } from '@components/layout/layout';
 import { useMarket } from '@utils/hooks/useMarket';
 import { useQuery } from 'react-query';
@@ -65,7 +65,7 @@ const NftPage = () => {
   if (isLoading || !tokenData) return <p>Loading...</p> // 로딩 컴포넌트 필요!
   return (
     <RootLayout>
-      <NFT collectionData={collectionData} token={tokenData} />
+      <NFTSale collectionData={collectionData} token={tokenData} />
     </RootLayout>
   );
 }

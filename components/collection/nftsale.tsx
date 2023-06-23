@@ -2,25 +2,25 @@ import { useState } from 'react';
 import Image from 'next/image';
 import { Icon } from "@iconify/react"
 import { CollectionData, TokenData } from "@utils/types/collection.interface"
-import { useQuery } from "react-query"
 import Link from 'next/link';
 import { UserAddress } from "./styled/nft.styled"
 import { Alert } from '@components/common/alert';
 import { useMarket } from '@utils/hooks/useMarket';
 import { useAccount } from 'wagmi';
+import { NFTActivity } from './nftactivity';
+import { useIpfs } from '@utils/hooks/useIpfs';
 
 interface NftProps {
     collectionData: CollectionData
     token: TokenData
 }
 
-export const NFT = ({ collectionData, token }: NftProps) => {
+export const NFTSale = ({ collectionData, token }: NftProps) => {
     const { address } = useAccount()
+    const { market } = useMarket()
+    const { metaData, imageUrl , isLoading } = useIpfs(token)
     const [isOpenAlert, setIsOpenAlert] = useState(false)
     const slicedAddress = token.seller.slice(0, 6) + "..." + token.seller.slice(-4);
-
-
-    const { market } = useMarket()
 
     const handleBuy= async () => {
         const response = await market.buyNft(token.id, {
@@ -31,48 +31,16 @@ export const NFT = ({ collectionData, token }: NftProps) => {
         console.log(receipt)
     }
     
-
     const handleCopy = () => {
         navigator.clipboard.writeText(token.seller);
         setIsOpenAlert(true)
     }
 
 
-
-
-
-
-    const fetchMetadata = async (metadata: string) => {
-        const ipfsUrl = metadata.replace('ipfs://', '');
-        const response = await fetch(`https://ipfs.io/ipfs/${ipfsUrl}`);
-        if (!response.ok) {
-            throw new Error('메타 데이터를 가져오는데 실패했습니다');
-        }
-        return response.json();
-    };
-
-    
-    const fetchImageData = async (ipfs: string) => {
-        const ipfsUrl = ipfs.replace('ipfs://', '');
-        const response = await fetch(`https://ipfs.io/ipfs/${ipfsUrl}`);
-        if (!response.ok) {
-            throw new Error('이미지 데이터를 가져오는데 실패했습니다');
-        }
-        const imageData = await response.blob();
-        const imageUrl = URL.createObjectURL(imageData);
-        return imageUrl;
-    };
-
-    const { data: metaData, isLoading: isMetadataLoading, } = useQuery(['metadata', token.metadata], () => fetchMetadata(token.metadata));
-    const { data: imageUrl, isLoading: isImageLoading } = useQuery(['image', metaData?.ipfs], () => fetchImageData(metaData?.ipfs));
-
-    const isLoading = isMetadataLoading || isImageLoading;
-
     if (isLoading) return <div>Loading...</div> // 로딩 컴포넌트 필요
-
     return (
         <>
-            <div className="container mx-auto px-12">
+            <div className="container mx-auto px-8 xl:px-32">
                 <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
                     <div className="lg:col-span-3 lg:row-end-1">
                         <div className="lg:flex lg:items-start">
@@ -81,7 +49,7 @@ export const NFT = ({ collectionData, token }: NftProps) => {
                             </div>
                         </div>
                     </div>
-                    <div className="lg:col-span-2 lg:row-span-2 lg:row-end-2">
+                    <div className="lg:col-span-2 lg:row-span-1 lg:row-end-1">
                         <div className="flex items-center justify-center">
                             <h1 className="sm: text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-3xl">{metaData.name}</h1>
                             <p className="sm: text-xl font-bold text-gray-500 dark:text-gray-400 sm:text-xl pl-3">#{token.tokenId}</p>
@@ -97,8 +65,7 @@ export const NFT = ({ collectionData, token }: NftProps) => {
                                 Buy Now
                             </button>
                         </div>
-
-                        <ul className="mt-4 space-y-2">
+                        <ul className="mt-4 space-y-3">
                             <h1 className="text-lg font-bold py-2">Collection</h1>
                             <Link href={`/collections/${collectionData.address}`}>
                                 <li className="flex items-center text-left text-md font-medium text-gray-600 dark:text-gray-400 px-3">
@@ -118,10 +85,11 @@ export const NFT = ({ collectionData, token }: NftProps) => {
                             </li>
                         </ul>
                     </div>
-                    <div className="lg:col-span-3">
-                        <div className="mt-8 flow-root sm:mt-12">
-                            <h1 className="text-3xl font-bold">History</h1>
+                    <div className="lg:col-span-5">
+                        <div className="my-5 flow-root">
+                            <h1 className="text-3xl font-bold mb-3">Activity</h1>
                         </div>
+                        <NFTActivity token={token} />
                     </div>
                 </div>
             </div>

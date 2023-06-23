@@ -6,8 +6,11 @@ import { WagmiConfig } from 'wagmi'
 import { config } from '../wagmi-config'
 import { ToastContainer } from 'react-toastify'
 import { QueryClient, QueryClientProvider } from 'react-query'
+import { useCoingecko } from '@utils/hooks/useCoingecko'
 
-const queryClient = new QueryClient({
+const queryClient = new QueryClient()
+/**
+ * {
     defaultOptions: {
         queries: {
             retry: 5,
@@ -17,11 +20,8 @@ const queryClient = new QueryClient({
             },
         },
     },
-})
-
-queryClient.setQueryDefaults('maticPrice', {
-    cacheTime: 600000,
-})
+}
+ */
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
     return (
