@@ -94,7 +94,7 @@ export const CreateNft = ({
                         id="description"
                         placeholder="Please introduce your NFT"
                     />
-                    <NftLabel htmlFor="NftImage">대표 이미지 등록</NftLabel>
+                    <NftLabel htmlFor="NftImage">Add Image</NftLabel>
                     <FileNftInputBox
                         state={nftImage}
                         setState={setNftImage}

@@ -8,6 +8,10 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Button } from '@components/common/button'
 import { LoadingSpinner } from '@components/common/loading/loading'
 
+
+
+
+
 interface MintProps {
     metaData: string
     collectionAddress: string
@@ -26,6 +30,7 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
         if (!signer) return
 
         try {
+            setIsLoading(true)
             const instance = await new ethers.Contract(collectionAddress, TokenABI.abi, signer)
             const mintPrice = await instance.mint_price()
             const account = await signer.address
@@ -35,7 +40,7 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
                 from: account,
             })
 
-            const receipt = await mintTx.wait()
+            // const receipt = await mintTx.wait()
             const newTokenId = await instance.getLatestTokenId()
             if (newTokenId) setLatestTokenId(newTokenId)
         } catch (e: unknown) {
@@ -57,16 +62,28 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
                 metaData,
                 creatorFee
             )
-            console.log(addOnMarket)
+            // console.log(addOnMarket, `marketEvent::`, market)
+            const receipt = await addOnMarket.wait()
+            console.log(`receipt :`, receipt)
+            if (receipt) {
+                market.addListener('Add', (listen: any) => {console.log(`add:`, listen)})
+            }
+
+            if (addOnMarket.hash) {
+                alert("성공적으로 등록되었습니다") // alert 필요
+                setIsLoading(false)
+            } 
         } catch (e) {
             console.log(e)
         }
     }
 
-    useEffect(() => {
-        if (!market || !signer) return
-    }, [market, signer])
 
+    useEffect(() => {
+        if (!market || !signer) return;
+      }, [market, signer]);
+
+      
     useEffect(() => {
         if (latestTokenId) {
             tokenOnMarket(price)

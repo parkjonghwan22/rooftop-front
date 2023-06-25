@@ -14,6 +14,7 @@ export const useMarket = () => {
             const signer = await walletProvider.getSigner();
       
             const marketInstance = await new ethers.Contract(marketAddress, MarketABI.abi, signer)
+            // const addEvent = marketInstance.on('Add', listen => console.log(listen))
             setMarket(marketInstance);
           };
       
@@ -21,5 +22,8 @@ export const useMarket = () => {
         }
     }, []);
 
-    return { market, marketAddress: market?.target };
+
+
+      
+    return { market, marketAddress: market?.target, marketAbi: MarketABI.abi };
 };

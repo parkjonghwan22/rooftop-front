@@ -3,11 +3,11 @@ import { Icon } from '@iconify/react'
 import { useEffect } from "react"
 import { TokenData } from "@utils/types/collection.interface"
 import { useMarket } from '@utils/hooks/useMarket'
-import { ethers } from "ethers";
 
 export const NFTActivity = ({ token }: { token: TokenData }) => {
     const { market } = useMarket()
 
+    console.log(market)
 
 
     const ThStyled = tw.th`
