@@ -20,6 +20,25 @@ module.exports = {
         1100: "68.75rem",
         1200: "75rem",
       },
+      animation: {
+        wiggle: "wiggle 1s ease-in-out infinite",
+      },
+      keyframes: {
+        wiggle: {
+          "0%, 100%": { transform: "rotate(-5deg)" },
+          "50%": { transform: "rotate(5deg)" },
+        },
+        bounce: {
+          "0%, 100%": {
+            transform: "translateY(-55%)",
+            "animation-timing-function": "cubic-bezier(0.8,0,1,1)",
+          },
+          "50%": {
+            transform: "none",
+            "animation-timing-function": "cubic-bezier(0,0,0.2,1)",
+          },
+        },
+      },
     },
     maxHeight: {
       0: "0",
