@@ -2,7 +2,7 @@ import tw from "tailwind-styled-components";
 
 export const Activity = () => {
   const ThStyled = tw.th`
-        px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400 dark:bg-gray-600
+        px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase dark:text-gray-400 dark:bg-gray-600 bg-gray-50
     `;
   const TdStyled = tw.td`
         px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 dark:bg-gray-900

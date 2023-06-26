@@ -100,7 +100,7 @@ export const ProfileCard = ({ user }: { user: UserType | null }) => {
             <div
               className={`text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded-t-lg transition duration-150 ease-in font-medium text-sm text-center w-full py-3 cursor-pointer ${
                 activeTab === "nfts"
-                  ? "bg-gray-100 dark:bg-gray-600 text-white "
+                  ? "bg-red-500 dark:bg-gray-600 text-white"
                   : ""
               }`}
               onClick={() => handleTabClick("nfts")}
@@ -110,7 +110,7 @@ export const ProfileCard = ({ user }: { user: UserType | null }) => {
             <div
               className={`text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded-t-lg transition duration-150 ease-in font-medium text-sm text-center w-full py-3 cursor-pointer ${
                 activeTab === "activity"
-                  ? "bg-gray-100 dark:bg-gray-600 text-white "
+                  ? "bg-red-500 dark:bg-gray-600 text-white "
                   : ""
               }`}
               onClick={() => handleTabClick("activity")}
@@ -120,7 +120,7 @@ export const ProfileCard = ({ user }: { user: UserType | null }) => {
             <div
               className={`text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded-t-lg transition duration-150 ease-in font-medium text-sm text-center w-full py-3 cursor-pointer ${
                 activeTab === "favorites"
-                  ? "bg-gray-100 dark:bg-gray-600 text-white "
+                  ? "bg-red-500 dark:bg-gray-600 text-white "
                   : ""
               }`}
               onClick={() => handleTabClick("favorites")}
@@ -129,7 +129,7 @@ export const ProfileCard = ({ user }: { user: UserType | null }) => {
             </div>
           </div>
         </div>
-        <div className=" mx-auto ml-6 mr-6 bg-gray-700 dark:bg-gray-600 rounded-b-lg border-t-2 border-gray-900">
+        <div className=" mx-auto ml-6 mr-6 dark:bg-gray-600 shadow rounded-b-lg border-t-2 dark:border-t-2 dark:border-gray-900">
           {activeTab === "nfts" && <Mynft />}
           {activeTab === "activity" && <Activity />}
           {activeTab === "favorites" && <Favorites />}

@@ -22,6 +22,9 @@ module.exports = {
       },
       animation: {
         wiggle: "wiggle 1s ease-in-out infinite",
+        tada: "tada 1s ease-in-out infinite",
+        zoomIn: "zoomIn 1s",
+        zoomOut: "zoomOut 1s",
       },
       keyframes: {
         wiggle: {
@@ -38,6 +41,23 @@ module.exports = {
             "animation-timing-function": "cubic-bezier(0,0,0.2,1)",
           },
         },
+        tada: {
+          "0%, 100%": { transform: "scale3d(1, 1, 1)" },
+          "10%, 30%, 50%, 70%, 90%": {
+            transform: "scale3d(0.9, 0.9, 0.9) rotate(-3deg)",
+          },
+          "20%, 40%, 60%, 80%": {
+            transform: "scale3d(1.1, 1.1, 1.1) rotate(3deg)",
+          },
+        },
+        zoomIn: {
+          "0%": { opacity: "0", transform: "scale(0.5)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
+        zoomOut: {
+          "0%": { opacity: "1", transform: "scale(1)" },
+          "100%": { opacity: "0", transform: "scale(0.5)" },
+        },
       },
     },
     maxHeight: {
@@ -50,6 +70,11 @@ module.exports = {
       "4/5": "80%",
       "9/10": "90%",
       full: "100%",
+    },
+  },
+  variants: {
+    extend: {
+      animation: ["hover", "focus"],
     },
   },
   plugins: [require("tailwind-scrollbar-hide")],
