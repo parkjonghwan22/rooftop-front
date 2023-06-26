@@ -90,8 +90,6 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                     royalty={collections[0].creatorFee}
                 />
             </Modal>
-            {/* <SuccessAlert /> */}
-            {/* <ErrorAlert /> */}
         </>
     )
 }
