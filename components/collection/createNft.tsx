@@ -9,6 +9,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { FileNftInputBox } from '@components/common/input/fileNftInputBox'
 import { NFTMint } from './nftmint'
+import { ErrorAlert, SuccessAlert } from '@components/common/successAlert'
 
 interface MintProps {
     collectionAddress: string
