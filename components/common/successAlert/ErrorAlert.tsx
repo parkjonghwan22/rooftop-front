@@ -49,7 +49,7 @@ export const ErrorAlert = () => {
                             <g
                                 fill="none"
                                 stroke="currentColor"
-                                stroke-linecap="round"
+                                strokeLinecap="round"
                                 strokeWidth="1"
                             >
                                 <path
