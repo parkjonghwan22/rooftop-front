@@ -60,7 +60,7 @@ export const SuccessAlert = () => {
                                 fill="none"
                                 stroke="currentColor"
                                 stroke-linecap="round"
-                                stroke-width="1"
+                                strokeWidth="1"
                             >
                                 <path
                                     strokeDasharray="60"
