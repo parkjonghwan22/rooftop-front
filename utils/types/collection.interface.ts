@@ -8,9 +8,9 @@ export interface CollectionData {
     url: string;
     creatorFee: string;
     logo: string;
-    verified?: string;
-    floorPrice?: number;
-    totalVolume?: number;
+    verified: boolean;
+    floorPrice: number;
+    totalVolume: number;
     createdAt: Date;
     updatedAt: Date;
     __v: number;

@@ -84,6 +84,7 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
         creatorFee,
         floorPrice: 0,
         totalVolume: 0,
+        verified: false,
       });
       if (data) {
         await request.put("auth/update", {

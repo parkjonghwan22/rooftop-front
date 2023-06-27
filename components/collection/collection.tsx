@@ -51,8 +51,8 @@ export const CollectionBanner = ({
             </div>
             <div className="mt-5 mb-3 flex gap-14 md:!gap-14">
                 <CollectionStat value={totalItems} label="작품 수" />
-                <CollectionStat value="0" label="최저 거래가" />
-                <CollectionStat value="0" label="총 거래량" />
+                <CollectionStat value={collectionData.floorPrice} label="최저 거래가" />
+                <CollectionStat value={collectionData.totalVolume} label="총 거래량" />
                 <CollectionStat value={collectionData.creatorFee} label="작가 로열티" />
             </div>
         </div>
