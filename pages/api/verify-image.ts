@@ -2,13 +2,22 @@ import { v4 as uuidv4 } from 'uuid'
 import { NextApiRequest, NextApiResponse } from 'next'
 import FormData from 'form-data'
 import axios from 'axios'
-import config from '../../config'
+
+
+export const config = {
+    api: {
+        bodyParser: {
+            sizeLimit: '10mb'
+        }
+    }
+}
 
 const handlerImage = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
         const { bytes, fileName, contentType } = JSON.parse(req.body)
-        const pinata_api_key = config.PINATA_API_KEY
-        const pinata_secret_api_key = config.PINATA_SECRET_API_KEY
+        const pinata_api_key = process.env.PINATA_API_KEY
+        const pinata_secret_api_key = process.env.PINATA_SECRET_API_KEY
+        const pinata_url = 'https://api.pinata.cloud/pinning/pinFileToIPFS'
 
         if (!bytes || !fileName || !contentType) {
             return res.status(422).send({ message: 'Image data are missing' })
@@ -22,7 +31,7 @@ const handlerImage = async (req: NextApiRequest, res: NextApiResponse) => {
             filename: fileName + '-' + uuidv4(),
         })
         const fileRes = await axios.post(
-            'https://api.pinata.cloud/pinning/pinFileToIPFS',
+            pinata_url,
             formData,
             {
                 maxBodyLength: Infinity,

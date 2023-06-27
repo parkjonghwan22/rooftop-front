@@ -1,38 +1,35 @@
 import axios from 'axios'
 import { useEffect, useState } from 'react'
+import { useQuery } from 'react-query'
 
-export const useCoingecko = () => {
-    const [maticPrice, setMaticPrice] = useState() // 1 MATIC 가격
-    const [amount, setAmount] = useState() // 내가가지고있는 MATIC 이랑 1 MATIC 가격 곱하기
-
-    const API_URL = 'https://api.coingecko.com/api/v3/coins/markets'
+export const useCoinGecko = () => {
+    const COINGECKO_API_URL = 'https://api.coingecko.com/api/v3/coins/markets'
     const CURRENCY = 'krw'
     const COIN_ID = 'matic-network'
-    const TARGET_PRICE = 3 // 환산받을 MATIC
 
-    /**
-     * Coingecko Test
-     */
-    const fetchData = async () => {
-        await axios.get(`${API_URL}?vs_currency=${CURRENCY}&ids=${COIN_ID}`).then((response) => {
-            if (!response.data) {
-                alert('API 서버로부터 데이터 가져오기 실패')
-                return
+    const fetchMaticData = async ( ) => {
+        const response = await axios.get(`${COINGECKO_API_URL}?vs_currency=${CURRENCY}&ids=${COIN_ID}`)
+            if (!response) {
+                throw new Error('이미지 데이터를 가져오는데 실패했습니다')
             }
-            console.log('matic response data : ', response.data)
-
-            setMaticPrice(response.data[0].current_price)
-            console.log('현재 1matic 가격 836: ', maticPrice)
-        })
+            return response.data[0].current_price
     }
 
-    /**
-     * Coingecko Test End
-     *  */
+    const { data: maticCurrencyPrice, isLoading: isGeckoLoading } = useQuery(
+        ['maticPrice'],
+        () => {
+            return fetchMaticData()
+        },
+        {
+            cacheTime: 60 * 60 * 24 * 1000,
+        }
+    )
 
-    useEffect(() => {
-        fetchData()
-    }, [])
+    const convertKRW = (maticAmount : number) => {
+        if (!isGeckoLoading && maticCurrencyPrice) {
+            return ((maticAmount/(10 ** 18)) * maticCurrencyPrice).toFixed(3) // 소수점 3자리까지
+        }
+    }
 
-    return { maticPrice }
+    return { isGeckoLoading, maticCurrencyPrice, convertKRW }
 }

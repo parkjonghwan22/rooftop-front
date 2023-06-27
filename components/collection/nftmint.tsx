@@ -7,6 +7,11 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Button } from '@components/common/button'
 import { LoadingSpinner } from '@components/common/loading/loading'
+import request from '@utils/request'
+
+
+
+
 
 interface MintProps {
     metaData: string
@@ -17,7 +22,7 @@ interface MintProps {
 }
 
 export const NFTMint = ({ collectionAddress, royalty, metaData, price, children }: MintProps) => {
-    const { market } = useMarket()
+    const { market, decodeEvent } = useMarket()
     const { signer } = useEthers()
     const [latestTokenId, setLatestTokenId] = useState<number>()
     const [isLoading, setIsLoading] = useState(false)
@@ -26,6 +31,7 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
         if (!signer) return
 
         try {
+            setIsLoading(true)
             const instance = await new ethers.Contract(collectionAddress, TokenABI.abi, signer)
             const mintPrice = await instance.mint_price()
             const account = await signer.address
@@ -35,7 +41,7 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
                 from: account,
             })
 
-            const receipt = await mintTx.wait()
+            // const receipt = await mintTx.wait()
             const newTokenId = await instance.getLatestTokenId()
             if (newTokenId) setLatestTokenId(newTokenId)
         } catch (e: unknown) {
@@ -57,15 +63,34 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
                 metaData,
                 creatorFee
             )
-            console.log(addOnMarket)
+            const receipt = await addOnMarket.wait()
+            if (receipt.logs) {
+                const data = decodeEvent(receipt.logs[0].topics[0], receipt.logs[0].data);
+                if (data) {
+                    const decodedData = {
+                        id: Number(data[0]),
+                        from: receipt.from,
+                        to: receipt.to,
+                        NFTaddress: collectionAddress,
+                        tokenId: Number(data[3]),
+                        price: Number(data[4]),
+                        event: "minted"
+                    };
+                    console.log(decodedData)
+                    const response = await request.post("event/minted", {
+                        ...decodedData,
+                    });
+                    if (response.statusText === "Created")
+                    alert("성공적으로 등록되었습니다") // alert 필요
+                    setIsLoading(false)
+                }
+            }
         } catch (e) {
             console.log(e)
         }
     }
 
-    useEffect(() => {
-        if (!market || !signer) return
-    }, [market, signer])
+
 
     useEffect(() => {
         if (latestTokenId) {

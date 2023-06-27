@@ -32,6 +32,20 @@ export interface TokenData {
     highestBid: number;
 }
 
+export interface ActivityData {
+    _id: string;
+    id: number;
+    from: string;
+    to: string;
+    NFTaddress: string;
+    tokenId: number;
+    price: number;
+    event: string;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}
+
 
 export interface MetaData {
     name: string;
