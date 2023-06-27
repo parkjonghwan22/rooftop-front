@@ -21,7 +21,7 @@ module.exports = {
         1200: "75rem",
       },
       animation: {
-        slideRight: 'slideRight 0.5s ease-in-out',
+        slideRight: "slideRight 0.5s ease-in-out",
         wiggle: "wiggle 1s ease-in-out infinite",
         tada: "tada 1.5s ease-in-out infinite",
         zoomIn: "zoomIn 1s",
@@ -30,8 +30,8 @@ module.exports = {
       },
       keyframes: {
         slideRight: {
-         '0%': { transform: 'translateX(-150%)' },
-         '100%': { transform: 'translateX(0)' },
+          "0%": { transform: "translateX(-150%)" },
+          "100%": { transform: "translateX(0)" },
         },
         wiggle: {
           "0%, 100%": { transform: "rotate(-5deg)" },
@@ -70,14 +70,25 @@ module.exports = {
         },
       },
     },
+    maxHeight: {
+      0: "0",
+      "1/4": "25%",
+      "2/5": "40%",
+      "1/2": "50%",
+      "3/5": "60%",
+      "3/4": "75%",
+      "4/5": "80%",
+      "9/10": "90%",
+      full: "100%",
+    },
     fontFamily: {
       redhat: ["Red Hat Text", "sans-serif"],
     },
     variants: {
-        extend: {
-            animation: ['hover', 'focus'],
-        },
+      extend: {
+        animation: ["hover", "focus"],
+      },
     },
   },
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [],
 };
