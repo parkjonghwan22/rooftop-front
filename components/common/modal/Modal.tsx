@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { ModalWrapper, ModalContent } from "./styled/modal.styled";
-import { Icon } from '@iconify/react';
+import { Icon } from "@iconify/react";
 import { StyledProps } from "utils/types/style.interface";
 
 interface ModalProps extends StyledProps {
@@ -8,12 +8,21 @@ interface ModalProps extends StyledProps {
   setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Modal = ({ isOpenModal, setIsOpenModal, children, width, height }: ModalProps) => {
+export const Modal = ({
+  isOpenModal,
+  setIsOpenModal,
+  children,
+  width,
+  height,
+}: ModalProps) => {
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClose = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as HTMLElement)) {
+      if (
+        modalRef.current &&
+        !modalRef.current.contains(e.target as HTMLElement)
+      ) {
         setIsOpenModal(false);
       }
     };
@@ -36,7 +45,11 @@ export const Modal = ({ isOpenModal, setIsOpenModal, children, width, height }: 
   return isOpenModal ? (
     <ModalWrapper>
       <ModalContent ref={modalRef} width={width} height={height}>
-        <Icon icon="ph:x" onClick={() => setIsOpenModal(false)} className="ml-auto text-lg cursor-pointer" />
+        <Icon
+          icon="ph:x"
+          onClick={() => setIsOpenModal(false)}
+          className="ml-auto text-lg cursor-pointer"
+        />
         {children}
       </ModalContent>
     </ModalWrapper>

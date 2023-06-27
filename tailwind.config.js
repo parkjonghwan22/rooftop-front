@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -21,7 +22,7 @@ module.exports = {
         1200: "75rem",
       },
       animation: {
-        slideRight: 'slideRight 0.5s ease-in-out',
+        slideRight: "slideRight 0.5s ease-in-out",
         wiggle: "wiggle 1s ease-in-out infinite",
         tada: "tada 1.5s ease-in-out infinite",
         zoomIn: "zoomIn 1s",
@@ -30,8 +31,8 @@ module.exports = {
       },
       keyframes: {
         slideRight: {
-         '0%': { transform: 'translateX(-150%)' },
-         '100%': { transform: 'translateX(0)' },
+          "0%": { transform: "translateX(-150%)" },
+          "100%": { transform: "translateX(0)" },
         },
         wiggle: {
           "0%, 100%": { transform: "rotate(-5deg)" },
@@ -59,25 +60,33 @@ module.exports = {
         zoomIn: {
           "0%": { opacity: "0", transform: "scale(0.5)" },
           "100%": { opacity: "1", transform: "scale(1)" },
+
         },
-        zoomOut: {
-          "0%": { opacity: "1", transform: "scale(1)" },
-          "100%": { opacity: "0", transform: "scale(0.5)" },
+        fontFamily: {
+            redhat: ['Red Hat Text', 'sans-serif'],
         },
-        flip: {
-          from: { transform: "rotateX(0deg)", transformOrigin: "50% bottom " },
-          to: { transform: "rotateX(180deg)", transformOrigin: "50% bottom " },
+        variants: {
+            extend: {
+                animation: ['hover', 'focus'],
+            },
         },
+
       },
     },
-    fontFamily: {
-      redhat: ["Red Hat Text", "sans-serif"],
+    maxHeight: {
+      0: "0",
+      "1/4": "25%",
+      "2/5": "40%",
+      "1/2": "50%",
+      "3/5": "60%",
+      "3/4": "75%",
+      "4/5": "80%",
+      "9/10": "90%",
+      full: "100%",
     },
-    variants: {
-        extend: {
-            animation: ['hover', 'focus'],
-        },
-    },
+    
   },
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [],
 };
+
+
