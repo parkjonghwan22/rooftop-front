@@ -96,11 +96,11 @@ export const ProfileCard = ({ user }: { user: UserType | null }) => {
               <Icon icon="bxs:copy" className="ml-1" />
             </UserAddress>
           </div>
-          <div className="flex justify-between items-center my-5 px-6">
+          <div className="flex justify-between items-center px-6 ">
             <div
-              className={`text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3 cursor-pointer ${
+              className={`text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded-t-lg transition duration-150 ease-in font-medium text-sm text-center w-full py-3 cursor-pointer ${
                 activeTab === "nfts"
-                  ? "bg-gray-100 dark:bg-gray-600 text-gray-900"
+                  ? "bg-red-500 dark:bg-gray-600 text-white"
                   : ""
               }`}
               onClick={() => handleTabClick("nfts")}
@@ -108,9 +108,9 @@ export const ProfileCard = ({ user }: { user: UserType | null }) => {
               My NFTs
             </div>
             <div
-              className={`text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3 cursor-pointer ${
+              className={`text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded-t-lg transition duration-150 ease-in font-medium text-sm text-center w-full py-3 cursor-pointer ${
                 activeTab === "activity"
-                  ? "bg-gray-100 dark:bg-gray-600 text-gray-900"
+                  ? "bg-red-500 dark:bg-gray-600 text-white "
                   : ""
               }`}
               onClick={() => handleTabClick("activity")}
@@ -118,9 +118,9 @@ export const ProfileCard = ({ user }: { user: UserType | null }) => {
               Activity
             </div>
             <div
-              className={`text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded transition duration-150 ease-in font-medium text-sm text-center w-full py-3 cursor-pointer ${
+              className={`text-gray-500 hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white rounded-t-lg transition duration-150 ease-in font-medium text-sm text-center w-full py-3 cursor-pointer ${
                 activeTab === "favorites"
-                  ? "bg-gray-100 dark:bg-gray-600 text-gray-900"
+                  ? "bg-red-500 dark:bg-gray-600 text-white "
                   : ""
               }`}
               onClick={() => handleTabClick("favorites")}
@@ -129,12 +129,12 @@ export const ProfileCard = ({ user }: { user: UserType | null }) => {
             </div>
           </div>
         </div>
+        <div className=" mx-auto ml-6 mr-6 dark:bg-gray-600 shadow rounded-b-lg border-t-2 dark:border-t-2 dark:border-gray-900">
+          {activeTab === "nfts" && <Mynft />}
+          {activeTab === "activity" && <Activity />}
+          {activeTab === "favorites" && <Favorites />}
+        </div>
       </ProfileCardWrap>
-      <div className="mt-16 mx-auto md:w-5/6 bg-gray-700 dark:bg-gray-800 rounded-lg">
-        {activeTab === "nfts" && <Mynft />}
-        {activeTab === "activity" && <Activity />}
-        {activeTab === "favorites" && <Favorites />}
-      </div>
       <Alert
         isOpenAlert={isOpenAlert}
         setIsOpenAlert={setIsOpenAlert}

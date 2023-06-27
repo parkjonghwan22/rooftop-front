@@ -1,4 +1,4 @@
-import LoadingSlider from "../modal/styled/LoadingSlide.styled";
+import LoadingSlider from "./styled/LoadingSlide.styled";
 
 export const LoadingSpinner2 = () => {
   return (
