@@ -17,5 +17,5 @@ export const RankingCollectionWrapper = tw.div`
 `
 
 export const RankingFollowSvg = tw.svg`
-    flex items-center justify-center fill-current
+    flex items-center justify-center fill-current hover:animate-tada
 `

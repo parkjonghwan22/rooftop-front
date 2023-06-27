@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
     RankingCollectionWrapper,
     TitleCollectionDiv,
@@ -7,6 +8,12 @@ import {
 } from './styled/stats.styled'
 
 const Stats = () => {
+    const [isFollow, setIsFollow] = useState(false)
+
+    const followHandler = () => {
+        setIsFollow((prevState) => !prevState)
+    }
+
     return (
         <>
             <TitleCollectionDiv>
@@ -83,9 +90,10 @@ const Stats = () => {
                                             width="34"
                                             height="34"
                                             cursor="pointer"
+                                            onClick={followHandler}
                                         >
                                             <path
-                                                fill="none"
+                                                fill={isFollow ? 'red' : 'none'}
                                                 stroke="currentColor"
                                                 stroke-dasharray="30"
                                                 stroke-dashoffset="30"
@@ -148,9 +156,10 @@ const Stats = () => {
                                                 width="34"
                                                 height="34"
                                                 cursor="pointer"
+                                                onClick={followHandler}
                                             >
                                                 <path
-                                                    fill="none"
+                                                    fill={isFollow ? 'red' : 'none'}
                                                     stroke="currentColor"
                                                     stroke-dasharray="30"
                                                     stroke-dashoffset="30"
