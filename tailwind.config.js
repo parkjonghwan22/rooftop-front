@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -59,15 +60,17 @@ module.exports = {
         zoomIn: {
           "0%": { opacity: "0", transform: "scale(0.5)" },
           "100%": { opacity: "1", transform: "scale(1)" },
+
         },
-        zoomOut: {
-          "0%": { opacity: "1", transform: "scale(1)" },
-          "100%": { opacity: "0", transform: "scale(0.5)" },
+        fontFamily: {
+            redhat: ['Red Hat Text', 'sans-serif'],
         },
-        flip: {
-          from: { transform: "rotateX(0deg)", transformOrigin: "50% bottom " },
-          to: { transform: "rotateX(180deg)", transformOrigin: "50% bottom " },
+        variants: {
+            extend: {
+                animation: ['hover', 'focus'],
+            },
         },
+
       },
     },
     maxHeight: {
@@ -81,14 +84,9 @@ module.exports = {
       "9/10": "90%",
       full: "100%",
     },
-    fontFamily: {
-      redhat: ["Red Hat Text", "sans-serif"],
-    },
-    variants: {
-      extend: {
-        animation: ["hover", "focus"],
-      },
-    },
+    
   },
   plugins: [],
 };
+
+
