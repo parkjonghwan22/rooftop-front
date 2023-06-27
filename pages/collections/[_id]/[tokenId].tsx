@@ -10,13 +10,24 @@ import { TokenData } from '@utils/types/collection.interface';
 const NftPage = () => {
   const router = useRouter();
   const { _id, id } = router.query;
-
   const { market } = useMarket();
+
+
 
   const getCollection = async (collectionAddress: string) => {
     try {
       const { data } = await request.get(`collection/${collectionAddress}`);
       return data[0];
+    } catch (error: unknown) {
+      throw new Error(error as string);
+    }
+  }
+
+
+  const getActivity = async (id: string | number) => {
+    try {
+      const { data } = await request.get(`event/${id}`);
+      return data;
     } catch (error: unknown) {
       throw new Error(error as string);
     }
@@ -60,12 +71,21 @@ const NftPage = () => {
       enabled: !!market && !!id,
     }
   );
-  const isLoading = collectionLoading || nftLoading
 
-  if (isLoading || !tokenData) return <p>Loading...</p> // 로딩 컴포넌트 필요!
+  const { data: activityData, isLoading: activityLoading } = useQuery(
+    ['activity', id],
+    () => getActivity(id as string),
+    {
+      enabled: !!id,
+    }
+  );
+
+  const isLoading = collectionLoading || nftLoading || activityLoading
+
+  if (isLoading || !tokenData || !activityData) return <p>Loading...</p> // 로딩 컴포넌트 필요
   return (
     <RootLayout>
-      <NFTSale collectionData={collectionData} token={tokenData} />
+      <NFTSale collectionData={collectionData} token={tokenData} activity={activityData} />
     </RootLayout>
   );
 }

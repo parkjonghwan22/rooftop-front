@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Button } from '@components/common/button'
 import { LoadingSpinner } from '@components/common/loading/loading'
+import request from '@utils/request'
 
 
 
@@ -21,7 +22,7 @@ interface MintProps {
 }
 
 export const NFTMint = ({ collectionAddress, royalty, metaData, price, children }: MintProps) => {
-    const { market } = useMarket()
+    const { market, decodeEvent } = useMarket()
     const { signer } = useEthers()
     const [latestTokenId, setLatestTokenId] = useState<number>()
     const [isLoading, setIsLoading] = useState(false)
@@ -62,28 +63,35 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
                 metaData,
                 creatorFee
             )
-            // console.log(addOnMarket, `marketEvent::`, market)
             const receipt = await addOnMarket.wait()
-            console.log(`receipt :`, receipt)
-            if (receipt) {
-                market.addListener('Add', (listen: any) => {console.log(`add:`, listen)})
+            if (receipt.logs) {
+                const data = decodeEvent(receipt.logs[0].topics[0], receipt.logs[0].data);
+                if (data) {
+                    const decodedData = {
+                        id: Number(data[0]),
+                        from: receipt.from,
+                        to: receipt.to,
+                        NFTaddress: collectionAddress,
+                        tokenId: Number(data[3]),
+                        price: Number(data[4]),
+                        event: "minted"
+                    };
+                    console.log(decodedData)
+                    const response = await request.post("event/minted", {
+                        ...decodedData,
+                    });
+                    if (response.statusText === "Created")
+                    alert("성공적으로 등록되었습니다") // alert 필요
+                    setIsLoading(false)
+                }
             }
-
-            if (addOnMarket.hash) {
-                alert("성공적으로 등록되었습니다") // alert 필요
-                setIsLoading(false)
-            } 
         } catch (e) {
             console.log(e)
         }
     }
 
 
-    useEffect(() => {
-        if (!market || !signer) return;
-      }, [market, signer]);
 
-      
     useEffect(() => {
         if (latestTokenId) {
             tokenOnMarket(price)

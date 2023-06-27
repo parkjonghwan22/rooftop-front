@@ -1,50 +1,74 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { Icon } from "@iconify/react"
-import { CollectionData, TokenData } from "@utils/types/collection.interface"
+import { CollectionData, TokenData, ActivityData } from "@utils/types/collection.interface"
 import Link from 'next/link';
 import { UserAddress } from "./styled/nft.styled"
 import { Alert } from '@components/common/alert';
 import { useMarket } from '@utils/hooks/useMarket';
-import { useAccount } from 'wagmi';
+import { useAccount, useBalance } from 'wagmi';
 import { NFTActivity } from './nftactivity';
 import { useIpfs } from '@utils/hooks/useIpfs';
 import { useCoinGecko } from '@utils/hooks/useCoingecko';
+import request from '@utils/request';
+import { ethers } from 'ethers';
 
 interface NftProps {
     collectionData: CollectionData
     token: TokenData
+    activity: ActivityData[]
 }
 
-export const NFTSale = ({ collectionData, token }: NftProps) => {
+export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const { address } = useAccount()
-    const { market } = useMarket()
-    const { metaData, imageUrl , isLoading } = useIpfs(token)
+    const { market, decodeEvent } = useMarket()
+    const { metaData, imageUrl, isLoading } = useIpfs(token)
     const { convertKRW } = useCoinGecko()
     const [isOpenAlert, setIsOpenAlert] = useState(false)
     const slicedAddress = token.seller.slice(0, 6) + "..." + token.seller.slice(-4);
 
+    function convertToWei(number: number, decimals: number) {
+        const wei = ethers.parseUnits(number.toString(), decimals);
+        return wei.toString();
+    }
+    const parsedPrice = convertToWei(token.price, 0)
 
-    const handleBuy= async () => {
-        const response = await market.buyNft(token.id, {
-            from: address,
-            value: token.price
-        })
-        const receipt = await response.wait()
-        console.log(receipt)
+    const handleBuy = async () => {
+        try {
+            const buyNFT = await market.buyNft(token.id, {
+                from: address,
+                value: parsedPrice,
+            })
+            const receipt = await buyNFT.wait()
+            // console.log(receipt)
+            if (receipt.logs) {
+                const data = decodeEvent(receipt.logs[3].topics[0], receipt.logs[3].data);
+                // console.log(data)
+                if (data) {
+                    const decodedData = {
+                        id: Number(data[0]),
+                        from: receipt.from,
+                        to: receipt.to,
+                        NFTaddress: token.NFTaddress,
+                        tokenId: Number(data[4]),
+                        price: Number(data[5]),
+                        event: "transfer"
+                    };
+                    console.log(decodedData)
+                    const response = await request.post("event/transfer", {
+                        ...decodedData,
+                    });
+                    console.log(response)
+                    if (response.statusText === "Created")
+                        alert("거래가 체결되었습니다") // alert 필요
+                }
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    };
 
 
-        const buyEventFilter = market.filters.Buy();
-        market.on(buyEventFilter, (seller: any, buyer: any, tokenId: any, price: any) => {
-          console.log("Buy event occurred:");
-          console.log("Seller:", seller);
-          console.log("Buyer:", buyer);
-          console.log("Token ID:", tokenId);
-          console.log("Price:", price);
-        });
-      };
-    
-    
     const handleCopy = () => {
         navigator.clipboard.writeText(token.seller);
         setIsOpenAlert(true)
@@ -103,7 +127,7 @@ export const NFTSale = ({ collectionData, token }: NftProps) => {
                         <div className="my-5 flow-root">
                             <h1 className="text-3xl font-bold mb-3">Activity</h1>
                         </div>
-                        <NFTActivity token={token} />
+                        <NFTActivity token={token} activity={activity} />
                     </div>
                 </div>
             </div>
@@ -111,4 +135,3 @@ export const NFTSale = ({ collectionData, token }: NftProps) => {
         </>
     )
 }
-
