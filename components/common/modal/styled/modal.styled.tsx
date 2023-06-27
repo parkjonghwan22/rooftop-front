@@ -8,3 +8,4 @@ export const ModalWrapper = tw.div`
 export const ModalContent = tw.div<StyledProps>`
   relative rounded-lg shadow bg-white dark:bg-gray-700 p-3 max-h-9/10 overflow-y-scroll
 `
+
