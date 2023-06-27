@@ -22,7 +22,7 @@ module.exports = {
       },
       animation: {
         wiggle: "wiggle 1s ease-in-out infinite",
-        tada: "tada 1s ease-in-out infinite",
+        tada: "tada 1.5s ease-in-out infinite",
         zoomIn: "zoomIn 1s",
         zoomOut: "zoomOut 1s",
       },
