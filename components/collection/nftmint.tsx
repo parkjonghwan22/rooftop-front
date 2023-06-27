@@ -77,6 +77,8 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
                         event: "minted"
                     };
                     console.log(decodedData)
+                    // const floorPrice = await request.put("", {})
+
                     const response = await request.post("event/minted", {
                         ...decodedData,
                     });
