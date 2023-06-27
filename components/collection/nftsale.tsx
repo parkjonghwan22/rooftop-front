@@ -68,11 +68,11 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
         }
     };
 
-
     const handleCopy = () => {
         navigator.clipboard.writeText(token.seller);
-        setIsOpenAlert(true)
-    }
+        setIsOpenAlert(true);
+    };
+
 
 
     if (isLoading) return <div>Loading...</div> // 로딩 컴포넌트 필요
