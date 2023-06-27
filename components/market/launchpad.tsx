@@ -82,6 +82,8 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
         url: collectionUrl.value,
         logo: collectionLogo,
         creatorFee,
+        floorPrice: 0,
+        totalVolume: 0,
       });
       if (data) {
         await request.put("auth/update", {

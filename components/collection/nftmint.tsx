@@ -22,7 +22,7 @@ interface MintProps {
 }
 
 export const NFTMint = ({ collectionAddress, royalty, metaData, price, children }: MintProps) => {
-    const { market, decodeEvent } = useMarket()
+    const { market, decodeEvent, getLowestPrice } = useMarket()
     const { signer } = useEthers()
     const [latestTokenId, setLatestTokenId] = useState<number>()
     const [isLoading, setIsLoading] = useState(false)
@@ -77,13 +77,12 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
                         event: "minted"
                     };
                     console.log(decodedData)
-                    // const floorPrice = await request.put("", {})
 
                     const response = await request.post("event/minted", {
                         ...decodedData,
                     });
                     if (response.statusText === "Created")
-                    alert("성공적으로 등록되었습니다") // alert 필요
+                        alert("성공적으로 등록되었습니다") // alert 필요
                     setIsLoading(false)
                 }
             }
@@ -92,11 +91,23 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
         }
     }
 
+    const updateFloorPrice = async (address: string) => {
 
+        const currentFloor = await getLowestPrice(address)
+        if (!currentFloor || currentFloor <= Number(price)) return
+        console.log(currentFloor)
+    
+        const { data } = await request.put("collection/update", {
+            address,
+            floorPrice: Number(price),
+        })
+        console.log(data)
+    }
 
     useEffect(() => {
         if (latestTokenId) {
             tokenOnMarket(price)
+            updateFloorPrice(collectionAddress)
         }
     }, [latestTokenId])
 

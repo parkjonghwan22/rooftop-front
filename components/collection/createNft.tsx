@@ -1,6 +1,5 @@
 import { useInput } from '@utils/hooks/useInput'
 import { CreateNftWrapper, NftFormContainer, NftTitle, NftLabel } from './styled/createNft.styled'
-import request from '@utils/request'
 import React, { useState } from 'react'
 import { InputBox, PriceInputBox, TextArea } from '@components/common/input'
 import { Button } from '@components/common/button'

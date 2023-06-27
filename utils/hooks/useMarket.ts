@@ -21,6 +21,20 @@ export const useMarket = () => {
     return decodedData;
   };
   
+  const getLowestPrice = async (address: string) => {
+    if (!market) return null
+      const result = await market.lowestPriceByCollection(address)
+      const parsedResult = Number(result) / (10 ** 18)
+      return parsedResult
+  }
+
+  const getTotalVolume = async (address: string) => {
+    if (!market) return null
+    const result = await market.totalSalesByCollection(address)
+    const parsedResult = Number(result) / (10 ** 18)
+    return parsedResult
+}
+
 
   useEffect(() => {
     if (window.ethereum) {
@@ -37,5 +51,11 @@ export const useMarket = () => {
 
 
 
-  return { market, marketAddress: market?.target, decodeEvent };
+  return { 
+    market, 
+    marketAddress: market?.target, 
+    decodeEvent,
+    getLowestPrice,
+    getTotalVolume
+  };
 };
