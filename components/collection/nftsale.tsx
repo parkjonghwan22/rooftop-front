@@ -12,6 +12,7 @@ import { useIpfs } from "@utils/hooks/useIpfs";
 import { useCoinGecko } from "@utils/hooks/useCoingecko";
 import { BidModal } from "@components/common/modal/BidModal";
 import Bid from "./bid";
+import { NumberBox } from "@components/common/Timer/numberbox";
 
 interface NftProps {
   collectionData: CollectionData;
@@ -136,6 +137,7 @@ export const NFTSale = ({ collectionData, token }: NftProps) => {
               </li>
             </ul>
           </div>
+          <NumberBox num={""} unit={""} flip={false} />
           <div className="lg:col-span-5">
             <div className="my-5 flow-root">
               <h1 className="text-3xl font-bold mb-3">Activity</h1>

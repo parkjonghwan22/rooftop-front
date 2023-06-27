@@ -25,6 +25,7 @@ module.exports = {
         tada: "tada 1.5s ease-in-out infinite",
         zoomIn: "zoomIn 1s",
         zoomOut: "zoomOut 1s",
+        flip: "flip 1s cubic-bezier(0, 0, 0.2, 1) infinite",
       },
       keyframes: {
         wiggle: {
@@ -58,7 +59,14 @@ module.exports = {
           "0%": { opacity: "1", transform: "scale(1)" },
           "100%": { opacity: "0", transform: "scale(0.5)" },
         },
+        flip: {
+          from: { transform: "rotateX(0deg)", transformOrigin: "50% bottom " },
+          to: { transform: "rotateX(180deg)", transformOrigin: "50% bottom " },
+        },
       },
+    },
+    fontFamily: {
+      redhat: ["Red Hat Text", "sans-serif"],
     },
     maxHeight: {
       0: "0",
