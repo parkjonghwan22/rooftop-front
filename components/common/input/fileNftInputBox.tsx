@@ -14,6 +14,7 @@ interface FileNftInputProps {
 
 export const FileNftInputBox = ({ state, setState, id, name, type }: FileNftInputProps) => {
     const pending = () => toast.info('Image Uploading...')
+    const success = () => toast.success('Image upload successfully completed. Press the button to create your NFT')
     const [previewImage, setPreviewImage] = useState('')
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || e.target.files.length === 0) {
@@ -43,6 +44,7 @@ export const FileNftInputBox = ({ state, setState, id, name, type }: FileNftInpu
                     setState(data.IpfsHash)
                     setPreviewImage(URL.createObjectURL(file))
                     URL.revokeObjectURL(previewImage)
+                    success()
                 })
                 .catch((error) => console.log(error))
         } catch (e: any) {
