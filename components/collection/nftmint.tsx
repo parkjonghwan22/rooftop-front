@@ -8,6 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Button } from '@components/common/button'
 import { LoadingSpinner } from '@components/common/loading/loading'
 import request from '@utils/request'
+import { SuccessAlert } from '@components/common/successAlert'
 
 
 
@@ -18,15 +19,17 @@ interface MintProps {
     collectionAddress: string
     royalty: string
     price: number | string
+    setSuccessAlert: React.Dispatch<React.SetStateAction<boolean>>
+    setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>
     children: string | React.ReactNode
 }
 
-export const NFTMint = ({ collectionAddress, royalty, metaData, price, children }: MintProps) => {
+export const NFTMint = ({ collectionAddress, royalty, metaData, price, setSuccessAlert,setIsOpenModal, children }: MintProps) => {
     const { market, decodeEvent, getLowestPrice } = useMarket()
     const { signer } = useEthers()
     const [latestTokenId, setLatestTokenId] = useState<number>()
     const [isLoading, setIsLoading] = useState(false)
-
+    
     const handleMint = async () => {
         if (!signer) return
 
@@ -81,8 +84,10 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, children 
                     const response = await request.post("event/minted", {
                         ...decodedData,
                     });
-                    if (response.statusText === "Created")
-                        alert("성공적으로 등록되었습니다") // alert 필요
+                    if (response.statusText === "Created"){
+                        toast.success("NFT Minted Successfully")
+                        setIsOpenModal(false)
+                    }
                     setIsLoading(false)
                 }
             }

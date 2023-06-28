@@ -4,179 +4,94 @@ import React from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { Icon } from "@iconify/react";
+import { TokenData } from "@utils/types/collection.interface";
+import { useIpfs } from "@utils/hooks/useIpfs";
+import { useCoinGecko } from "@utils/hooks/useCoingecko";
+import Link from "next/link";
 
 export const SlideWrap = tw.div`
-mx-auto w-1100 h-450 rounded-lg overflow-hidden dark:bg-gray-900 bg-gary-100 shadow-xl
+  mx-auto w-5/6  md:w-3/4 h-450 lg:h-450 rounded-lg dark:bg-gray-900 bg-gary-100 shadow-xl
 `;
 
 export const SlideBox = tw.div`
-w-10/12 h-450 mx-auto flex items-center
+  w-10/12 h-450 mx-auto items-center flex flex-col lg:flex-row
 `;
 
-const Logo = tw.svg`
-  w-8 h-8 text-white 
-`;
 
-const ImageSlider = () => {
+const SlideItem = ({ token }: { token: TokenData }) => {
+  const { metaData, imageUrl, isLoading } = useIpfs(token)
+  const { convertKRW } = useCoinGecko()
+
+
+  if (isLoading) return <p>Loading...</p> // 로딩 컴포넌트 필요
+  return (
+
+      <div className="container mx-auto">
+        <SlideBox>
+        <Link href={`/collections/${token.NFTaddress}/nft?id=${token.id}`}>
+        <div className="object-fill overflow-hidden w-80 h-80 lg:border-4 rounded-md border-white dark:border-gray-600 mt-8 lg:mt-0 lg:ml-10">
+          <Image
+            src={imageUrl ? imageUrl : 'https://dummyimage.com/480x480/ccc/000'}
+            alt="test"
+            width={1000}
+            height={1000}
+          />
+          </div>
+        </Link>
+          <div className="w-full lg:h-80 lg:ml-20 mt-4 lg:mt-11">
+            <div className="flex flex-wrap">
+              <div className="w-full mb-2 lg:mb-10 flex justify-center lg:justify-start">
+                <span className="text-2xl lg:text-4xl font-bold">{metaData.name} #{token.id}</span>
+              </div>
+              <div className="hidden lg:block w-full mb-2">
+                <span className="text-2xl">Current Price</span>
+              </div>
+              <div className="w-full mb-4 lg:mb-10 flex items-center justify-center lg:justify-start">
+                <span className="text-lg lg:text-3xl mr-4 font-semibold flex items-center"><Icon icon="cryptocurrency-color:matic" className="mr-2" /> {token.price / 10 ** 18}</span>
+                <span className="text-sm lg:text-lg text-green-600 dark:text-green-400">{convertKRW(token.price)}￦</span>
+              </div>
+              <div className="w-full flex justify-center lg:justify-start">
+                <div className="w-4/6 h-16 font-bold bg-red-500 lg:mr-10 rounded-lg cursor-pointer flex items-center hover:bg-gray-500 transition-all duration-150">
+                  <div className="w-full text-center text-xl text-white">
+                  <Link href={`/collections/${token.NFTaddress}/nft?id=${token.id}`}>
+                    Buy now
+                  </Link>
+                  </div>
+                  <div className="w-24 h-full border-l-2 flex justify-center items-center">
+                    <Icon icon="mdi:cart-outline" className="text-3xl" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </SlideBox>
+      </div>
+  );
+};
+
+const Slide = ({tokenData}: { tokenData: TokenData[] }) => {
   const settings = {
     infinite: true,
-    speed: 500,
+    speed: 700,
     slidesToShow: 1,
     slidesToScroll: 1,
     autoplay: true,
-    autoplaySpeed: 2000,
+    autoplaySpeed: 3000,
     arrows: false,
   };
 
   return (
-    <Slider {...settings}>
-      <div>
-        <SlideBox>
-          <Image
-            src="http://localhost:3000/test.png"
-            alt="test"
-            width={1000}
-            height={1000}
-            className="object-fill w-80 h-80 border-4 ml-20"
-          />
-          <div className="w-full h-80 ml-20 mt-11">
-            <div className="flex flex-wrap">
-              <div className="w-full mb-10">
-                <span className="text-3xl font-bold">Space Cat : NFT #452</span>
-              </div>
-              <div className="w-full mb-10">
-                <span className="text-lg font-medium block mb-5">
-                  Current Price
-                </span>
-                <span className="text-4xl mr-5 font-semibold">0.029 ETH</span>
-                <span>$50.15</span>
-              </div>
-              <div className="w-full">
-                <div className="w-4/6 h-16 font-bold bg-red-500 mr-10 rounded-lg cursor-pointer flex items-center hover:bg-gray-500">
-                  <div className="w-full text-center text-xl text-white">
-                    Buy now
-                  </div>
-                  <div className="w-24 h-full border-l-2 flex justify-center items-center">
-                    <Logo
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      className=""
-                    >
-                      <path
-                        fill="white"
-                        d="M17 18a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2c0-1.11.89-2 2-2M1 2h3.27l.94 2H20a1 1 0 0 1 1 1c0 .17-.05.34-.12.5l-3.58 6.47c-.34.61-1 1.03-1.75 1.03H8.1l-.9 1.63l-.03.12a.25.25 0 0 0 .25.25H19v2H7a2 2 0 0 1-2-2c0-.35.09-.68.24-.96l1.36-2.45L3 4H1V2m6 16a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2c0-1.11.89-2 2-2m9-7l2.78-5H6.14l2.36 5H16Z"
-                      />
-                    </Logo>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </SlideBox>
-      </div>
-      <div>
-        <SlideBox>
-          <Image
-            src="http://localhost:3000/test3.png"
-            alt="test"
-            width={1000}
-            height={1000}
-            className="object-fill w-80 h-80 border-4 ml-20"
-          />
-          <div className="w-full h-80 ml-20 mt-11">
-            <div className="flex flex-wrap">
-              <div className="w-full mb-10">
-                <span className="text-3xl font-bold">Space Cat : NFT #452</span>
-              </div>
-              <div className="w-full mb-10">
-                <span className="text-lg font-medium block mb-5">
-                  Current Price
-                </span>
-                <span className="text-4xl mr-5 font-semibold">0.029 ETH</span>
-                <span>$50.15</span>
-              </div>
-              <div className="w-full">
-                <div className="w-4/6 h-16 font-bold bg-red-500 mr-10 rounded-lg cursor-pointer flex items-center hover:bg-gray-500">
-                  <div className="w-full text-center text-xl text-white">
-                    Buy now
-                  </div>
-                  <div className="w-24 h-full border-l-2 flex justify-center items-center">
-                    <Logo
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      className=""
-                    >
-                      <path
-                        fill="white"
-                        d="M17 18a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2c0-1.11.89-2 2-2M1 2h3.27l.94 2H20a1 1 0 0 1 1 1c0 .17-.05.34-.12.5l-3.58 6.47c-.34.61-1 1.03-1.75 1.03H8.1l-.9 1.63l-.03.12a.25.25 0 0 0 .25.25H19v2H7a2 2 0 0 1-2-2c0-.35.09-.68.24-.96l1.36-2.45L3 4H1V2m6 16a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2c0-1.11.89-2 2-2m9-7l2.78-5H6.14l2.36 5H16Z"
-                      />
-                    </Logo>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </SlideBox>
-      </div>
-      <div>
-        <SlideBox>
-          <Image
-            src="http://localhost:3000/test7.png"
-            alt="test"
-            width={1000}
-            height={1000}
-            className="object-fill w-80 h-80 border-4 ml-20"
-          />
-          <div className="w-full h-80 ml-20 mt-11">
-            <div className="flex flex-wrap">
-              <div className="w-full mb-10">
-                <span className="text-3xl font-bold">Space Cat : NFT #452</span>
-              </div>
-              <div className="w-full mb-10">
-                <span className="text-lg font-medium block mb-5">
-                  Current Price
-                </span>
-                <span className="text-4xl mr-5 font-semibold">0.029 ETH</span>
-                <span>$50.15</span>
-              </div>
-              <div className="w-full">
-                <div className="w-4/6 h-16 font-bold bg-red-500 mr-10 rounded-lg cursor-pointer flex items-center hover:bg-gray-500">
-                  <div className="w-full text-center text-xl text-white">
-                    Buy now
-                  </div>
-                  <div className="w-24 h-full border-l-2 flex justify-center items-center">
-                    <Logo
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      className=""
-                    >
-                      <path
-                        fill="white"
-                        d="M17 18a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2c0-1.11.89-2 2-2M1 2h3.27l.94 2H20a1 1 0 0 1 1 1c0 .17-.05.34-.12.5l-3.58 6.47c-.34.61-1 1.03-1.75 1.03H8.1l-.9 1.63l-.03.12a.25.25 0 0 0 .25.25H19v2H7a2 2 0 0 1-2-2c0-.35.09-.68.24-.96l1.36-2.45L3 4H1V2m6 16a2 2 0 0 1 2 2a2 2 0 0 1-2 2a2 2 0 0 1-2-2c0-1.11.89-2 2-2m9-7l2.78-5H6.14l2.36 5H16Z"
-                      />
-                    </Logo>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </SlideBox>
-      </div>
-    </Slider>
-  );
-};
-
-const Slide = () => {
-  return (
     <>
+      <div className="justify-self-center text-3xl lg:text-4xl font-bold mb-5 text-gray-800 dark:text-gray-100">
+          <h2>Today's Collection</h2>
+      </div>
       <SlideWrap>
-        <ImageSlider />
+          <Slider {...settings}>
+            {tokenData && tokenData.map((token) => (
+                <SlideItem key={token.id} token={token} />
+            ))}
+          </Slider>
       </SlideWrap>
     </>
   );
