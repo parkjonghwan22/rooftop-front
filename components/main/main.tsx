@@ -5,10 +5,12 @@ import { useMarket } from "@utils/hooks/useMarket";
 import Category from "./styled/category";
 import Collection from "./styled/collection";
 import Slide from "./styled/slide";
+import { useCoinGecko } from "@utils/hooks/useCoingecko";
 
 const Main = () => {
   const { market } = useMarket();
   const [randomAddress, setRandomAddress] = useState<string | undefined>('');
+  const {maticHistoryPrice} = useCoinGecko()
 
   const getAllCollections = async () => {
     try {
@@ -80,6 +82,7 @@ const Main = () => {
   if (isLoading) return <p>Loading...</p>; // 로딩 컴포넌트 필요
   return (
     <div className="mx-auto flex flex-col items-center">
+      <div>History Price : {maticHistoryPrice}</div>
       <Slide tokenData={tokenData} />
       <Category collectionDatas={collectionDatas} />
       <Collection collectionDatas={collectionDatas} />

@@ -23,7 +23,6 @@ const SlideItem = ({ token }: { token: TokenData }) => {
   const { metaData, imageUrl, isLoading } = useIpfs(token)
   const { convertKRW } = useCoinGecko()
 
-
   if (isLoading) return <p>Loading...</p> // 로딩 컴포넌트 필요
   return (
 
