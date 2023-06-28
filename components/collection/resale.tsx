@@ -1,6 +1,58 @@
+import { PriceInputBox } from "@components/common/input";
+import { LoadingSpinner } from "@components/common/loading/loading";
+import { useInput } from "@utils/hooks/useInput";
+import { useIpfs } from "@utils/hooks/useIpfs";
+import { useMarket } from "@utils/hooks/useMarket";
+import { TokenData } from "@utils/types/collection.interface";
+import { ethers } from "ethers";
+import { Button } from "flowbite-react";
 import Image from "next/image";
+import React, { useState } from "react";
+import { toast } from "react-toastify";
 
-export const ReSale = () => {
+
+interface NftProps {
+  token: TokenData;
+  setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const ReSale = ({ token, setIsOpenModal }: NftProps) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const { metaData, imageUrl } = useIpfs(token);
+  const { market } = useMarket();
+  const nftPrice = useInput("");
+
+  const success = () => toast.success('NFT Upload Successfully!')
+
+
+  const handleReAddSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+
+    setIsLoading(true)
+
+    
+    try {
+      if (!market || !nftPrice.value) return;
+      
+      const priceInWei = ethers.parseEther(nftPrice.value.toString());
+      
+
+      const reAddonMarket = await market.reAddNftToMarket(token.id, priceInWei);
+      
+      const receipt = await reAddonMarket.wait()
+      console.log(receipt);
+      
+      if(receipt) {
+        setIsLoading(false)
+        success()
+        setIsOpenModal(false)
+      }
+
+    } catch (e: any) {
+      console.log(e.message)
+    }
+  };
+
   return (
     <>
       <div className="px-3 py-3 w-full h-5/6">
@@ -8,7 +60,9 @@ export const ReSale = () => {
         <div className="flex mt-4">
           <div className="w-1/2 ml-4">
             <Image
-              src="http://localhost:3000/test2.png"
+              src={
+                imageUrl ? imageUrl : "https://dummyimage.com/480x480/ccc/000"
+              }
               alt="test"
               width={1000}
               height={1000}
@@ -17,17 +71,36 @@ export const ReSale = () => {
           </div>
           <div className="w-1/2 flex flex-col mt-10 pl-10">
             <div className="flex items-center">
-              <div className="text-xl font-bold">NFT Name</div>
-              <div className="text-sm ml-2">#</div>
+              <div className="text-xl font-bold">{metaData.name}</div>
+              <div className="text-sm ml-2">#{token.tokenId}</div>
             </div>
             <div className="text-xl mr-4 mt-4 mb-1">Price</div>
-            <input
-              className="w-3/4 px-2 py-1 dark:bg-gray-900 rounded-lg"
+            <form onSubmit={handleReAddSubmit}>
+            <PriceInputBox
+              value={nftPrice.value}
+              onChange={nftPrice.onChange}
+              name="price"
+              icon="cryptocurrency-color:matic"
               placeholder="0.000"
             />
-            <div className="w-3/4 mt-4 inline-flex items-center justify-center rounded-md border-2 border-transparent bg-purple-500 bg-none px-8 py-2 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-400 cursor-pointer">
+            {!isLoading && (
+            <Button
+              type="submit"
+              className="w-3/4 mt-4 inline-flex items-center justify-center rounded-md border-2 border-transparent bg-purple-500 bg-none px-8 py-1 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-400 cursor-pointer"
+            >
               등록하기
-            </div>
+            </Button>
+            )}
+            {isLoading && (
+              <Button
+              type="submit"
+              className="w-3/4 mt-4 inline-flex items-center justify-center rounded-md border-2 border-transparent bg-purple-500 bg-none px-8 py-1 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-400 cursor-pointer"
+            >
+              <LoadingSpinner /> Uploading...
+            </Button>
+            )}
+
+            </form>
           </div>
         </div>
       </div>
