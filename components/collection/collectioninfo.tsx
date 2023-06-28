@@ -14,20 +14,12 @@ import { Button } from '@components/common/button'
 import { Modal } from '@components/common/modal/Modal'
 import { CreateNft } from '@components/collection/createNft'
 import axios from 'axios'
+import { CollectionData } from '@utils/types/collection.interface'
 
-interface Collection {
-    address: string
-    creator: string
-    name: string
-    symbol: string
-    description: string
-    url: string
-    creatorFee: string
-    logo: string
-}
+
 
 export const CollectionInfo = ({ address }: { address: string }) => {
-    const [collections, setCollections] = useState<Collection[]>([])
+    const [collections, setCollections] = useState<CollectionData[]>([])
     const [isOpenModal, setIsOpenModal] = useState(false)
     const getCollections = async () => {
         try {
@@ -59,8 +51,8 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                         <Description description={collection.description} />
                         <CollectionDatas
                             creatorFee={collection.creatorFee}
-                            totalVolume={0}
-                            floorPrice={0}
+                            totalVolume={collection.totalVolume}
+                            floorPrice={collection.floorPrice}
                             follows={0}
                         />
                     </SectionA>
