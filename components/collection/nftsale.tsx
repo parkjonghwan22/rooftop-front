@@ -12,6 +12,8 @@ import { useIpfs } from '@utils/hooks/useIpfs';
 import { useCoinGecko } from '@utils/hooks/useCoingecko';
 import request from '@utils/request';
 import { ethers } from 'ethers';
+import { SuccessAlert } from '@components/common/successAlert';
+import { toast } from 'react-toastify';
 
 interface NftProps {
     collectionData: CollectionData
@@ -25,6 +27,8 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const { metaData, imageUrl, isLoading } = useIpfs(token)
     const { convertKRW } = useCoinGecko()
     const [isOpenAlert, setIsOpenAlert] = useState(false)
+    const [isSuccessAlert , setSuccessAlert] = useState(false)
+
     const slicedAddress = token.seller.slice(0, 6) + "..." + token.seller.slice(-4);
 
     function convertToWei(number: number, decimals: number) {
@@ -59,9 +63,12 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                         ...decodedData,
                     });
                     console.log(response)
-                    if (response.statusText === "Created")
-                        alert("거래가 체결되었습니다") // alert 필요
-                        updateTotalVolume(token.NFTaddress)
+
+                    if (response.statusText === "Created"){
+                        toast.success("Your work was successful!")
+                    }
+                        
+
                 }
             }
         } catch (e) {
@@ -142,6 +149,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                     </div>
                 </div>
             </div>
+            {/* {isSuccessAlert && <SuccessAlert/>} */}
             <Alert isOpenAlert={isOpenAlert} setIsOpenAlert={setIsOpenAlert} color="green">지갑 주소가 복사되었습니다</Alert>
         </>
     )

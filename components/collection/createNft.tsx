@@ -8,7 +8,6 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { FileNftInputBox } from '@components/common/input/fileNftInputBox'
 import { NFTMint } from './nftmint'
-import { ErrorAlert, SuccessAlert } from '@components/common/successAlert'
 
 interface MintProps {
     collectionAddress: string
@@ -27,13 +26,15 @@ export const CreateNft = ({
     const [isLoading, setIsLoading] = useState(false)
     const [nftImage, setNftImage] = useState('')
     const [metaData, setMetaData] = useState('')
+    const [isSuccessAlert , setSuccessAlert] = useState(false)
 
     const nftName = useInput('')
     const nftPrice = useInput('')
     const nftDescription = useInput('')
 
-    const success = () => toast.success('Image Uploaded!')
-
+    const success = () => toast.success('Image Upload Successfully! try Market On')
+    const pending = () => toast.info('Data is loading...');
+    
     const handlePinataSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
 
@@ -41,6 +42,8 @@ export const CreateNft = ({
 
         try {
             if (!nftImage) return
+
+            pending()
 
             fetch('/api/verify', {
                 method: 'POST',
@@ -56,6 +59,7 @@ export const CreateNft = ({
                     const tokenURI = `ipfs://${data.IpfsHash}`
                     setMetaData(tokenURI)
                     setIsLoading(false)
+                    success()
                 })
                 .catch((error) => console.log(error))
         } catch (e: any) {
@@ -118,12 +122,15 @@ export const CreateNft = ({
                             royalty={royalty}
                             price={nftPrice.value as string | number}
                             metaData={metaData}
+                            setSuccessAlert={setSuccessAlert}
+                            setIsOpenModal={setIsOpenModal}
                         >
                             List NFT on Market
                         </NFTMint>
                     )}
                 </NftFormContainer>
             </CreateNftWrapper>
+            {/* {isSuccessAlert && <SuccessAlert/>} */}
         </>
     )
 }
