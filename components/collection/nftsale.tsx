@@ -22,6 +22,8 @@ import { TimerInput } from "@components/common/Timer/timeinput";
 import { TimerContainer } from "@components/common/Timer/timecontainer";
 import { SuccessAlert } from "@components/common/successAlert";
 import { toast } from "react-toastify";
+import { ReSaleModal } from "@components/common/modal/ReSaleModal";
+import { ReSale } from "./resale";
 
 interface NftProps {
   collectionData: CollectionData;
@@ -37,6 +39,8 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isSuccessAlert, setSuccessAlert] = useState(false);
+
+  
 
   const [newTime, setNewTime] = useState<number>(0);
   const [time, setTime] = useState<number>(0);
@@ -218,7 +222,8 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
 
               {token.openingPrice == 0 && (
                 <button
-                  onClick={handleBuy}
+                  // onClick={handleBuy}
+                  onClick={() => setIsOpenModal(true)}
                   type="button"
                   className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-800"
                 >
@@ -280,6 +285,9 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
       >
         지갑 주소가 복사되었습니다
       </Alert>
+      <ReSaleModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal}>
+        <ReSale />
+      </ReSaleModal>
     </>
   );
 };
