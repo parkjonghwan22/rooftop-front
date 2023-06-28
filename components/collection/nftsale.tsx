@@ -23,7 +23,7 @@ interface NftProps {
 
 export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const { address } = useAccount()
-    const { market, decodeEvent } = useMarket()
+    const { market, decodeEvent, getTotalVolume } = useMarket()
     const { metaData, imageUrl, isLoading } = useIpfs(token)
     const { convertKRW } = useCoinGecko()
     const [isOpenAlert, setIsOpenAlert] = useState(false)
@@ -63,10 +63,12 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                         ...decodedData,
                     });
                     console.log(response)
+
                     if (response.statusText === "Created"){
                         toast.success("Your work was successful!")
                     }
                         
+
                 }
             }
         } catch (e) {
@@ -79,6 +81,14 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
         setIsOpenAlert(true);
     };
 
+    const updateTotalVolume = async (address: string) => {
+        const currentVolume = await getTotalVolume(address);
+    
+        const { data } = await request.put("collection/update", {
+          address,
+          totalVolume: Number(currentVolume),
+        });
+      };
 
 
     if (isLoading) return <div>Loading...</div> // 로딩 컴포넌트 필요
@@ -104,10 +114,12 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                                 <span className="text-sm text-gray-500 dark:text-gray-400">{convertKRW(token.price)}￦</span>
                             </div>
 
-                            <button onClick={handleBuy} type="button" className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-800">
-                                <Icon icon="ion:cart-sharp" className="text-xl mr-3" />
-                                Buy Now
-                            </button>
+                            {(token.openingPrice == 0) &&
+                                <button onClick={handleBuy} type="button" className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-800">
+                                    <Icon icon="ion:cart-sharp" className="text-xl mr-3" />
+                                    Buy Now
+                                </button>
+                            }
                         </div>
                         <ul className="mt-4 space-y-3">
                             <h1 className="text-lg font-bold py-2">Collection</h1>

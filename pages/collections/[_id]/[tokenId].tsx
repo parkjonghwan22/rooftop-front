@@ -15,12 +15,12 @@ const NftPage = () => {
 
 
   const getCollection = async (collectionAddress: string) => {
-    try {
-      const { data } = await request.get(`collection/${collectionAddress}`);
-      return data[0];
-    } catch (error: unknown) {
-      throw new Error(error as string);
-    }
+      try {
+        const { data } = await request.get(`collection/${collectionAddress}`);
+        return data[0];
+      } catch (error: unknown) {
+        throw new Error(error as string);
+      }
   }
 
 

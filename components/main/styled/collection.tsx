@@ -1,3 +1,4 @@
+import { CollectionData } from "@utils/types/collection.interface";
 import tw from "tailwind-styled-components";
 import Image from "next/image";
 
@@ -5,12 +6,17 @@ export const CollectionWrap = tw.div`
      rounded-lg mt-16 mx-auto w-full flex flex-col items-center
 `;
 
-const Collection = () => {
+interface CollectionProps {
+  collectionDatas: CollectionData[]
+}
+
+
+const Collection = ({ collectionDatas }: CollectionProps) => {
   return (
     <>
       <CollectionWrap>
         <div className="text-3xl font-bold px-5 py-4">Collections</div>
-        <div className="flex flex-wrap justify-center">
+        <div className="flex flex-wrap justify-center w-5/6">
           <div className="w-72 hover:transform hover:scale-105 transition duration-300 cursor-pointer m-1.5">
             <div>
               <Image
