@@ -1,13 +1,12 @@
 interface TimerInputProps {
   value: number;
-  handleSetTime(): void;
   handleStartTimer(): void;
   handleChange(e: React.ChangeEvent<HTMLInputElement>): void;
 }
 
 export const TimerInput = ({
   value,
-  handleSetTime,
+
   handleStartTimer,
   handleChange,
 }: TimerInputProps) => {
@@ -22,13 +21,6 @@ export const TimerInput = ({
         onChange={handleChange}
         min={0}
       />
-
-      <button
-        onClick={handleSetTime}
-        className="bg-red-500 text-xl font-semibold font-redhat px-4 py-2 md:text-xl rounded-xl text-white hover:bg-rose-500 hover:text-rose-100 transition duration-300 ease-in mr-2"
-      >
-        시간설정
-      </button>
       <button
         onClick={handleStartTimer}
         className="bg-red-500 text-xl font-semibold font-redhat px-4 py-2 md:text-xl rounded-xl text-white hover:bg-rose-500 hover:text-rose-100 transition duration-300 ease-in"
