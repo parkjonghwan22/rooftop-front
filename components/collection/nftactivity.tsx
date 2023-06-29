@@ -11,10 +11,6 @@ import { ethers } from 'ethers'
 export const NFTActivity = ({ token, activity }: { token: TokenData, activity: ActivityData[] }) => {
     const [isOpenAlert, setIsOpenAlert] = useState(false)
 
-    const { market } = useMarket()
-
-
-
     const handleCopy = (address: string) => {
         navigator.clipboard.writeText(address);
         setIsOpenAlert(true)

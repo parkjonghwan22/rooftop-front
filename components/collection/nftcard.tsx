@@ -6,37 +6,39 @@ import { Icon } from '@iconify/react';
 import { useIpfs } from '@utils/hooks/useIpfs';
 import request from '@utils/request';
 import { useAccount } from 'wagmi';
+import { useState } from 'react';
+import { LoadingSpinner } from '@components/common/loading/loading';
 
 export const NFTCard = ({ token }: { token: TokenData }) => {
     const { address } = useAccount()
     const router = useRouter();
     const { _id } = router.query;
     const { metaData, imageUrl, isLoading } = useIpfs(token)
+    const [ isCartLoading, setIsCartLoading ] = useState(false)
 
 
     const handleAddToCart = async () => {
         if (!address) return
-
+        setIsCartLoading(true)
         const checkResponse = await request.post('cart/checkDuplicate', {
             shopper: address,
             id: token.id
-          });
-          
-          console.log(checkResponse)
-          if (checkResponse.data.id) {
+        });
+        if (checkResponse.data.id) {
             alert("이미 해당 NFT를 장바구니에 담았습니다.") // alert 필요
+            setIsCartLoading(false)
             return;
-          }
+        }
 
         const { data } = await request.post('cart/add', {
             shopper: address,
-            id : token.id,
+            id: token.id,
             NFTaddress: token.NFTaddress,
             tokenId: token.tokenId,
             price: token.price,
             metadata: token.metadata
         })
-        console.log(data)
+        if (data) setIsCartLoading(false)
     }
 
     if (isLoading) return <div>Loading...</div> // 로딩 컴포넌트 필요
@@ -70,7 +72,7 @@ export const NFTCard = ({ token }: { token: TokenData }) => {
                 {!token.sold
                     ?
                     <button onClick={handleAddToCart} className="px-2 py-1 text-xs font-semibold text-white uppercase transition-colors duration-150 transform bg-red-500 rounded hover:bg-gray-600 focus:bg-gray-700 focus:outline-none">
-                        Add to cart
+                        {isCartLoading? <LoadingSpinner /> : `Add to cart`}
                     </button>
                     :
                     <button className="px-2 py-1 text-xs font-semibold text-white uppercase transition-colors duration-150 transform bg-gray-500 rounded focus:outline-none disabled">

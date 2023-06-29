@@ -2,13 +2,11 @@ import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import request from "@utils/request";
 import { useMarket } from "@utils/hooks/useMarket";
-import { useCoinGecko } from "@utils/hooks/useCoingecko";
 import { Hero, Category, Collection, Slide } from "./styled"
 
 const Main = () => {
   const { market } = useMarket();
   const [randomAddress, setRandomAddress] = useState<string | undefined>('');
-  const {maticHistoryPrice} = useCoinGecko()
 
   const getAllCollections = async () => {
     try {

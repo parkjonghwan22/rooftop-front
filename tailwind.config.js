@@ -24,6 +24,7 @@ module.exports = {
       },
       animation: {
         slideRight: "slideRight 0.5s ease-in-out",
+        slideLeft: "slideLeft 0.3s ease-in-out",
         wiggle: "wiggle 1s ease-in-out infinite",
         tada: "tada 1.5s ease-in-out infinite",
         zoomIn: "zoomIn 1s",
@@ -33,6 +34,10 @@ module.exports = {
       keyframes: {
         slideRight: {
           "0%": { transform: "translateX(-150%)" },
+          "100%": { transform: "translateX(0)" },
+        },
+        slideLeft: {
+          "0%": { transform: "translateX(150%)" },
           "100%": { transform: "translateX(0)" },
         },
         wiggle: {
