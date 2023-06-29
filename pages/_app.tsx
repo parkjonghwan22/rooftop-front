@@ -6,7 +6,6 @@ import { WagmiConfig } from "wagmi";
 import { config } from "../wagmi-config";
 import { ToastContainer } from "react-toastify";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { useCoinGecko } from "@utils/hooks/useCoingecko";
 
 const queryClient = new QueryClient();
 /**
