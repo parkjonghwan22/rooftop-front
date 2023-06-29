@@ -4,7 +4,7 @@ import { useMarket } from '@utils/hooks/useMarket';
 import { useQuery } from 'react-query';
 import request from '@utils/request';
 import { useRouter } from 'next/router';
-import { TokenData } from '@utils/types/collection.interface';
+import { TokenData } from '@utils/types/nft.interface';
 
 
 const NftPage = () => {

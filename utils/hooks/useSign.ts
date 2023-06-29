@@ -5,6 +5,7 @@ import { UserType } from "@utils/types/user.interface"
 
 export const useSign = () => {
     const { address, isConnected } = useAccount()
+    const [isLoading, setIsLoading] = useState(true)
     const [isDefinitelyConnected, setIsDefinitelyConnected] = useState(false);
     const [user, setUser] = useState<UserType | null>(null)
     const [currentAddress, setCurrentAddress] = useState<`0x${string}` | undefined>()
@@ -15,6 +16,7 @@ export const useSign = () => {
                 address: address
             });
             if (data.address) setUser(data)
+            setIsLoading(false)
         } catch (error) {
             console.log(error);
         }
@@ -30,5 +32,5 @@ export const useSign = () => {
         }
     }, [address]);
 
-    return { user, address: currentAddress }
+    return { user, address: currentAddress, isConnected: isDefinitelyConnected, isLoading }
 }

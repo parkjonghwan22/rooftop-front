@@ -5,7 +5,7 @@ import {
   CollectionData,
   TokenData,
   ActivityData,
-} from "@utils/types/collection.interface";
+} from "@utils/types/nft.interface";
 import Link from "next/link";
 import { UserAddress } from "./styled/nft.styled";
 import { Alert } from "@components/common/alert";
@@ -160,12 +160,15 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
   };
 
   const updateTotalVolume = async (address: string) => {
-    const currentVolume = await getTotalVolume(address);
+    try {
+      const currentVolume = await getTotalVolume(address);
 
-    const { data } = await request.put("collection/update", {
-      address,
-      totalVolume: Number(currentVolume),
-    });
+      const { data } = await request.put("collection/update", {
+        address,
+        totalVolume: Number(currentVolume),
+      });
+    } catch (e) {console.log(e)};
+  
   };
 
   if (isLoading) return <div>Loading...</div>; // 로딩 컴포넌트 필요

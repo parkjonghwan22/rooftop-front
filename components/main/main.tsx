@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import request from "@utils/request";
 import { useMarket } from "@utils/hooks/useMarket";
-import Category from "./styled/category";
-import Collection from "./styled/collection";
-import Slide from "./styled/slide";
+import { Hero, Category, Collection, Slide } from "./styled"
+
 
 const Main = () => {
   const { market } = useMarket();
@@ -13,6 +12,15 @@ const Main = () => {
   const getAllCollections = async () => {
     try {
       const { data } = await request.get(`collection`);
+      return data;
+    } catch (error: unknown) {
+      throw new Error(error as string);
+    }
+  };
+
+  const getAllEvents = async () => {
+    try {
+      const { data } = await request.get(`event?time=72&event=transfer`); // 시간 내의 transfer 이벤트 검색
       return data;
     } catch (error: unknown) {
       throw new Error(error as string);
@@ -54,6 +62,14 @@ const Main = () => {
     },
   );
 
+  const { data: activityDatas, isLoading: activityLoading } = useQuery(
+    ["event"],
+    () => getAllEvents(),
+    {
+      cacheTime: 60 * 24 * 1000,
+    },
+  );
+
   const getRandomAddress = () => {
     const randomIndex = Math.floor(Math.random() * collectionDatas.length);
     return collectionDatas[randomIndex]?.address;
@@ -75,13 +91,14 @@ const Main = () => {
     }
   }, [collectionLoading]);
 
-  const isLoading = collectionLoading || nftsLoading;
+  const isLoading = collectionLoading || nftsLoading || activityLoading;
 
   if (isLoading) return <p>Loading...</p>; // 로딩 컴포넌트 필요
   return (
     <div className="mx-auto flex flex-col items-center">
+      <Hero />
       <Slide tokenData={tokenData} />
-      <Category collectionDatas={collectionDatas} />
+      <Category collectionDatas={collectionDatas} activityDatas={activityDatas} />
       <Collection collectionDatas={collectionDatas} />
     </div>
   );

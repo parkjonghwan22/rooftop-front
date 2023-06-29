@@ -5,7 +5,7 @@ import { Collection } from '@components/collection/collection';
 import { useMarket } from '@utils/hooks/useMarket';
 import { useQuery } from 'react-query';
 import request from '@utils/request';
-import { CollectionData } from '@utils/types/collection.interface';
+import { CollectionData } from '@utils/types/nft.interface';
 
 const CollectionPage = () => {
   const router = useRouter();

@@ -1,4 +1,4 @@
-import { TokenData } from '@utils/types/collection.interface'
+import { TokenData } from '@utils/types/nft.interface'
 import { useQuery } from 'react-query'
 
 export const useIpfs = (token: TokenData) => {

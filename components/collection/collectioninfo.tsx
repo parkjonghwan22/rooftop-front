@@ -14,7 +14,7 @@ import { Button } from '@components/common/button'
 import { Modal } from '@components/common/modal/Modal'
 import { CreateNft } from '@components/collection/createNft'
 import axios from 'axios'
-import { CollectionData } from '@utils/types/collection.interface'
+import { CollectionData } from '@utils/types/nft.interface'
 
 
 

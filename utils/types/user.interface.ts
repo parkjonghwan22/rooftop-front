@@ -6,3 +6,16 @@ export interface UserType {
   hasCollection: boolean;
   verified: boolean;
 }
+
+export interface CartType {
+  _id: string,
+  shopper: string,
+  id: number,
+  NFTaddress: string,
+  tokenId: number,
+  price: number,
+  metadata: string,
+  createdAt: string,
+  updatedAt: string,
+  __v: number
+}

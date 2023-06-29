@@ -48,7 +48,7 @@ export const Modal = ({
         <Icon
           icon="ph:x"
           onClick={() => setIsOpenModal(false)}
-          className="ml-auto text-lg cursor-pointer"
+          className="ml-auto text-xl cursor-pointer"
         />
         {children}
       </ModalContent>

@@ -5,13 +5,13 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { Icon } from "@iconify/react";
-import { TokenData } from "@utils/types/collection.interface";
+import { TokenData } from "@utils/types/nft.interface";
 import { useIpfs } from "@utils/hooks/useIpfs";
 import { useCoinGecko } from "@utils/hooks/useCoingecko";
 import Link from "next/link";
 
 export const SlideWrap = tw.div`
-  mx-auto w-5/6  md:w-3/4 h-450 lg:h-450 rounded-lg dark:bg-gray-900 bg-gary-100 shadow-xl
+  mx-auto mb-20 w-5/6  md:w-3/4 h-450 lg:h-450 rounded-lg dark:bg-gray-900 bg-gary-100 dark:shadow-2xl dark:shadow-cyan-500/50
 `;
 
 export const SlideBox = tw.div`
@@ -59,7 +59,7 @@ const SlideItem = ({ token }: { token: TokenData }) => {
                   </Link>
                   </div>
                   <div className="w-24 h-full border-l-2 flex justify-center items-center">
-                    <Icon icon="mdi:cart-outline" className="text-3xl" />
+                    <Icon icon="mdi:cart-outline" className="text-3xl text-white" />
                   </div>
                 </div>
               </div>
@@ -70,7 +70,7 @@ const SlideItem = ({ token }: { token: TokenData }) => {
   );
 };
 
-const Slide = ({tokenData}: { tokenData: TokenData[] }) => {
+export const Slide = ({tokenData}: { tokenData: TokenData[] }) => {
   const settings = {
     infinite: true,
     speed: 700,
@@ -83,7 +83,7 @@ const Slide = ({tokenData}: { tokenData: TokenData[] }) => {
 
   return (
     <>
-      <div className="justify-self-center text-3xl lg:text-4xl font-bold mb-5 text-gray-800 dark:text-gray-100">
+      <div className="justify-self-center text-3xl lg:text-4xl font-bold mb-10 text-gray-800 dark:text-gray-100">
           <h2>Today's Collection</h2>
       </div>
       <SlideWrap>
@@ -96,5 +96,3 @@ const Slide = ({tokenData}: { tokenData: TokenData[] }) => {
     </>
   );
 };
-
-export default Slide;
