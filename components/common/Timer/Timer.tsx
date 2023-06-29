@@ -54,11 +54,6 @@ export const Timer = () => {
     };
   }, [isTimerRunning, time]);
 
-  const handleSetTime = () => {
-    if (!isTimerRunning) {
-      setTime(newTime);
-    }
-  };
 
   const handleStartTimer = () => {
     if (!isTimerRunning && time > 0) {
@@ -72,7 +67,7 @@ export const Timer = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col r">
       <TimerContainer
         days={days}
         hours={hours}
@@ -81,7 +76,6 @@ export const Timer = () => {
       /> 
        <TimerInput
         value={newTime}
-        handleSetTime={handleSetTime}
         handleStartTimer={handleStartTimer}
         handleChange={handleChange}
       />
