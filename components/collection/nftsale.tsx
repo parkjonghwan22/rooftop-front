@@ -199,20 +199,22 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                             </li>
                         </ul>
                     </div>
-
+                    
                     <div className="lg:col-span-5">
                         <div className="my-5 flow-root">
                             <h1 className="text-3xl font-bold mb-3">Chart</h1>
+                        </div>
+                        <Chart2 token={token} activity={activity}/>
+                    </div>
+
+                    <div className="lg:col-span-5">
+                        <div className="my-5 flow-root">
+                            <h1 className="text-3xl font-bold mb-3">Activity</h1>
                         </div>
                         <NFTActivity token={token} activity={activity} />
                     </div>
 
-                    <div className="lg:col-span-5">
-                        <div className="my-5 flow-root">
-                            <h1 className="text-3xl font-bold mb-3">Chart</h1>
-                        </div>
-                        <Chart2 />
-                    </div>
+                    
                 </div>
             </div>
             {/* {isSuccessAlert && <SuccessAlert/>} */}

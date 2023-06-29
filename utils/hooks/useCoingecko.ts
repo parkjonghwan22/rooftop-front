@@ -16,36 +16,47 @@ export const useCoinGecko = () => {
         }
         return response.data[0].current_price
     }
-
-    const getHistoricalPrice = async () => {
+    // ================================ //
+    const getHistoricalPrice = async (date: string,price:number) => {
+        console.log("price" , price)
         try {
-            const date = '26-06-2023' // 날짜 형식 가공하기
-            console.log('date :', date)
-
             const response = await axios.get(
-                `https://api.coingecko.com/api/v3/coins/${COIN_ID}/history`
-            ,{
-                params:{
-                    date:date,
-                    localization:false,
+                `https://api.coingecko.com/api/v3/coins/${COIN_ID}/history`,
+                {
+                    params: {
+                        date,
+                        localization: false,
+                    },
                 }
-            })
-                console.log('response :', response)
-            return response.data.market_data.current_price.krw
+            )
+           console.log("response" , response)
+            console.log("price 222" , price)
+           
+            if (response.data) {
+                console.log(112222)
+                const maticHistoryPrice = response.data.market_data.current_price.krw     
+                const convertedPrice = ((price / 10 ** 18) * maticHistoryPrice).toFixed(3)
+                console.log(convertedPrice)
+                return maticHistoryPrice
+            }
+
         } catch (e) {
             console.error(e)
         }
     }
+    // ================================ //
 
-    const { data: maticHistoryPrice, isLoading: maticHistoryLoading } = useQuery(
-        ['maticHistoryPrice'],
-        () => {
-            return getHistoricalPrice()
-        },
-        {
-            cacheTime: 60 * 60 * 24 * 1000,
-        }
-    )
+
+    // const { data: maticHistoryPrice, isLoading: maticHistoryLoading } = useQuery(
+    //     ['maticHistoryPrice', parsedDate],
+    //     () => {
+    //         return getHistoricalPrice(parsedDate as string)
+    //     },
+    //     {
+    //         cacheTime: 60 * 60 * 24 * 1000,
+    //         enabled: !!parsedDate,
+    //     }
+    // )
 
     const { data: maticCurrencyPrice, isLoading: isGeckoLoading } = useQuery(
         ['maticPrice'],
@@ -54,7 +65,7 @@ export const useCoinGecko = () => {
         },
         {
             cacheTime: 60 * 60 * 24 * 1000,
-            enabled:true,
+            enabled: true,
         }
     )
 
@@ -64,5 +75,5 @@ export const useCoinGecko = () => {
         }
     }
 
-    return { isGeckoLoading, maticCurrencyPrice, convertKRW, maticHistoryPrice }
+    return { isGeckoLoading, maticCurrencyPrice, convertKRW , getHistoricalPrice}
 }
