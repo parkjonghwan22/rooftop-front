@@ -9,7 +9,7 @@ import { Button } from '@components/common/button'
 import { LoadingSpinner } from '@components/common/loading/loading'
 import request from '@utils/request'
 import { SuccessAlert } from '@components/common/successAlert'
-
+import { useCoinGecko } from '@utils/hooks/useCoingecko'
 
 
 
@@ -27,6 +27,7 @@ interface MintProps {
 export const NFTMint = ({ collectionAddress, royalty, metaData, price, setSuccessAlert,setIsOpenModal, children }: MintProps) => {
     const { market, decodeEvent, getLowestPrice } = useMarket()
     const { signer } = useEthers()
+    const { convertKRW } = useCoinGecko()
     const [latestTokenId, setLatestTokenId] = useState<number>()
     const [isLoading, setIsLoading] = useState(false)
     
@@ -77,10 +78,10 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, setSucces
                         NFTaddress: collectionAddress,
                         tokenId: Number(data[3]),
                         price: Number(data[4]),
+                        krwPrice: convertKRW(Number(data[4])),
                         event: "minted"
                     };
-                    console.log(decodedData)
-
+                    console.log(`decodedData ::`, decodedData)
                     const response = await request.post("event/minted", {
                         ...decodedData,
                     });

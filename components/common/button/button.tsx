@@ -6,6 +6,8 @@ const backgroundColors: StyledOptions = {
     blue: "bg-blue-600",
     green: "bg-green-600",
     yellow: "bg-yellow-500",
+    purple: "bg-purple-500",
+    cyan: "bg-cyan-500",
     gray: "bg-gray-100",
   };
   

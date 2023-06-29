@@ -22,6 +22,11 @@ export const useMarket = () => {
     return decodedData;
   };
 
+  const convertToWei = (number: number, decimals: number) => {
+    const wei = ethers.parseUnits(number.toString(), decimals)
+    return wei.toString()
+  }
+
   const getLatestId = async () => {
     if (!market) return null
     const result = await market.getLatestId()
@@ -72,6 +77,7 @@ export const useMarket = () => {
     marketAddress: market?.target,
     latestId,
     decodeEvent,
+    convertToWei,
     getLowestPrice,
     getTotalVolume
   };

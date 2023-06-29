@@ -32,7 +32,7 @@ interface NftProps {
 
 export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const { address } = useAccount()
-    const { market, decodeEvent, getTotalVolume } = useMarket()
+    const { market, decodeEvent, convertToWei, getTotalVolume } = useMarket()
     const { metaData, imageUrl, isLoading } = useIpfs(token)
     const { convertKRW } = useCoinGecko()
     const [isOpenAlert, setIsOpenAlert] = useState(false)
@@ -40,11 +40,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const [isSuccessAlert, setSuccessAlert] = useState(false)
 
     const slicedAddress = token.seller.slice(0, 6) + '...' + token.seller.slice(-4)
-
-    function convertToWei(number: number, decimals: number) {
-        const wei = ethers.parseUnits(number.toString(), decimals)
-        return wei.toString()
-    }
     const parsedPrice = convertToWei(token.price, 0)
 
     const handleBuy = async () => {
@@ -66,6 +61,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                         NFTaddress: token.NFTaddress,
                         tokenId: Number(data[4]),
                         price: Number(data[5]),
+                        krwPrice: convertKRW(Number(data[5])),
                         event: 'transfer',
                     }
                     console.log(decodedData)
