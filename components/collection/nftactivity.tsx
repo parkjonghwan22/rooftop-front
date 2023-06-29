@@ -1,6 +1,6 @@
 import tw from 'tailwind-styled-components'
 import { useEffect, useState } from "react"
-import { TokenData, ActivityData } from "@utils/types/collection.interface"
+import { TokenData, ActivityData } from "@utils/types/nft.interface"
 import { useMarket } from '@utils/hooks/useMarket'
 import { UserAddress } from './styled/nft.styled'
 import { Alert } from '@components/common/alert'

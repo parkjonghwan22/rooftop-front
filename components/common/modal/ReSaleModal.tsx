@@ -1,27 +1,27 @@
 import { useEffect, useRef } from "react";
-import { ModalWrapper, ModalContent } from "./styled/modal.styled";
 import { Icon } from "@iconify/react";
 import { StyledProps } from "utils/types/style.interface";
+import { ReSaleContent, ReSaleWrapper } from "./styled/Resale.styled";
 
-interface ModalProps extends StyledProps {
+interface ResaleProps extends StyledProps {
   isOpenModal: boolean;
   setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Modal = ({
+export const ReSaleModal = ({
   isOpenModal,
   setIsOpenModal,
   children,
   width,
   height,
-}: ModalProps) => {
-  const modalRef = useRef<HTMLDivElement>(null);
+}: ResaleProps) => {
+  const ResaleRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleClose = (e: MouseEvent) => {
       if (
-        modalRef.current &&
-        !modalRef.current.contains(e.target as HTMLElement)
+        ResaleRef.current &&
+        !ResaleRef.current.contains(e.target as HTMLElement)
       ) {
         setIsOpenModal(false);
       }
@@ -43,15 +43,15 @@ export const Modal = ({
   }, [setIsOpenModal]);
 
   return isOpenModal ? (
-    <ModalWrapper>
-      <ModalContent ref={modalRef} width={width} height={height}>
+    <ReSaleWrapper>
+      <ReSaleContent ref={ResaleRef} width={width} height={height}>
         <Icon
           icon="ph:x"
           onClick={() => setIsOpenModal(false)}
-          className="ml-auto text-xl cursor-pointer"
+          className="ml-auto text-lg cursor-pointer mt-2 mr-2 hover:animate-tada"
         />
         {children}
-      </ModalContent>
-    </ModalWrapper>
+      </ReSaleContent>
+    </ReSaleWrapper>
   ) : null;
 };

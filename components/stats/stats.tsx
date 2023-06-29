@@ -1,4 +1,4 @@
-import { CollectionData } from '@utils/types/collection.interface'
+import { CollectionData } from '@utils/types/nft.interface'
 import { useState } from 'react'
 import {
     RankingCollectionWrapper,

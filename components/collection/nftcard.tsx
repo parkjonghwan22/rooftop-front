@@ -1,14 +1,43 @@
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { TokenData } from "@utils/types/collection.interface"
+import { TokenData } from "@utils/types/nft.interface"
 import { Icon } from '@iconify/react';
 import { useIpfs } from '@utils/hooks/useIpfs';
+import request from '@utils/request';
+import { useAccount } from 'wagmi';
 
 export const NFTCard = ({ token }: { token: TokenData }) => {
-  const router = useRouter();
-  const { _id } = router.query;
-  const { metaData, imageUrl , isLoading } = useIpfs(token)
+    const { address } = useAccount()
+    const router = useRouter();
+    const { _id } = router.query;
+    const { metaData, imageUrl, isLoading } = useIpfs(token)
+
+
+    const handleAddToCart = async () => {
+        if (!address) return
+
+        const checkResponse = await request.post('cart/checkDuplicate', {
+            shopper: address,
+            id: token.id
+          });
+          
+          console.log(checkResponse)
+          if (checkResponse.data.id) {
+            alert("이미 해당 NFT를 장바구니에 담았습니다.") // alert 필요
+            return;
+          }
+
+        const { data } = await request.post('cart/add', {
+            shopper: address,
+            id : token.id,
+            NFTaddress: token.NFTaddress,
+            tokenId: token.tokenId,
+            price: token.price,
+            metadata: token.metadata
+        })
+        console.log(data)
+    }
 
     if (isLoading) return <div>Loading...</div> // 로딩 컴포넌트 필요
     return (
@@ -38,9 +67,16 @@ export const NFTCard = ({ token }: { token: TokenData }) => {
                     <Icon icon="cryptocurrency-color:matic" className="mr-1" />
                     {token.price / 10 ** 18}
                 </h1>
-                <button className="px-2 py-1 text-xs font-semibold text-white uppercase transition-colors duration-150 transform bg-red-500 rounded hover:bg-gray-600 focus:bg-gray-700 focus:outline-none">
-                    Add to cart
-                </button>
+                {!token.sold
+                    ?
+                    <button onClick={handleAddToCart} className="px-2 py-1 text-xs font-semibold text-white uppercase transition-colors duration-150 transform bg-red-500 rounded hover:bg-gray-600 focus:bg-gray-700 focus:outline-none">
+                        Add to cart
+                    </button>
+                    :
+                    <button className="px-2 py-1 text-xs font-semibold text-white uppercase transition-colors duration-150 transform bg-gray-500 rounded focus:outline-none disabled">
+                        Sold Out
+                    </button>
+                }
             </div>
         </div>
     )

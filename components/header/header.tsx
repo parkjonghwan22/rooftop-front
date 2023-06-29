@@ -11,40 +11,20 @@ import { UserType } from '@utils/types/user.interface'
 import Link from 'next/link'
 import { CartButton } from '@components/common/button'
 import { SearchContainer, SearchBox } from '@components/common/search/search'
+import { useSign } from '@utils/hooks/useSign'
+import { useScroll } from '@utils/hooks/useScroll'
 
 const Header = () => {
-    const { address, isConnected } = useAccount()
+    const { user, isLoading, isConnected } = useSign()
+    const { isScrolling } = useScroll()
     const { disconnect } = useDisconnect()
     const [isOpenModal, setIsOpenModal] = useState(false)
-    const [isDefinitelyConnected, setIsDefinitelyConnected] = useState(false)
-    const [isLoading, setIsLoading] = useState(true)
-    const [user, setUser] = useState<UserType | null>(null)
 
-    const getUser = async () => {
-        try {
-            const { data } = await request.post('auth/sign', {
-                address: address,
-            })
-            if (data.address) setUser(data)
-            setIsLoading(false)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    useEffect(() => {
-        if (isConnected) {
-            setIsDefinitelyConnected(true)
-            getUser()
-        } else {
-            setIsDefinitelyConnected(false)
-        }
-    }, [address])
 
     return (
         <>
             <header>
-                <div className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800 opacity-90 fixed top-0 left-0 right-0 z-10">
+            <div className={`border-gray-200 px-4 lg:px-6 py-2.5 opacity-90 fixed top-0 left-0 right-0 z-10 ${!isScrolling ? 'bg-transparent' : 'bg-white dark:bg-gray-800'}`}>
                     <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
                         <Link href="/">
                             <TitleContainer />
@@ -56,7 +36,7 @@ const Header = () => {
                             <SearchBox />
                         </SearchContainer>
                         <div className="flex items-center">
-                            {!isDefinitelyConnected && (
+                            {!isConnected && (
                                 <Button
                                     color="white"
                                     backgroundColor="red"
@@ -69,9 +49,9 @@ const Header = () => {
                                     Connect
                                 </Button>
                             )}
-                            {isDefinitelyConnected &&
+                            {isConnected &&
                                 (isLoading ? <LoadingSpinner /> : <DropDownBtn user={user} />)}
-                            {isDefinitelyConnected && <CartButton />}
+                            {isConnected && <CartButton />}
                         </div>
                     </div>
                 </div>

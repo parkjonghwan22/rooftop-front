@@ -1,4 +1,4 @@
-import { CollectionData, TokenData } from '@utils/types/collection.interface'
+import { CollectionData, TokenData } from '@utils/types/nft.interface'
 import { NFTCard } from './nftcard'
 import { CollectionStat } from './styled/collection.styled'
 import { VerifiedMarker } from '@components/common/marker/verify'

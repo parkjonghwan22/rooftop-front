@@ -7,12 +7,7 @@ import { useEffect, useState } from "react";
 // 로딩 컴포넌트 필요
 
 const MyCollection = () => {
-    const [isLoading, setIsLoading] = useState(true)
-    const { user } = useSign()
-
-    useEffect(() => {
-        if (user) setIsLoading(false)
-    }, [user])
+    const { user, isLoading } = useSign()
 
     return (
         <RootLayout>

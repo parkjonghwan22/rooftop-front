@@ -9,11 +9,17 @@ import { InputBox } from "@components/common/input";
 import { FileInputCircle } from "@components/common/input/fileinputcircle";
 import request from "@utils/request";
 import { Alert } from "@components/common/alert";
-import { Mynft } from "./styled/Mynfts.styled";
-import { Activity } from "./styled/Activity.styled";
-import { Favorites } from "./styled/Favorites.styled";
+import { MyNFT, Activity, Favorites } from "./index"
+import { ActivityData, TokenData } from "@utils/types/nft.interface";
 
-export const ProfileCard = ({ user }: { user: UserType | null }) => {
+
+interface ProfileProps {
+  user: UserType | null;
+  tokenData: TokenData[]
+  activity: ActivityData[]
+}
+
+export const ProfileCard = ({ user, tokenData, activity }: ProfileProps) => {
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [modify, setModify] = useState(false);
   const [userImg, setUserImg] = useState<string>("");
@@ -130,8 +136,8 @@ export const ProfileCard = ({ user }: { user: UserType | null }) => {
           </div>
         </div>
         <div className=" mx-auto ml-6 mr-6 dark:bg-gray-600 shadow rounded-b-lg border-t-2 dark:border-t-2 dark:border-gray-900">
-          {activeTab === "nfts" && <Mynft />}
-          {activeTab === "activity" && <Activity />}
+          {activeTab === "nfts" && <MyNFT tokenData={tokenData} />}
+          {activeTab === "activity" && <Activity activity={activity} />}
           {activeTab === "favorites" && <Favorites />}
         </div>
       </ProfileCardWrap>

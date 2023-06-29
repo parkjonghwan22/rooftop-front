@@ -8,7 +8,6 @@ const ConnectWallet = () => {
     const { connect, connectors, error, isLoading, pendingConnector } = useConnect()
     const { disconnect } = useDisconnect();
 
-
     const handleConnect = (type: string) => () => {
         if (isConnected) return disconnect();
         const provider = connectors.find((x) => x.ready && type === x.id);
