@@ -22,6 +22,10 @@ import { TimerInput } from "@components/common/Timer/timeinput";
 import { TimerContainer } from "@components/common/Timer/timecontainer";
 import { SuccessAlert } from "@components/common/successAlert";
 import { toast } from "react-toastify";
+import { ReSaleModal } from "@components/common/modal/ReSaleModal";
+import { ReSale } from "./resale";
+import { LoadingSpinner2 } from "@components/common/loading/loading2";
+import { LoadingModal } from "@components/common/modal/LoadingModal";
 
 interface NftProps {
   collectionData: CollectionData;
@@ -37,56 +41,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
   const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isSuccessAlert, setSuccessAlert] = useState(false);
-
-  const [newTime, setNewTime] = useState<number>(0);
-  const [time, setTime] = useState<number>(0);
-  const [days, setDays] = useState<number>(0);
-  const [hours, setHours] = useState<number>(0);
-  const [minutes, setMinutes] = useState<number>(0);
-  const [seconds, setSeconds] = useState<number>(0);
-  const [isTimerRunning, setIsTimerRunning] = useState<boolean>(false);
-
-  const timeToMinutes = time * 60;
-  const countDownDate = new Date().getTime() + timeToMinutes * 1000;
-
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval> | null = null;
-    if (isTimerRunning && time > 0) {
-      interval = setInterval(() => {
-        const now = new Date().getTime();
-        const difference = countDownDate - now;
-
-        const newDays = Math.floor(difference / (1000 * 60 * 60 * 24));
-        const newHours = Math.floor(
-          (difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
-        );
-        const newMinutes = Math.floor(
-          (difference % (1000 * 60 * 60)) / (1000 * 60)
-        );
-        const newSeconds = Math.floor((difference % (1000 * 60)) / 1000);
-
-        setDays(newDays);
-        setHours(newHours);
-        setMinutes(newMinutes);
-        setSeconds(newSeconds);
-
-        if (difference <= 0) {
-          clearInterval(interval as ReturnType<typeof setInterval>);
-          setDays(0);
-          setHours(0);
-          setMinutes(0);
-          setSeconds(0);
-          alert("경매가 종료되었습니다");
-        }
-      }, 1000);
-    }
-
-    return () => {
-      if (interval) {
-        clearInterval(interval as ReturnType<typeof setInterval>);
-      }
-    };
-  }, [isTimerRunning, time]);
 
   const slicedAddress =
     token.seller.slice(0, 6) + "..." + token.seller.slice(-4);
@@ -127,6 +81,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
           });
           console.log(response);
           if (response.statusText === "Created") {
+            setIsOpenModal(false)
             toast.success("Your work was successful!");
             updateTotalVolume(token.NFTaddress);
           } // alert 필요
@@ -142,22 +97,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     setIsOpenAlert(true);
   };
 
-  const handleSetTime = () => {
-    if (!isTimerRunning) {
-      setTime(newTime);
-    }
-  };
-
-  const handleStartTimer = () => {
-    if (!isTimerRunning && time > 0) {
-      setIsTimerRunning(true);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let inputTime = parseInt(e.target.value);
-    setNewTime(inputTime);
-  };
+ 
 
   const updateTotalVolume = async (address: string) => {
     try {
@@ -178,13 +118,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
         <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
           <div className="lg:col-span-3 lg:row-end-1">
             <div className="lg:flex lg:items-start">
-              <TimerContainer
-                days={days}
-                hours={hours}
-                minutes={minutes}
-                seconds={seconds}
-              />
-              <div className="lg:w-[576px] overflow-hidden rounded-lg">
+              <div className="lg:w-[576px]  overflow-hidden rounded-lg">
                 <Image
                   src={
                     imageUrl
@@ -194,7 +128,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                   alt="nft image"
                   width={720}
                   height={720}
-                  className="h-full w-full max-w-full object-cover"
+                  className="w-full max-w-full object-cover"
                 />
               </div>
             </div>
@@ -219,9 +153,24 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                 </span>
               </div>
 
-              {token.openingPrice == 0 && (
+              {address && (address === token.seller) && (
                 <button
-                  onClick={handleBuy}
+                  // 재등록버튼
+                  onClick={() => setIsOpenModal(true)}
+                  type="button"
+                  className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-red-500 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-red-800"
+                >
+                  <Icon icon="ion:cart-sharp" className="text-xl mr-3" />
+                  Set New Price
+                </button>
+              )}
+              {address && (address !== token.seller) && (
+                  <button
+                  // 구입버튼
+                  onClick={() => {
+                    handleBuy(),
+                    setIsOpenModal(true)
+                  }}
                   type="button"
                   className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-800"
                 >
@@ -230,13 +179,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                 </button>
               )}
             </div>
-            <TimerInput
-              value={newTime}
-              handleSetTime={handleSetTime}
-              handleStartTimer={handleStartTimer}
-              handleChange={handleChange}
-            />
-
             <ul className="mt-4 space-y-3">
               <h1 className="text-lg font-bold py-2">Collection</h1>
               <Link href={`/collections/${collectionData.address}`}>
@@ -283,6 +225,19 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
       >
         지갑 주소가 복사되었습니다
       </Alert>
+      {address && (address === token.seller) && (
+        <ReSaleModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal}>
+        <ReSale token={token} setIsOpenModal={setIsOpenModal}/>
+      </ReSaleModal>
+      )} 
+      {address && (address !== token.seller) && (
+          <LoadingModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal}>
+          <LoadingSpinner2/>
+      </LoadingModal>
+      )}
+     
+
+     
     </>
   );
 };

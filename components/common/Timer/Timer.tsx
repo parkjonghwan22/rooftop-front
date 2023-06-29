@@ -14,7 +14,8 @@ export const Timer = () => {
   const timeToMinutes = time * 60;
   const countDownDate = new Date().getTime() + timeToMinutes * 1000;
 
-  useEffect(() => {
+
+    useEffect(() => {
     let interval: ReturnType<typeof setInterval> | null = null;
     if (isTimerRunning && time > 0) {
       interval = setInterval(() => {
@@ -53,37 +54,37 @@ export const Timer = () => {
     };
   }, [isTimerRunning, time]);
 
-  //   const handleSetTime = () => {
-  //     if (!isTimerRunning) {
-  //       setTime(newTime);
-  //     }
-  //   };
+  const handleSetTime = () => {
+    if (!isTimerRunning) {
+      setTime(newTime);
+    }
+  };
 
-  //   const handleStartTimer = () => {
-  //     if (!isTimerRunning && time > 0) {
-  //       setIsTimerRunning(true);
-  //     }
-  //   };
+  const handleStartTimer = () => {
+    if (!isTimerRunning && time > 0) {
+      setIsTimerRunning(true);
+    }
+  };
 
-  //   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //     let inputTime = parseInt(e.target.value);
-  //     setNewTime(inputTime);
-  //   };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let inputTime = parseInt(e.target.value);
+    setNewTime(inputTime);
+  };
 
   return (
     <div className="flex flex-col items-center">
-      {/* <TimerContainer
+      <TimerContainer
         days={days}
         hours={hours}
         minutes={minutes}
         seconds={seconds}
-      /> */}
-      {/* <TimerInput
+      /> 
+       <TimerInput
         value={newTime}
         handleSetTime={handleSetTime}
         handleStartTimer={handleStartTimer}
         handleChange={handleChange}
-      /> */}
+      />
     </div>
   );
 };
