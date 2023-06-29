@@ -42,6 +42,8 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const slicedAddress = token.seller.slice(0, 6) + '...' + token.seller.slice(-4)
     const parsedPrice = convertToWei(token.price, 0)
 
+    console.log(token)
+
     const handleBuy = async () => {
         try {
             const buyNFT = await market.buyNft(token.id, {
