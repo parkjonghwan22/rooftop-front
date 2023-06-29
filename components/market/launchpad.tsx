@@ -18,12 +18,16 @@ import { useEthers } from "@utils/hooks/useEthers";
 import request from "@utils/request";
 import { LoadingSpinner } from "@components/common/loading/loading";
 import { Alert } from "@components/common/alert";
+import { toast } from "react-toastify";
 
 interface LaunchPadProps {
   setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
+
+  const success = () => toast.success("Collection creation completed !")
+
   const { factory, provider, signer } = useEthers();
 
   const [collectionLogo, setCollectionLogo] = useState("");
@@ -94,6 +98,7 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
         setIsLoading(false);
         setIsOpenModal(false);
         setIsOpenAlert(true);
+        success()
       }
     } catch (e) {
       alert(e);
