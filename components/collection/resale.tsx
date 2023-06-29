@@ -3,7 +3,7 @@ import { LoadingSpinner } from "@components/common/loading/loading";
 import { useInput } from "@utils/hooks/useInput";
 import { useIpfs } from "@utils/hooks/useIpfs";
 import { useMarket } from "@utils/hooks/useMarket";
-import { TokenData } from "@utils/types/collection.interface";
+import { TokenData } from "@utils/types/nft.interface";
 import { ethers } from "ethers";
 import { Button } from "flowbite-react";
 import Image from "next/image";
