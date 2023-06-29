@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react';
 import request from '@utils/request';
+import { toast } from 'react-toastify';
 
 
 interface FileInputProps {
@@ -8,6 +9,7 @@ interface FileInputProps {
 }
 
 export const FileInputBox = ({ state, setState }: FileInputProps) => {
+    const pending = () => toast.info('Image Uploading...')
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -22,6 +24,7 @@ export const FileInputBox = ({ state, setState }: FileInputProps) => {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             console.log(`data :`, data)
+            pending()
             setState(data.fileUrl);
         } catch (error) {
             console.error(`error :`, error);

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { Chart2 } from './styled/chart.styled'
 import { Icon } from "@iconify/react";
 import {
   CollectionData,
@@ -27,29 +28,32 @@ import { ReSale } from "./resale";
 import { LoadingSpinner2 } from "@components/common/loading/loading2";
 import { LoadingModal } from "@components/common/modal/LoadingModal";
 
+
 interface NftProps {
-  collectionData: CollectionData;
-  token: TokenData;
-  activity: ActivityData[];
+    collectionData: CollectionData
+    token: TokenData
+    activity: ActivityData[]
 }
 
 export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
-  const { address } = useAccount();
-  const { market, decodeEvent, getTotalVolume } = useMarket();
-  const { metaData, imageUrl, isLoading } = useIpfs(token);
-  const { convertKRW } = useCoinGecko();
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isSuccessAlert, setSuccessAlert] = useState(false);
+    const { address } = useAccount()
+    const { market, decodeEvent, getTotalVolume } = useMarket()
+    const { metaData, imageUrl, isLoading } = useIpfs(token)
+    const { convertKRW } = useCoinGecko()
+    const [isOpenAlert, setIsOpenAlert] = useState(false)
+    const [isOpenModal, setIsOpenModal] = useState(false)
+    const [isSuccessAlert, setSuccessAlert] = useState(false)
 
-  const slicedAddress =
-    token.seller.slice(0, 6) + "..." + token.seller.slice(-4);
 
-  function convertToWei(number: number, decimals: number) {
-    const wei = ethers.parseUnits(number.toString(), decimals);
-    return wei.toString();
-  }
-  const parsedPrice = convertToWei(token.price, 0);
+  const slicedAddress = token.seller.slice(0, 6) + "..." + token.seller.slice(-4);
+
+
+    function convertToWei(number: number, decimals: number) {
+        const wei = ethers.parseUnits(number.toString(), decimals)
+        return wei.toString()
+    }
+    const parsedPrice = convertToWei(token.price, 0)
+
 
   const handleBuy = async () => {
     try {
@@ -86,17 +90,18 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
             updateTotalVolume(token.NFTaddress);
           } // alert 필요
         }
-      }
-    } catch (e) {
-      console.log(e);
     }
-  };
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(token.seller);
-    setIsOpenAlert(true);
-  };
+    const handleCopy = () => {
+        navigator.clipboard.writeText(token.seller)
+        setIsOpenAlert(true)
+    }
 
+    const handleSetTime = () => {
+        if (!isTimerRunning) {
+            setTime(newTime)
+        }
+    }
  
 
   const updateTotalVolume = async (address: string) => {
@@ -208,13 +213,22 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
               </li>
             </ul>
           </div>
-
-          <div className="lg:col-span-5">
-            <div className="my-5 flow-root">
-              <h1 className="text-3xl font-bold mb-3">Activity</h1>
-            </div>
+            
+           
+            <div className="lg:col-span-5">
+                        <div className="my-5 flow-root">
+                            <h1 className="text-3xl font-bold mb-3">Chart</h1>
+                        </div>
             <NFTActivity token={token} activity={activity} />
-          </div>
+            </div>
+
+          
+          <div className="lg:col-span-5">
+                        <div className="my-5 flow-root">
+                            <h1 className="text-3xl font-bold mb-3">Chart</h1>
+                        </div>
+                        <Chart2 />
+            </div>
         </div>
       </div>
       {/* {isSuccessAlert && <SuccessAlert/>} */}
@@ -241,3 +255,4 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     </>
   );
 };
+
