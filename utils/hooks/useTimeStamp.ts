@@ -1,39 +1,37 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
+// import { useState, useEffect } from 'react';
 
-export const useTimeStamp = (createdAt: string) => {
-  const [timeAgo, setTimeAgo] = useState('')
+// export const useTimeStamp = (timestamp: string) => {
+//   const [timeAgo, setTimeAgo] = useState('');
 
-  const parsedTime: Date | undefined = useMemo(
-    () => (createdAt ? new Date(Date.parse(createdAt)) : undefined),
-    [createdAt]
-  )
-  const thisTime = new Date().getTime() + (1000 * 60 * 60 * 9)
+//   useEffect(() => {
+//     const parsedTime = new Date(Date.parse(timestamp));
+//     const thisTime = new Date().getTime();
 
-  const updateTimeStamp = useCallback(() => {
-    if (!parsedTime) return
+//     const updateTimeStamp = () => {
+//       if (!parsedTime) return;
 
-    const timeElapsed = Math.floor((thisTime - parsedTime.getTime()) / 1000)
+//       const timeElapsed = Math.floor((thisTime - parsedTime.getTime()) / 1000);
 
-    if (timeElapsed < 60) {
-      setTimeAgo(`방금 전`)
-    } else if (timeElapsed < 60 * 60) {
-      const minutes = Math.floor(timeElapsed / 60)
-      setTimeAgo(`${minutes}분 전`)
-    } else if (timeElapsed < 60 * 60 * 24) {
-      const hours = Math.floor(timeElapsed / (60 * 60))
-      setTimeAgo(`${hours}시간 전`)
-    } else if (timeElapsed < 60 * 60 * 24 * 7) {
-      const days = Math.floor(timeElapsed / (60 * 60 * 24))
-      setTimeAgo(`${days}일 전`)
-    } else {
-      const date = parsedTime.toISOString().slice(0, 10)
-      setTimeAgo(date)
-    }
-  }, [thisTime, parsedTime])
+//       if (timeElapsed < 60) {
+//         setTimeAgo(`방금 전`);
+//       } else if (timeElapsed < 60 * 60) {
+//         const minutes = Math.floor(timeElapsed / 60);
+//         setTimeAgo(`${minutes}분 전`);
+//       } else if (timeElapsed < 60 * 60 * 24) {
+//         const hours = Math.floor(timeElapsed / (60 * 60));
+//         setTimeAgo(`${hours}시간 전`);
+//       } else if (timeElapsed < 60 * 60 * 24 * 7) {
+//         const days = Math.floor(timeElapsed / (60 * 60 * 24));
+//         setTimeAgo(`${days}일 전`);
+//       } else {
+//         const date = parsedTime.toISOString().slice(0, 10);
+//         setTimeAgo(date);
+//       }
+//     };
 
-  useEffect(() => {
-    updateTimeStamp()
-  }, [parsedTime, updateTimeStamp])
+//     updateTimeStamp();
+//   }, [timestamp]);
 
-  return timeAgo
-}
+//   if (!timeAgo) return timestamp;
+//   return timeAgo;
+// };

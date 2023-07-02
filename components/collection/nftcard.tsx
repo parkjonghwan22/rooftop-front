@@ -7,10 +7,13 @@ import { useIpfs } from '@utils/hooks/useIpfs';
 import request from '@utils/request';
 import { useAccount } from 'wagmi';
 import { useState } from 'react';
-import { LoadingSpinner } from '@components/common/loading/loading';
+import { useQueryClient } from "react-query";
+import { LoadingSpinner } from '@components/common/loading';
+
 
 export const NFTCard = ({ token }: { token: TokenData }) => {
     const { address } = useAccount()
+    const queryClient = useQueryClient();
     const router = useRouter();
     const { _id } = router.query;
     const { metaData, imageUrl, isLoading } = useIpfs(token)
@@ -18,30 +21,43 @@ export const NFTCard = ({ token }: { token: TokenData }) => {
 
 
     const handleAddToCart = async () => {
-        if (!address) return
-        setIsCartLoading(true)
-        const checkResponse = await request.post('cart/checkDuplicate', {
-            shopper: address,
-            id: token.id
-        });
-        if (checkResponse.data.id) {
-            alert("이미 해당 NFT를 장바구니에 담았습니다.") // alert 필요
-            setIsCartLoading(false)
-            return;
+        try {
+            if (!address) return
+            setIsCartLoading(true)
+            const checkResponse = await request.post('cart/checkDuplicate', {
+                shopper: address,
+                id: token.id
+            });
+            if (checkResponse.data.id) {
+                alert("이미 해당 NFT를 장바구니에 담았습니다.") // alert 필요
+                setIsCartLoading(false)
+                return;
+            }
+    
+            const { data } = await request.post('cart/add', {
+                shopper: address,
+                seller: token.seller,
+                id: token.id,
+                NFTaddress: token.NFTaddress,
+                tokenId: token.tokenId,
+                price: token.price,
+                metadata: token.metadata
+            })
+            if (data) {
+                queryClient.setQueryData('cart', (prevData: any) => {
+                    if (prevData) {
+                      return [...prevData, data];
+                    }
+                    return [data];
+                  }); 
+                setIsCartLoading(false)
+            }
+        } catch (e) {
+            console.log(e)
         }
-
-        const { data } = await request.post('cart/add', {
-            shopper: address,
-            id: token.id,
-            NFTaddress: token.NFTaddress,
-            tokenId: token.tokenId,
-            price: token.price,
-            metadata: token.metadata
-        })
-        if (data) setIsCartLoading(false)
     }
 
-    if (isLoading) return <div>Loading...</div> // 로딩 컴포넌트 필요
+    if (isLoading) return <LoadingSpinner />
     return (
         <div className="w-64 mb-10 mx-5 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 relative">
             <div className="px-3 py-2">

@@ -40,6 +40,7 @@ export interface ActivityData {
     NFTaddress: string;
     tokenId: number;
     price: number;
+    krwPrice: string;
     event: string;
     createdAt: string;
     updatedAt: string;

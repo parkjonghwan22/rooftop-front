@@ -9,6 +9,7 @@ import { TokenData } from "@utils/types/nft.interface";
 import { useIpfs } from "@utils/hooks/useIpfs";
 import { useCoinGecko } from "@utils/hooks/useCoingecko";
 import Link from "next/link";
+import { LoadingSpinner2 } from "@components/common/loading";
 
 export const SlideWrap = tw.div`
   mx-auto mb-20 w-5/6  md:w-3/4 h-450 lg:h-450 rounded-lg dark:bg-gray-900 bg-gary-100 dark:shadow-2xl dark:shadow-cyan-500/50
@@ -23,7 +24,7 @@ const SlideItem = ({ token }: { token: TokenData }) => {
   const { metaData, imageUrl, isLoading } = useIpfs(token)
   const { convertKRW } = useCoinGecko()
 
-  if (isLoading) return <p>Loading...</p> // 로딩 컴포넌트 필요
+  if (isLoading) return <LoadingSpinner2 />
   return (
 
       <div className="container mx-auto">

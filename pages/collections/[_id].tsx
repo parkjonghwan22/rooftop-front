@@ -1,11 +1,10 @@
 import { useRouter } from 'next/router';
 import { RootLayout } from "@components/layout/layout"
-import { useEffect } from 'react';
 import { Collection } from '@components/collection/collection';
 import { useMarket } from '@utils/hooks/useMarket';
 import { useQuery } from 'react-query';
 import request from '@utils/request';
-import { CollectionData } from '@utils/types/nft.interface';
+import { LoadingSpinner2 } from '@components/common/loading';
 
 const CollectionPage = () => {
   const router = useRouter();
@@ -66,7 +65,7 @@ const CollectionPage = () => {
   );
   const isLoading = collectionLoading || nftsLoading
 
-  if (isLoading) return <p>Loading...</p> // 로딩 컴포넌트 필요
+  if (isLoading) return <LoadingSpinner2 />
   return (
     <RootLayout>
         <Collection collectionData={collectionData} tokenData={tokenData} />

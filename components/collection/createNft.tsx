@@ -3,7 +3,7 @@ import { CreateNftWrapper, NftFormContainer, NftTitle, NftLabel } from './styled
 import React, { useState } from 'react'
 import { InputBox, PriceInputBox, TextArea } from '@components/common/input'
 import { Button } from '@components/common/button'
-import { LoadingSpinner } from '@components/common/loading/loading'
+import { LoadingSpinner } from '@components/common/loading'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { FileNftInputBox } from '@components/common/input/fileNftInputBox'
