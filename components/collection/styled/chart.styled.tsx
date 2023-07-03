@@ -18,24 +18,16 @@ import { Line } from 'react-chartjs-2'
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend)
 
 export const Chart2 = ({ token, activity }: { token: TokenData, activity: ActivityData[] }) => {
-  // const { getHistoricalPrice } = useCoinGecko();
-  // // const transferData = activity.filter((item) => item.event === "transfer")
+  const priceArray = activity.map((item) => item.krwPrice)
+  const dateArray = activity.map((item) => item.createdAt.slice(0, 10).split("-").reverse().join("-"))
 
-  // const maticHistoryPrices = activity.map((item) => {
-  //   const parsedDate = item.createdAt.slice(0, 10).split("-").reverse().join("-");
-  //   getHistoricalPrice(parsedDate,item.price)
-  //   // return maticHistoryPrice;
-  // });
-
-  // console.log(maticHistoryPrices)
-  
   // Chart Data //
   const chartData = {
-        labels: [], // X축
+        labels: dateArray, // X축
         datasets: [
             {
                 label: 'NFT Trading Chart',
-                data: [],
+                data: priceArray,
                 fill: false,
                 backgroundColor: 'rgba(75, 192, 192, 0.4)', // hover시 나오는 background Color
                 borderColor: 'rgba(75, 192, 192, 1)', //
@@ -50,8 +42,8 @@ export const Chart2 = ({ token, activity }: { token: TokenData, activity: Activi
         maintainAspectRatio: false, // 반응형
         layout: {
             padding: {
-                top: 20,
-                bottom: 20,
+                top: 10,
+                bottom: 10,
             },
         },
         elements: {

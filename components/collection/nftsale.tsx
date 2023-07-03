@@ -36,8 +36,6 @@ interface NftProps {
   activity: ActivityData[];
 }
 
-
-
 export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
   const { address } = useAccount();
   const { market, decodeEvent, convertToWei, getTotalVolume } = useMarket();
@@ -47,8 +45,9 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isSuccessAlert, setSuccessAlert] = useState(false);
 
-  const slicedAddress = token.seller.slice(0, 6) + "..." + token.seller.slice(-4);
-    const parsedPrice = convertToWei(token.price, 0)
+  const slicedAddress =
+    token.seller.slice(0, 6) + "..." + token.seller.slice(-4);
+  const parsedPrice = convertToWei(token.price, 0);
 
   const handleBuy = async () => {
     try {
@@ -72,6 +71,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
             NFTaddress: token.NFTaddress,
             tokenId: Number(data[4]),
             price: Number(data[5]),
+            krwPrice: convertKRW(Number(data[5])),
             event: "transfer",
           };
           console.log(decodedData);
@@ -84,7 +84,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
             toast.success("Your work was successful!");
             updateTotalVolume(token.NFTaddress);
           } // alert 필요
-
         }
       }
     } catch (e) {
@@ -152,85 +151,80 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                 </span>
               </div>
 
-                            {address && address === token.seller && (
-                                <button
-                                    // 재등록버튼
-                                    onClick={() => setIsOpenModal(true)}
-                                    type="button"
-                                    className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-red-500 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-red-800"
-                                >
-                                    <Icon icon="ion:cart-sharp" className="text-xl mr-3" />
-                                    Set New Price
-                                </button>
-                            )}
-                            {address && address !== token.seller && (
-                                <button
-                                    // 구입버튼
-                                    onClick={() => {
-                                        handleBuy(), setIsOpenModal(true)
-                                    }}
-                                    type="button"
-                                    className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-800"
-                                >
-                                    <Icon icon="ion:cart-sharp" className="text-xl mr-3" />
-                                    Buy Now
-                                </button>
-                            )}
-                        </div>
-                        <ul className="mt-4 space-y-3">
-                            <h1 className="text-lg font-bold py-2">Collection</h1>
-                            <Link href={`/collections/${collectionData.address}`}>
-                                <li className="flex items-center text-left text-md font-medium text-gray-600 dark:text-gray-400 px-3">
-                                    <div className="w-7 h-7 mr-2 cursor-pointer">
-                                        <Image
-                                            src={collectionData.logo}
-                                            alt=""
-                                            width={720}
-                                            height={720}
-                                            className="h-full w-full rounded-full"
-                                        />
-                                    </div>
-                                    <span className="font-bold">{metaData.name}</span>
-                                </li>
-                            </Link>
-                            <h1 className="text-lg font-bold py-2">Description</h1>
-                            <li className="flex items-center text-left text-sm font-medium text-gray-600  dark:text-gray-400 px-3">
-                                {metaData.description}
-                            </li>
-                            <h1 className="text-lg font-bold py-2">Owner</h1>
-                            <li className="flex items-center text-left text-sm font-medium text-gray-600  dark:text-gray-400 px-3">
-                                <UserAddress onClick={handleCopy}>
-                                    {slicedAddress}
-                                    <Icon icon="bxs:copy" className="ml-1" />
-                                </UserAddress>
-                            </li>
-                        </ul>
-                        <Auction token={token} />
-                    </div>
-                    
-                    <div className="lg:col-span-5">
-                        <div className="my-5 flow-root">
-                            <h1 className="text-3xl font-bold mb-3">Chart</h1>
-                        </div>
-                        <Chart2 token={token} activity={activity}/>
-                    </div>
-
-                    <div className="lg:col-span-5">
-                        <div className="my-5 flow-root">
-                            <h1 className="text-3xl font-bold mb-3">Activity</h1>
-                        </div>
-                        <NFTActivity token={token} activity={activity} />
-                    </div>
-
-                    
-                </div>
-
+              {address && address === token.seller && (
+                <button
+                  // 재등록버튼
+                  onClick={() => setIsOpenModal(true)}
+                  type="button"
+                  className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-red-500 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-red-800"
+                >
+                  <Icon icon="ion:cart-sharp" className="text-xl mr-3" />
+                  Set New Price
+                </button>
+              )}
+              {address && address !== token.seller && (
+                <button
+                  // 구입버튼
+                  onClick={() => {
+                    handleBuy(), setIsOpenModal(true);
+                  }}
+                  type="button"
+                  className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-800"
+                >
+                  <Icon icon="ion:cart-sharp" className="text-xl mr-3" />
+                  Buy Now
+                </button>
+              )}
             </div>
-            <Chart2 />
+            <ul className="mt-4 space-y-3">
+              <h1 className="text-lg font-bold py-2">Collection</h1>
+              <Link href={`/collections/${collectionData.address}`}>
+                <li className="flex items-center text-left text-md font-medium text-gray-600 dark:text-gray-400 px-3">
+                  <div className="w-7 h-7 mr-2 cursor-pointer">
+                    <Image
+                      src={collectionData.logo}
+                      alt=""
+                      width={720}
+                      height={720}
+                      className="h-full w-full rounded-full"
+                    />
+                  </div>
+                  <span className="font-bold">{metaData.name}</span>
+                </li>
+              </Link>
+              <h1 className="text-lg font-bold py-2">Description</h1>
+              <li className="flex items-center text-left text-sm font-medium text-gray-600  dark:text-gray-400 px-3">
+                {metaData.description}
+              </li>
+              <h1 className="text-lg font-bold py-2">Owner</h1>
+              <li className="flex items-center text-left text-sm font-medium text-gray-600  dark:text-gray-400 px-3">
+                <UserAddress onClick={handleCopy}>
+                  {slicedAddress}
+                  <Icon icon="bxs:copy" className="ml-1" />
+                </UserAddress>
+              </li>
+            </ul>
+            <Auction token={token} />
           </div>
+
+          <div className="lg:col-span-5">
+            <div className="my-5 flow-root">
+              <h1 className="text-3xl font-bold mb-3">Chart</h1>
+            </div>
+            <Chart2 token={token} activity={activity} />
+          </div>
+
+          <div className="lg:col-span-5">
+            <div className="my-5 flow-root">
+              <h1 className="text-3xl font-bold mb-3">Activity</h1>
+            </div>
+            <NFTActivity token={token} activity={activity} />
+          </div>
+          {/* <Chart2 /> */}
         </div>
       </div>
       {/* {isSuccessAlert && <SuccessAlert/>} */}
+
       <Alert
         isOpenAlert={isOpenAlert}
         setIsOpenAlert={setIsOpenAlert}
@@ -248,7 +242,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
           <LoadingSpinner2 />
         </LoadingModal>
       )}
-  
     </>
   );
 };
