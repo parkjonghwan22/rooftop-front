@@ -38,12 +38,15 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const [isOpenAlert, setIsOpenAlert] = useState(false)
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [isSuccessAlert, setSuccessAlert] = useState(false)
+    const [isBuyLoading , setIsBuyLoading] = useState(false)
+
 
     const slicedAddress = token.seller.slice(0, 6) + '...' + token.seller.slice(-4)
     const parsedPrice = convertToWei(token.price, 0)
 
     const handleBuy = async () => {
         try {
+            
             const buyNFT = await market.buyNft(token.id, {
                 from: address,
                 value: parsedPrice,
@@ -155,9 +158,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                             {address && address !== token.seller && (
                                 <button
                                     // 구입버튼
-                                    onClick={() => {
-                                        handleBuy(), setIsOpenModal(true)
-                                    }}
+                                    onClick={()=>{handleBuy(),setIsOpenModal(true)}}
                                     type="button"
                                     className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-800"
                                 >
@@ -222,7 +223,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                     <ReSale token={token} setIsOpenModal={setIsOpenModal} />
                 </ReSaleModal>
             )}
-            {address && address !== token.seller && (
+            {isBuyLoading && (
                 <LoadingModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal}>
                     <LoadingSpinner2 />
                 </LoadingModal>

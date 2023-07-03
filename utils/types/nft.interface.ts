@@ -41,6 +41,7 @@ export interface ActivityData {
     tokenId: number;
     price: number;
     event: string;
+    krwPrice:string;
     createdAt: string;
     updatedAt: string;
     __v: number;
