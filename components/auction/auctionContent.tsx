@@ -43,6 +43,7 @@ export const AuctionContent = ({
         duration
       );
 
+      console.log("startAuction ====",startAuction)
       const receipt = await startAuction.wait();
       console.log("receipt ==== ", receipt);
 

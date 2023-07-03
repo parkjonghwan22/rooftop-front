@@ -58,7 +58,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                 gasLimit: 800000,
             })
             const receipt = await buyNFT.wait()
-            console.log(receipt)
+            console.log("=====================",receipt)
             if (receipt.logs) {
                 const decodedData = decodeTransfer(receipt, token)
                 const response = await request.post("event/transfer", {
