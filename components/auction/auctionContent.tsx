@@ -13,11 +13,13 @@ import { useRef, useState } from "react";
 interface NftProps {
   token: TokenData;
   setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setAuctionEnded: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const AuctionContent = ({
   token,
   setIsOpenModal,
+  setAuctionEnded,
   handleTimerStart,
 }: NftProps & { handleTimerStart: (time: number) => void }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -48,7 +50,7 @@ export const AuctionContent = ({
         try {
           setIsLoading(false)
           setIsOpenModal(false)
-          
+
           const currentTime = new Date()
           const endTime = new Date(currentTime.getTime() + duration * 1000)
           const endTimeISO = endTime.toISOString()
