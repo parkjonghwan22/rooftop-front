@@ -1,10 +1,10 @@
 import { UserAddress } from "@components/collection/styled/nft.styled";
 import { Alert } from "@components/common/alert";
 import { Icon } from "@iconify/react";
-import { useTimeStamp } from "@utils/hooks/useTimeStamp";
 import { ActivityData } from "@utils/types/nft.interface";
 import { useState } from "react";
 import { TdStyled, ThStyled } from "./styled/Activity.styled";
+import { TimeStamp } from "@components/common/timestamp/timestamp";
 
 
 export const Activity = ({ activity }: { activity: ActivityData[] }) => {
@@ -21,7 +21,7 @@ export const Activity = ({ activity }: { activity: ActivityData[] }) => {
       <div className="flex flex-col">
         <div className="-m-1.5 overflow-x-auto">
           <div className="p-1.5 min-w-full inline-block align-middle">
-            <div className="rounded-b-lg shadow overflow-hidden dark:border-gray-800 dark:shadow-gray-700">
+            <div className="rounded-b-lg shadow overflow-hidden dark:border-gray-800 dark:shadow-gray-700 max-h-[500px] overflow-y-scroll">
               <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
                 <thead className="bg-gray-50 dark:bg-gray-800">
                   <tr>
@@ -49,7 +49,7 @@ export const Activity = ({ activity }: { activity: ActivityData[] }) => {
                         </UserAddress>
                       </TdStyled>
                       <TdStyled className="font-bold">{item.price / (10 ** 18)} MATIC</TdStyled>
-                      <TdStyled>{useTimeStamp(item.createdAt)}</TdStyled>
+                      <TdStyled><TimeStamp timestamp={item.createdAt} /></TdStyled>
                     </tr>
                   ))}
                 </tbody>

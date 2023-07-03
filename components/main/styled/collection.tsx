@@ -2,6 +2,7 @@ import { CollectionData } from "@utils/types/nft.interface";
 import tw from "tailwind-styled-components";
 import Image from "next/image";
 import Link from "next/link";
+import { VerifiedMarker } from "@components/common/marker/verify";
 
 export const CollectionWrap = tw.div`
      rounded-lg mt-16 mx-auto w-full flex flex-col items-center
@@ -26,7 +27,8 @@ const CollectionCard = ({ collection }: { collection : CollectionData }) => {
       />
     </div>
     <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90 ">
-      <div className="text-xl text-center pt-4 pb-4 font-bold">
+      <div className="text-xl pt-4 pb-4 font-bold flex items-center justify-center">
+        {collection.verified && <span className="mr-2"><VerifiedMarker /></span>}
         {collection.name}
       </div>
       <div className="flex flex-wrap pl-5">
@@ -47,6 +49,11 @@ const CollectionCard = ({ collection }: { collection : CollectionData }) => {
 
 
 export const Collection = ({ collectionDatas }: CollectionProps) => {
+  const verifiedCollectionDatas = collectionDatas
+  .filter((collection) => collection.verified === true)
+  .sort((a, b) => b.totalVolume - a.totalVolume)
+  .slice(0, 10);
+  
   const sortedCollectionDatas = collectionDatas.sort((a, b) => {
     const dateA = new Date(a.createdAt);
     const dateB = new Date(b.createdAt);
@@ -56,7 +63,13 @@ export const Collection = ({ collectionDatas }: CollectionProps) => {
   return (
     <>
       <CollectionWrap>
-        <div className="text-3xl font-bold px-5 py-10">New Collections</div>
+      <h2 className="text-3xl font-bold px-5 py-10">Recommended Collections</h2>
+        <div className="flex flex-wrap justify-center w-5/6 mb-20">
+          {verifiedCollectionDatas.map((collection) => (
+            <CollectionCard key={collection._id} collection={collection} />
+          ))}
+        </div>
+        <h2 className="text-3xl font-bold px-5 py-10">New Collections</h2>
         <div className="flex flex-wrap justify-center w-5/6">
           {sortedCollectionDatas.map((collection) => (
             <CollectionCard key={collection._id} collection={collection} />

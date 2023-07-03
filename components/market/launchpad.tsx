@@ -88,6 +88,7 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
         creatorFee,
         floorPrice: 0,
         totalVolume: 0,
+        totalSales: 0,
         verified: false,
       });
       if (data) {
@@ -96,6 +97,7 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
           hasCollection: true,
         });
         setIsLoading(false);
+        window.location.reload();
         setIsOpenModal(false);
         setIsOpenAlert(true);
         success()
@@ -113,8 +115,8 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
     <>
       <LaunchPadWrapper>
         <FormContainer onSubmit={handleSubmit}>
-          <SectionTitle>자신만의 NFT 컬렉션을 만들어주세요</SectionTitle>
-          <Label htmlFor="name">컬렉션 이름</Label>
+          <SectionTitle>Create your own NFT collection!</SectionTitle>
+          <Label htmlFor="name">Collection Name</Label>
           <InputBox
             value={collectionName.value}
             onChange={collectionName.onChange}
@@ -128,7 +130,7 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
             isFocused={isFocused}
             isDuplicated={isDuplicated}
           />
-          <Label htmlFor="symbol">심볼</Label>
+          <Label htmlFor="symbol">Symbol</Label>
           <InputBox
             value={collectionSymbol.value}
             onChange={collectionSymbol.onChange}
@@ -142,14 +144,14 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
             isFocused={isFocused}
             isDuplicated={isDuplicated}
           />
-          <Label htmlFor="description">세부 설명</Label>
+          <Label htmlFor="description">Description</Label>
           <TextArea
             value={collectionDescription.value}
             onChange={collectionDescription.onChange}
             id="description"
             placeholder="당신의 컬렉션을 소개해주세요"
           />
-          <Label htmlFor="url">컬렉션 주소</Label>
+          <Label htmlFor="url">Collection URL</Label>
           <InputBox
             value={collectionUrl.value}
             onChange={collectionUrl.onChange}
@@ -163,21 +165,21 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
             isFocused={isFocused}
             isDuplicated={isDuplicated}
           />
-          <Label htmlFor="creatorFee">로열티 설정</Label>
+          <Label htmlFor="creatorFee">Creator Royalty</Label>
           <CheckBox
             options={["0%", "2.5%", "5%"]}
             onChange={handleCheckBox}
             selectedOption={creatorFee}
           />
-          <Label htmlFor="logo">대표 이미지 등록</Label>
+          <Label htmlFor="logo">Thumbnail</Label>
           <FileInputBox state={collectionLogo} setState={setCollectionLogo} />
           {isLoading ? (
             <Button type="submit" color="blue" disabled>
-              <LoadingSpinner /> 등록중...
+              <LoadingSpinner /> uploading...
             </Button>
           ) : (
             <Button type="submit" color="blue">
-              컬렉션 등록
+              Add Collection
             </Button>
           )}
         </FormContainer>

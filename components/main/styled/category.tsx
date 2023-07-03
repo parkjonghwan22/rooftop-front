@@ -3,6 +3,7 @@ import tw from "tailwind-styled-components";
 import Image from "next/image";
 import Link from "next/link";
 import { CollectionData, ActivityData } from "@utils/types/nft.interface";
+import { VerifiedMarker } from "@components/common/marker/verify";
 
 interface CollectionProps {
   collectionDatas: CollectionData[]
@@ -10,6 +11,7 @@ interface CollectionProps {
 }
 
 const CategoryItem = ({ collection, index }: { collection: CollectionData, index: number }) => {
+
 
   const TdStyled = tw.td`
     py-4 whitespace-no-wrap dark:bg-gray-700
@@ -34,7 +36,10 @@ const CategoryItem = ({ collection, index }: { collection: CollectionData, index
         </Link>
         </TdStyled>
         <TdStyled className="px-6">
-          <div className="text-lg leading-5 font-medium text-gray-900 dark:text-gray-200 mb-3">{collection.name}</div>
+          <div className="text-lg leading-5 font-medium text-gray-900 dark:text-gray-200 mb-3 flex items-center">
+            {collection.name}
+            {collection.verified && <div className="ml-1"><VerifiedMarker /></div>}
+          </div>
           <div className="text-sm leading-5 text-gray-900 dark:text-gray-200">Floor : {collection.floorPrice}</div>
           <div className="text-sm leading-5 text-gray-400">Volume : {collection.totalVolume}</div>
         </TdStyled>
@@ -58,16 +63,15 @@ export const Category = ({ collectionDatas, activityDatas }: CollectionProps) =>
     const countA = activityDatas.filter((activity) => activity.NFTaddress === a.address).length;
     const countB = activityDatas.filter((activity) => activity.NFTaddress === b.address).length;
     return countB - countA;
-  });
+  }).slice(0, 10);
 
   // top 정렬
   const sortedByTop = [...collectionDatas].sort((a, b) => {
     return b.totalVolume - a.totalVolume;
-  });
-  // console.log(sortedByTop)
-
+  }).slice(0, 10);
+  
   const selectedDatas = selectedSort === 'trending' ? sortedByTrending : sortedByTop;
-  // console.log(`selectedDatas:`, selectedDatas)
+  
 
   return (
     <div className="flex flex-col w-3/4 mt-20 mb-10">
@@ -91,7 +95,7 @@ export const Category = ({ collectionDatas, activityDatas }: CollectionProps) =>
       </header>
       <table className="min-w-full lg:w-full">
         <tbody className="lg:grid grid-cols-2 gap-1">
-          {selectedDatas.slice(0, 10).map((collection, index) => (
+          {selectedDatas.map((collection, index) => (
             <CategoryItem key={collection._id} collection={collection} index={index} />
           ))}
         </tbody>

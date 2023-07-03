@@ -7,22 +7,16 @@ import Link from 'next/link'
 import { UserAddress } from './styled/nft.styled'
 import { Alert } from '@components/common/alert'
 import { useMarket } from '@utils/hooks/useMarket'
-import { useAccount, useBalance } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { NFTActivity } from './nftactivity'
 import { useIpfs } from '@utils/hooks/useIpfs'
 import { useCoinGecko } from '@utils/hooks/useCoingecko'
 import request from '@utils/request'
-import { ethers } from 'ethers'
-import { BidModal } from '@components/common/modal/BidModal'
-import Bid from './bid'
-import { TimerInput } from '@components/common/Timer/timeinput'
-import { TimerContainer } from '@components/common/Timer/timecontainer'
-import { SuccessAlert } from '@components/common/successAlert'
-import { toast } from 'react-toastify'
-import { ReSaleModal } from '@components/common/modal/ReSaleModal'
+import { ReSaleModal, LoadingModal } from '@components/common/modal'
 import { ReSale } from './resale'
-import { LoadingSpinner2 } from '@components/common/loading/loading2'
-import { LoadingModal } from '@components/common/modal/LoadingModal'
+import { LoadingSpinner2 } from '@components/common/loading'
+import { toast } from 'react-toastify'
+import { useDecode } from '@utils/hooks/useDecode'
 
 interface NftProps {
     collectionData: CollectionData
@@ -32,77 +26,49 @@ interface NftProps {
 
 export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const { address } = useAccount()
-    const { market, decodeEvent, convertToWei, getTotalVolume } = useMarket()
+    const { market, convertToWei, updateCollection } = useMarket()
+    const { decodeTransfer } = useDecode()
     const { metaData, imageUrl, isLoading } = useIpfs(token)
     const { convertKRW } = useCoinGecko()
     const [isOpenAlert, setIsOpenAlert] = useState(false)
     const [isOpenModal, setIsOpenModal] = useState(false)
-    const [isSuccessAlert, setSuccessAlert] = useState(false)
-    const [isBuyLoading , setIsBuyLoading] = useState(false)
-
-
+    const [isBuyLoading, setIsBuyLoading] = useState(false
     const slicedAddress = token.seller.slice(0, 6) + '...' + token.seller.slice(-4)
     const parsedPrice = convertToWei(token.price, 0)
 
     const handleBuy = async () => {
         try {
-            
+            setIsBuyLoading(true)
             const buyNFT = await market.buyNft(token.id, {
                 from: address,
                 value: parsedPrice,
+                gasLimit: 800000,
             })
             const receipt = await buyNFT.wait()
-            // console.log(receipt)
+            console.log(receipt)
             if (receipt.logs) {
-                const data = decodeEvent(receipt.logs[3].topics[0], receipt.logs[3].data)
-                // console.log(data)
-                if (data) {
-                    const decodedData = {
-                        id: Number(data[0]),
-                        from: receipt.from,
-                        to: receipt.to,
-                        NFTaddress: token.NFTaddress,
-                        tokenId: Number(data[4]),
-                        price: Number(data[5]),
-                        krwPrice: convertKRW(Number(data[5])),
-                        event: 'transfer',
-                    }
-                    console.log(decodedData)
-                    const response = await request.post('event/transfer', {
-                        ...decodedData,
-                    })
-                    console.log(response)
-                    if (response.statusText === 'Created') {
-                        setIsOpenModal(false)
-                        toast.success('Your work was successful!')
-                        updateTotalVolume(token.NFTaddress)
-                    } // alert 필요
+                const decodedData = decodeTransfer(receipt, token)
+                const response = await request.post("event/transfer", {
+                    ...decodedData,
+                });
+                if (response.statusText === "Created") {
+                    setIsOpenModal(false);
+                    setIsBuyLoading(false)
+                    toast.success("NFT transaction was successful!");
+                    updateCollection(token.NFTaddress);
                 }
             }
         } catch (e) {
-            console.log(e)
+            alert(e)
         }
     }
 
-    const handleCopy = () => {
-        navigator.clipboard.writeText(token.seller)
+    const handleCopy = (address: string) => {
+        navigator.clipboard.writeText(address)
         setIsOpenAlert(true)
     }
 
-    const updateTotalVolume = async (address: string) => {
-        try {
-            const currentVolume = await getTotalVolume(address)
-
-            const { data } = await request.put('collection/update', {
-                address,
-                totalVolume: Number(currentVolume),
-            })
-        } catch (e) {
-            console.log(e)
-        }
-    }
-
-    if (isLoading) return <div>Loading...</div> // 로딩 컴포넌트 필요
+    if (isLoading || isBuyLoading) return <LoadingSpinner2 />
     return (
         <>
             <div className="container mx-auto px-8 xl:px-32">
@@ -149,16 +115,16 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                                     // 재등록버튼
                                     onClick={() => setIsOpenModal(true)}
                                     type="button"
-                                    className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-red-500 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-red-800"
+                                    className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-red-500 bg-none px-5 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-red-800"
                                 >
-                                    <Icon icon="ion:cart-sharp" className="text-xl mr-3" />
+                                    <Icon icon="icomoon-free:price-tags" className="text-xl mr-3" />
                                     Set New Price
                                 </button>
                             )}
                             {address && address !== token.seller && (
                                 <button
                                     // 구입버튼
-                                    onClick={()=>{handleBuy(),setIsOpenModal(true)}}
+                                    onClick={handleBuy}
                                     type="button"
                                     className="inline-flex items-center justify-center rounded-md border-2 border-transparent bg-blue-600 bg-none px-8 py-3 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-blue-800"
                                 >
@@ -189,19 +155,18 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                             </li>
                             <h1 className="text-lg font-bold py-2">Owner</h1>
                             <li className="flex items-center text-left text-sm font-medium text-gray-600  dark:text-gray-400 px-3">
-                                <UserAddress onClick={handleCopy}>
+                                <UserAddress onClick={()=>handleCopy(token.seller)}>
                                     {slicedAddress}
                                     <Icon icon="bxs:copy" className="ml-1" />
                                 </UserAddress>
                             </li>
                         </ul>
                     </div>
-                    
                     <div className="lg:col-span-5">
                         <div className="my-5 flow-root">
                             <h1 className="text-3xl font-bold mb-3">Chart</h1>
                         </div>
-                        <Chart2 token={token} activity={activity}/>
+                        <Chart2 token={token} activity={activity} />
                     </div>
 
                     <div className="lg:col-span-5">
@@ -211,7 +176,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                         <NFTActivity token={token} activity={activity} />
                     </div>
 
-                    
+
                 </div>
             </div>
             {/* {isSuccessAlert && <SuccessAlert/>} */}
@@ -222,11 +187,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                 <ReSaleModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal}>
                     <ReSale token={token} setIsOpenModal={setIsOpenModal} />
                 </ReSaleModal>
-            )}
-            {isBuyLoading && (
-                <LoadingModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal}>
-                    <LoadingSpinner2 />
-                </LoadingModal>
             )}
         </>
     )

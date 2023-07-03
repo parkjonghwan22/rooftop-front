@@ -1,5 +1,5 @@
 import { PriceInputBox } from "@components/common/input";
-import { LoadingSpinner } from "@components/common/loading/loading";
+import { LoadingSpinner } from "@components/common/loading";
 import { useInput } from "@utils/hooks/useInput";
 import { useIpfs } from "@utils/hooks/useIpfs";
 import { useMarket } from "@utils/hooks/useMarket";

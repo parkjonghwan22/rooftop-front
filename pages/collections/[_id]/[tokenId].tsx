@@ -5,6 +5,7 @@ import { useQuery } from 'react-query';
 import request from '@utils/request';
 import { useRouter } from 'next/router';
 import { TokenData } from '@utils/types/nft.interface';
+import { LoadingSpinner2 } from '@components/common/loading';
 
 
 const NftPage = () => {
@@ -85,6 +86,7 @@ const NftPage = () => {
   if (isLoading || !tokenData || !activityData) return <p>Loading...</p> // 로딩 컴포넌트 필요
   return (
     <RootLayout>
+      {(isLoading || !tokenData || !activityData) && <LoadingSpinner2 />}
       <NFTSale collectionData={collectionData} token={tokenData} activity={activityData} />
     </RootLayout>
   );

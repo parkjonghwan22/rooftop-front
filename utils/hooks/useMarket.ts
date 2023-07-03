@@ -1,6 +1,7 @@
 import { ethers } from "ethers";
 import MarketABI from '@contracts/Marketplace.json';
 import { useState, useEffect } from "react";
+import request from "@utils/request";
 
 export const useMarket = () => {
   const [market, setMarket] = useState<any>(null);
@@ -22,31 +23,49 @@ export const useMarket = () => {
     return decodedData;
   };
 
+
+
   const convertToWei = (number: number, decimals: number) => {
     const wei = ethers.parseUnits(number.toString(), decimals)
     return wei.toString()
   }
 
-  const getLatestId = async () => {
-    if (!market) return null
-    const result = await market.getLatestId()
-    const parsedResult = Number(result)
-    return parsedResult
-  }
+  // const getLatestId = async () => {
+  //   if (!market) return null
+  //   const result = await market.getLatestId()
+  //   const parsedResult = Number(result)
+  //   return parsedResult
+  // }
 
   const getLowestPrice = async (address: string) => {
     if (!market) return null
     const result = await market.lowestPriceByCollection(address)
-    const parsedResult = Number(result) / (10 ** 18)
-    return parsedResult
+    return result
   }
-
   const getTotalVolume = async (address: string) => {
     if (!market) return null
     const result = await market.totalSalesByCollection(address)
     const parsedResult = Number(result) / (10 ** 18)
     return parsedResult
   }
+
+  const updateCollection = async (address: string) => {
+    try {
+      const currentVolume = await getTotalVolume(address);
+      const currentFloor = await getLowestPrice(address);
+      console.log(currentFloor);
+      const { data } = await request.put('collection/update', {
+        address,
+        totalVolume: Number(currentVolume),
+        floorPrice: Number(currentFloor) / (10 ** 18),
+        totalSales: 1,
+      });
+      console.log(data)
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
 
   useEffect(() => {
     if (window.ethereum) {
@@ -61,24 +80,23 @@ export const useMarket = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchLatestId = async () => {
-      if (market) {
-        const id = await getLatestId();
-        setLatestId(id);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchLatestId = async () => {
+  //     if (market) {
+  //       const id = await getLatestId();
+  //       setLatestId(id);
+  //     }
+  //   };
 
-    fetchLatestId();
-  }, [market]);
+  //   fetchLatestId();
+  // }, [market]);
 
   return {
     market,
     marketAddress: market?.target,
-    latestId,
+    // latestId,
     decodeEvent,
     convertToWei,
-    getLowestPrice,
-    getTotalVolume
+    updateCollection
   };
 };
