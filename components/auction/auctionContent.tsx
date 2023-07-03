@@ -3,8 +3,10 @@ import { LoadingSpinner } from "@components/common/loading";
 import { useInput } from "@utils/hooks/useInput";
 import { useIpfs } from "@utils/hooks/useIpfs";
 import { useMarket } from "@utils/hooks/useMarket";
+import request from "@utils/request";
 import { TokenData } from "@utils/types/nft.interface";
 import { ethers } from "ethers";
+
 import Image from "next/image";
 import { useRef, useState } from "react";
 
@@ -32,20 +34,44 @@ export const AuctionContent = ({
 
       const priceInWei = ethers.parseEther(nftPrice.value.toString());
       const duration = newTime * 60;
+
       const startAuction = await market.startAuction(
         token.id,
         priceInWei,
         duration
       );
+
       const receipt = await startAuction.wait();
       console.log("receipt ==== ", receipt);
+
       if(receipt) {
-        setIsLoading(false)
-        setIsOpenModal(false)
+        try {
+          setIsLoading(false)
+          setIsOpenModal(false)
+          
+          const currentTime = new Date()
+          const endTime = new Date(currentTime.getTime() + duration * 1000)
+          const endTimeISO = endTime.toISOString()
+          console.log(typeof(endTimeISO))
+          // endTime : 2023-07-04T00:43:49.291Z
+
+
+          // DB 와 통신을 하는 순간 타이머가 돌아가지 않음..
+          const { data } = await request.post(`auction/add`, {
+            id: token.id,
+            endTime: endTimeISO
+          })
+          
+          console.log('data ==========', data)
+          return data
+
+        } catch(e:any) {
+          console.log(e.message)
+        }
       }
 
       if (newTime > 0) {
-          handleTimerStart(newTime);
+          handleTimerStart(newTime * 60);
         } else {
             clearInterval(updateTimeRef.current!);
         }

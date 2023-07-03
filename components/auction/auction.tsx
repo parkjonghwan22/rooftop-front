@@ -4,6 +4,7 @@ import { TokenData } from "@utils/types/nft.interface";
 import { useEffect, useState } from "react";
 import { AuctionContent } from "./auctionContent";
 import { useMarket } from "@utils/hooks/useMarket";
+import request from "@utils/request";
 
 
 interface AuctionProps {
@@ -16,18 +17,41 @@ export const Auction = ({ token }: AuctionProps) => {
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
   const [seconds, setSeconds] = useState<number>(0);
+  const [newTimer, setNewTimer] = useState<number>(0);
+  const [auctionEnded, setAuctionEnded] = useState(false)
   const { market } = useMarket()
 
   const getAuction = async () => {
-    const data = await market.TokenOnSale(token.id)
-    console.log(data)
+    const {data} = await request.get(`auction/${token.id}`)
+    if (data) {
+    //   const endTime = data.endTime.split("T")
+    //   const currentTime = new Date().toISOString().split("T")
+    //   console.log(endTime, currentTime)
+    //   if(currentTime[0].split('-')[2] < endTime[0].split('-')[2]) {
+    //     Number(endTime[0].split('-')[2]) - Number(currentTime[0].split('-')[2] + "일 남았습니다")
+    //   }
+    //   if(currentTime[0].split('-')[2] === endTime[0].split('-')[2]) {
+    //     Number(endTime[1].split(':')[0]) - Number(currentTime[1].split(':')[0] + "시간 남았습니다")
+    //   }
+    // }
+      const endTime= Number(new Date(data.endTime).getTime())
+      const currentTime = Number(new Date().getTime())
+      console.log(endTime - currentTime)
+      if (endTime <= currentTime) {
+        setAuctionEnded(true)
+        console.log('경매가 종료되었습니다')
+      }
+      if (endTime > currentTime) {
+        setNewTimer(Math.floor((endTime-currentTime) / (1000)))
+      }
+    }
   }
-
-
-
+  console.log(`newTimer:`, newTimer)
 
   const handleTimerStart = (time: number) => {
-    const timeToMinutes = time * 60;
+    console.log("-----------",time)
+
+    const timeToMinutes = time;
     const countDownDate = new Date().getTime() + timeToMinutes * 1000;
 
     const updateTime = setInterval(() => {
@@ -59,10 +83,10 @@ export const Auction = ({ token }: AuctionProps) => {
   };
 
   useEffect(() => {
-    if(!market) return
 
     getAuction()
-  }, [market])
+    handleTimerStart(newTimer)
+  }, [token, newTimer])
 
   return (
     <>
