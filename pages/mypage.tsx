@@ -48,6 +48,24 @@ const MyPage = () => {
         }
       }
     
+      const getAllCollectionData = async () => {
+        try {
+            const { data } = await request.get(`collection/`)
+            console.log('getAllCollectionData : ', data)
+            return data
+        } catch (error: unknown) {
+            throw new Error(error as string)
+        }
+    }
+
+    const { data: allCollectionData, isLoading: getAllCollectionLoading } = useQuery(
+        ['allCollection'],
+        () => getAllCollectionData(),
+        {
+          cacheTime: 60 * 60
+        }
+    )
+
 
       const { data: activityData, isLoading: activityLoading } = useQuery(
         ['activity', user?.address],
@@ -69,7 +87,7 @@ const MyPage = () => {
         <RootLayout>
             {isLoading ? 
             <LoadingSpinner2 />
-            : <ProfileCard user={user} tokenData={tokenData} activity={activityData} />
+            : <ProfileCard user={user} tokenData={tokenData} activity={activityData} collectionData={allCollectionData}/>
             }
         </RootLayout>
     )

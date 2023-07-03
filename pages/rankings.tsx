@@ -25,7 +25,7 @@ const Rankings = () => {
 
     return (
         <RootLayout>
-            <Stats collectionDatas={allCollectionData} />
+            <Stats collectionDatas={allCollectionData}/>
         </RootLayout>
     )
 }

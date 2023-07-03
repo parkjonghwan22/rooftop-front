@@ -21,6 +21,7 @@ import { CollectionData } from '@utils/types/nft.interface'
 export const CollectionInfo = ({ address }: { address: string }) => {
     const [collections, setCollections] = useState<CollectionData[]>([])
     const [isOpenModal, setIsOpenModal] = useState(false)
+    
     const getCollections = async () => {
         try {
             const { data } = await request.get(`collection/${address}`)
