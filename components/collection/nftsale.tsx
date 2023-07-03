@@ -32,7 +32,8 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const { convertKRW } = useCoinGecko()
     const [isOpenAlert, setIsOpenAlert] = useState(false)
     const [isOpenModal, setIsOpenModal] = useState(false)
-    const [isBuyLoading, setIsBuyLoading] = useState(false
+    const [isBuyLoading, setIsBuyLoading] = useState(false)
+
     const slicedAddress = token.seller.slice(0, 6) + '...' + token.seller.slice(-4)
     const parsedPrice = convertToWei(token.price, 0)
 
@@ -164,7 +165,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                     </div>
                     <div className="lg:col-span-5">
                         <div className="my-5 flow-root">
-                            <h1 className="text-3xl font-bold mb-3">Chart</h1>
+                            <h1 className="text-3xl font-bold mb-3">Price History</h1>
                         </div>
                         <Chart2 token={token} activity={activity} />
                     </div>
