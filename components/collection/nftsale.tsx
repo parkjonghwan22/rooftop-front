@@ -17,6 +17,8 @@ import { ReSale } from './resale'
 import { LoadingSpinner2 } from '@components/common/loading'
 import { toast } from 'react-toastify'
 import { useDecode } from '@utils/hooks/useDecode'
+import { Auction } from '@components/auction'
+
 
 interface NftProps {
     collectionData: CollectionData
@@ -162,6 +164,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                                 </UserAddress>
                             </li>
                         </ul>
+                        <Auction token={token}/>
                     </div>
                     <div className="lg:col-span-5">
                         <div className="my-5 flow-root">
