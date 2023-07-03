@@ -2,6 +2,8 @@ import { CollectionData, TokenData } from '@utils/types/nft.interface'
 import { NFTCard } from './nftcard'
 import { CollectionStat } from './styled/collection.styled'
 import { VerifiedMarker } from '@components/common/marker/verify'
+import { RangeSlider } from '@components/common/range/rangeslider'
+import { useState } from 'react'
 
 interface CollectionProps {
     collectionData: CollectionData
@@ -45,7 +47,7 @@ export const CollectionBanner = ({
                     <h4 className="text-xl font-bold text-navy-700 dark:text-white mr-1">
                         {collectionData.name}
                     </h4>
-                    <VerifiedMarker />
+                    {collectionData.verified && <VerifiedMarker />}
                 </div>
                 <p className="text-base font-normal text-gray-500">{collectionData.description}</p>
             </div>
@@ -59,14 +61,45 @@ export const CollectionBanner = ({
     )
 }
 
+
+export const CollectionSweeper = ({ tokenData }: { tokenData: TokenData[] }) => {
+    const [selectedCount, setSelectedCount] = useState(0);
+    const filterdTokenData = tokenData.filter(token => !token.sold)
+  
+    const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const count = parseInt(e.target.value);
+      setSelectedCount(count);
+    };
+
+    const calculateTotalPrice = (tokenData: TokenData[], selectedCount: number): number => {
+        const selectedTokens = tokenData.slice(0, selectedCount);
+        return selectedTokens.reduce((totalPrice, token) => totalPrice + token.price, 0);
+    };
+
+  
+    return (
+      <div className="w-10/12 mx-auto mb-10 flex items-center">
+        <RangeSlider
+          tokenData={filterdTokenData}
+          selectedCount={selectedCount}
+          onSliderChange={handleSliderChange}
+        />
+        <div>SWEEP {calculateTotalPrice(filterdTokenData, selectedCount) / (10 ** 18)} MATIC</div>
+      </div>
+    );
+  };
+
 export const NFTList = ({ tokenData }: { tokenData: TokenData[] }) => {
     const sortedData = tokenData ? tokenData.sort((a, b) => b.id - a.id) : []
 
     return (
-        <div className="flex flex-wrap justify-center">
-            {sortedData.map((token) => (
-                <NFTCard key={token.id} token={token} />
-            ))}
-        </div>
+        <>
+            <CollectionSweeper tokenData={tokenData} />
+            <div className="flex flex-wrap justify-center">
+                {sortedData.map((token) => (
+                    <NFTCard key={token.id} token={token} />
+                ))}
+            </div>
+        </>
     )
 }

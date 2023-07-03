@@ -5,12 +5,12 @@ import { useMarket } from '@utils/hooks/useMarket'
 import { UserAddress } from './styled/nft.styled'
 import { Alert } from '@components/common/alert'
 import { Icon } from '@iconify/react'
-import { useTimeStamp } from '@utils/hooks/useTimeStamp'
+import { TimeStamp } from "@common/timestamp/timestamp"
 import { ethers } from 'ethers'
 
 export const NFTActivity = ({ token, activity }: { token: TokenData, activity: ActivityData[] }) => {
     const [isOpenAlert, setIsOpenAlert] = useState(false)
-
+    
     const handleCopy = (address: string) => {
         navigator.clipboard.writeText(address);
         setIsOpenAlert(true)
@@ -28,7 +28,7 @@ export const NFTActivity = ({ token, activity }: { token: TokenData, activity: A
             <div className="flex flex-col">
                 <div className="-m-1.5 overflow-x-auto">
                     <div className="p-1.5 min-w-full inline-block align-middle">
-                        <div className="border rounded-lg shadow overflow-hidden dark:border-gray-800 dark:shadow-gray-700">
+                        <div className="border rounded-lg shadow overflow-hidden dark:border-gray-800 dark:shadow-gray-700 max-h-[500px] overflow-y-scroll">
                             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-800">
                                 <thead className="bg-gray-50 dark:bg-gray-800">
                                     <tr>
@@ -56,7 +56,7 @@ export const NFTActivity = ({ token, activity }: { token: TokenData, activity: A
                                                 </UserAddress>
                                             </TdStyled>
                                             <TdStyled className="font-bold">{item.price / (10 ** 18)} MATIC</TdStyled>
-                                            <TdStyled>{useTimeStamp(item.createdAt)}</TdStyled>
+                                            <TdStyled><TimeStamp timestamp={item.createdAt} /></TdStyled>
                                         </tr>
                                     ))}
                                 </tbody>

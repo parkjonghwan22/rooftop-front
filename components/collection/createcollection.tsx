@@ -22,10 +22,10 @@ export const CreateCollection = () => {
     return (
         <>
             <SectionWrap>
-                <SectionTitle>컬렉션 등록</SectionTitle>
-                <SectionDescription>아직 NFT 컬렉션이 없으신가요</SectionDescription>
+                <SectionTitle>New Collcetion</SectionTitle>
+                <SectionDescription>Wellcome! <br></br>Create your own NFT collection</SectionDescription>
                 <Button onClick={() => { setIsOpenModal(true) }} color="blue" size="w-4/12" >
-                    만들러 가기
+                    Go to Create
                     <Icon icon="iconamoon:enter" className="text-lg ml-2" />
                 </Button>
             </SectionWrap>

@@ -8,9 +8,10 @@ import { useCoinGecko } from "@utils/hooks/useCoingecko";
 import Link from "next/link";
 import { useAccount } from "wagmi";
 import { useState } from "react";
-import { LoadingSpinner } from "@components/common/loading/loading";
+import { LoadingSpinner } from "@components/common/loading";
 import { useMarket } from "@utils/hooks/useMarket";
-import { ethers } from "ethers";
+import { toast } from 'react-toastify'
+import { useDecode } from "@utils/hooks/useDecode";
 
 interface CartItemProps {
   address?: string
@@ -25,6 +26,7 @@ const CartItem = ({ item, address, convertKRW }: CartItemProps) => {
   const [isDeleted, setIsDeleted] = useState(false)
 
   const handleDeleteCartItem = async (id: number) => {
+    
     try {
       if (!address) return
       setIsDeleteLoading(true)
@@ -86,7 +88,8 @@ interface CartProps {
 const Cart = ({ cartData, setIsOpenCart }: CartProps) => {
   const { address } = useAccount()
   const { convertKRW } = useCoinGecko()
-  const { market, decodeEvent, convertToWei } = useMarket()
+  const { market, convertToWei, updateCollection } = useMarket()
+  const { decodeTransfers } = useDecode()
   const [isLoading, setIsLoading] = useState(false)
   const [isDeleted, setIsDeleted] = useState(false)
 
@@ -98,51 +101,36 @@ const Cart = ({ cartData, setIsOpenCart }: CartProps) => {
     try {
       setIsLoading(true)
       const parsedPrice = convertToWei(totalPrice, 0)
-        console.log(ids)
-        const buyNFT = await market.buyNfts(ids, {
-            from: address,
-            value: parsedPrice,
-        })
-        const receipt = await buyNFT.wait()
-        console.log(receipt)
-        if (receipt) {
-          const response = await request.delete(`cart/${address}`);
-          if (response.status === 200) {
-            setIsDeleted(true)
-            setIsLoading(false)
+      console.log(ids)
+      const buyNFT = await market.buyNfts(ids, {
+        from: address,
+        value: parsedPrice,
+      })
+      const receipt = await buyNFT.wait()
+      console.log(receipt)
+      if (receipt) {
+        const response = await request.delete(`cart/${address}`);
+        if (response.status === 200) {
+          setIsDeleted(true)
+          setIsLoading(false)
+        }
+      }
+      if (receipt.logs) {
+        const decodedDatas = decodeTransfers(receipt, cartData)
+        for (const decodedData of decodedDatas) {
+          const response = await request.post("event/transfer", {
+            ...decodedData,
+          });
+          if (response.statusText === "Created") {
+            toast.success("NFT transaction was successful!");
+            updateCollection(decodedData.NFTaddress);
           }
         }
-
-        
-        // if (receipt.logs) {
-        //     const data = decodeEvent(receipt.logs[3].topics[0], receipt.logs[3].data)
-        //     // console.log(data)
-        //     if (data) {
-        //         const decodedData = {
-        //             id: Number(data[0]),
-        //             from: receipt.from,
-        //             to: receipt.to,
-        //             NFTaddress: cart.NFTaddress,
-        //             tokenId: Number(data[4]),
-        //             price: Number(data[5]),
-        //             event: 'transfer',
-        //         }
-        //         console.log(decodedData)
-        //         const response = await request.post('event/transfer', {
-        //             ...decodedData,
-        //         })
-        //         console.log(response)
-        //         if (response.statusText === 'Created') {
-        //             setIsOpenModal(false)
-        //             toast.success('Your work was successful!')
-        //             updateTotalVolume(token.NFTaddress)
-        //         } // alert 필요
-        //     }
-        // }
+      }
     } catch (e) {
-        console.log(e)
+      console.log(e)
     }
-}
+  }
 
   return (
     <div className="z-10 fixed inset-y-0 right-0 flex max-w-full pl-10">
@@ -174,7 +162,7 @@ const Cart = ({ cartData, setIsOpenCart }: CartProps) => {
               </div>
             </div>
             <div className="my-6">
-              <Button onClick={handleBuyAllItems} color="purple" size="w-full" fontSize="lg">{isLoading? <><LoadingSpinner />Processing transaction...</> : 'Complete purchase'}</Button>
+              <Button onClick={handleBuyAllItems} color="purple" size="w-full" fontSize="lg">{isLoading ? <><LoadingSpinner />Processing transaction...</> : 'Complete purchase'}</Button>
             </div>
           </div>
         </div>

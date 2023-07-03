@@ -1,3 +1,4 @@
+import { LoadingSpinner2 } from "@components/common/loading";
 import { RootLayout } from "@components/layout/layout"
 import { ProfileCard } from "@components/profile/profile";
 import { useMarket } from "@utils/hooks/useMarket";
@@ -67,7 +68,7 @@ const MyPage = () => {
     return (
         <RootLayout>
             {isLoading ? 
-            <>Loading...</> 
+            <LoadingSpinner2 />
             : <ProfileCard user={user} tokenData={tokenData} activity={activityData} />
             }
         </RootLayout>

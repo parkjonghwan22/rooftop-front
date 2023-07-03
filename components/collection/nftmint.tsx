@@ -6,10 +6,11 @@ import { useEthers } from '@utils/hooks/useEthers'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Button } from '@components/common/button'
-import { LoadingSpinner } from '@components/common/loading/loading'
+import { LoadingSpinner } from '@components/common/loading'
 import request from '@utils/request'
 import { SuccessAlert } from '@components/common/successAlert'
 import { useCoinGecko } from '@utils/hooks/useCoingecko'
+import { useDecode } from '@utils/hooks/useDecode'
 
 
 
@@ -24,13 +25,12 @@ interface MintProps {
     children: string | React.ReactNode
 }
 
-export const NFTMint = ({ collectionAddress, royalty, metaData, price, setSuccessAlert,setIsOpenModal, children }: MintProps) => {
-    const { market, decodeEvent, getLowestPrice } = useMarket()
+export const NFTMint = ({ collectionAddress, royalty, metaData, price, setSuccessAlert, setIsOpenModal, children }: MintProps) => {
+    const { market } = useMarket()
+    const { decodeMinted } = useDecode()
     const { signer } = useEthers()
-    const { convertKRW } = useCoinGecko()
-    const [latestTokenId, setLatestTokenId] = useState<number>()
     const [isLoading, setIsLoading] = useState(false)
-    
+
     const handleMint = async () => {
         if (!signer) return
 
@@ -44,17 +44,16 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, setSucces
                 value: mintPrice,
                 from: account,
             })
-
-            // const receipt = await mintTx.wait()
-            const newTokenId = await instance.getLatestTokenId()
-            if (newTokenId) setLatestTokenId(newTokenId)
+            const receipt = await mintTx.wait()
+            const latestTokenId = await instance.getLatestTokenId()
+            await tokenOnMarket(price, latestTokenId)
         } catch (e: unknown) {
             console.log(e as Error)
         }
     }
 
-    const tokenOnMarket = async (price: string | number) => {
-        if (!latestTokenId) return
+    const tokenOnMarket = async (price: string | number, latestTokenId: number) => {
+        if (!latestTokenId || !market) return
         const priceInWei = ethers.parseEther(price.toString()); // 10 ** 18
 
         try {
@@ -69,53 +68,21 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, setSucces
             )
             const receipt = await addOnMarket.wait()
             if (receipt.logs) {
-                const data = decodeEvent(receipt.logs[0].topics[0], receipt.logs[0].data);
-                if (data) {
-                    const decodedData = {
-                        id: Number(data[0]),
-                        from: receipt.from,
-                        to: receipt.to,
-                        NFTaddress: collectionAddress,
-                        tokenId: Number(data[3]),
-                        price: Number(data[4]),
-                        krwPrice: convertKRW(Number(data[4])),
-                        event: "minted"
-                    };
-                    console.log(`decodedData ::`, decodedData)
-                    const response = await request.post("event/minted", {
-                        ...decodedData,
-                    });
-                    if (response.statusText === "Created"){
-                        toast.success("NFT Minted Successfully")
-                        setIsOpenModal(false)
-                    }
-                    setIsLoading(false)
+                const decodedData = decodeMinted(receipt, collectionAddress)
+                console.log(`decodedData ::`, decodedData)
+                const response = await request.post("event/minted", {
+                    ...decodedData,
+                });
+                if (response.statusText === "Created") {
+                    toast.success("NFT Minted Successfully")
+                    setIsOpenModal(false)
                 }
+                setIsLoading(false)
             }
         } catch (e) {
             console.log(e)
         }
     }
-
-    const updateFloorPrice = async (address: string) => {
-
-        const currentFloor = await getLowestPrice(address)
-        if (!currentFloor || currentFloor <= Number(price)) return
-        console.log(currentFloor)
-    
-        const { data } = await request.put("collection/update", {
-            address,
-            floorPrice: Number(price),
-        })
-        console.log(data)
-    }
-
-    useEffect(() => {
-        if (latestTokenId) {
-            tokenOnMarket(price)
-            updateFloorPrice(collectionAddress)
-        }
-    }, [latestTokenId])
 
     return (
         <Button color="green" onClick={handleMint}>

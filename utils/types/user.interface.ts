@@ -9,6 +9,7 @@ export interface UserType {
 
 export interface CartType {
   _id: string,
+  seller: string,
   shopper: string,
   id: number,
   NFTaddress: string,

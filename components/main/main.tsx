@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import request from "@utils/request";
 import { useMarket } from "@utils/hooks/useMarket";
 import { Hero, Category, Collection, Slide } from "./styled"
+import { LoadingSpinner2 } from "@components/common/loading";
 
 const Main = () => {
   const { market } = useMarket();
@@ -29,6 +30,7 @@ const Main = () => {
   const getNfts = async (collectionAddress: string) => {
     try {
       const response = await market.getAllTokensInCollection(collectionAddress);
+      console.log(response)
       const result = response.map((proxy: any) => {
         const obj = {
           id: Number(proxy[0]),
@@ -92,7 +94,7 @@ const Main = () => {
 
   const isLoading = collectionLoading || nftsLoading || activityLoading;
 
-  if (isLoading) return <p>Loading...</p>; // 로딩 컴포넌트 필요
+  if (isLoading) return <LoadingSpinner2 />
   return (
     <div className="mx-auto flex flex-col items-center">
       <Hero />

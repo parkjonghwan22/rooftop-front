@@ -3,6 +3,7 @@ import { useIpfs } from '@utils/hooks/useIpfs';
 import { MynftsWrap } from "./styled/Mynfts.styled";
 import Image from "next/image";
 import Link from "next/link";
+import { LoadingSpinner } from "@components/common/loading";
 
 
 
@@ -10,7 +11,7 @@ const NFTItem = ({ token }: { token: TokenData }) => {
     const { metaData, imageUrl, isLoading } = useIpfs(token)
 
 
-    if (isLoading) return <p>loading...</p> // 로딩 컴포넌트 필요
+    if (isLoading) return <LoadingSpinner />
     return (
         <>
             <div className="group relative hover:animate-[wiggle_1s_ease-in-out_infinite] cursor-pointer mx-2 mt-3">

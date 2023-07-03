@@ -1,4 +1,3 @@
-import { useCoinGecko } from '@utils/hooks/useCoingecko'
 import { ActivityData, TokenData } from '@utils/types/nft.interface'
 import {
     Chart as ChartJS,

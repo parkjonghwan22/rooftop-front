@@ -47,7 +47,7 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                         collectionAddress={collection.address}
                     />
                     <SectionA>
-                        <CollectionName name={collection.name} verified={true} />
+                        <CollectionName name={collection.name} verified={collection.verified} />
                         <Description description={collection.description} />
                         <CollectionDatas
                             creatorFee={collection.creatorFee}

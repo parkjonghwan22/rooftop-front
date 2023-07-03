@@ -1,10 +1,8 @@
 import { CollectionInfo, CreateCollection, AddNewCollection } from "@components/collection";
+import { LoadingSpinner2 } from "@components/common/loading";
 import { RootLayout } from "@components/layout/layout"
 import { useSign } from "@utils/hooks/useSign";
-import { useEffect, useState } from "react";
 
-
-// 로딩 컴포넌트 필요
 
 const MyCollection = () => {
     const { user, isLoading } = useSign()
@@ -12,7 +10,7 @@ const MyCollection = () => {
     return (
         <RootLayout>
             {isLoading ?
-                <>Loading...</>
+                <LoadingSpinner2 />
                 : (!user?.hasCollection) ? <CreateCollection />
                     : <>
                         <AddNewCollection />
