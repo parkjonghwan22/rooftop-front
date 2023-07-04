@@ -89,6 +89,7 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
         floorPrice: 0,
         totalVolume: 0,
         totalSales: 0,
+        favorite:[],
         verified: false,
       });
       if (data) {

@@ -11,6 +11,7 @@ export interface CollectionData {
     verified: boolean;
     floorPrice: number;
     totalVolume: number;
+    favorite:string[];
     createdAt: Date;
     updatedAt: Date;
     __v: number;
@@ -40,7 +41,6 @@ export interface ActivityData {
     NFTaddress: string;
     tokenId: number;
     price: number;
-    krwPrice: string;
     event: string;
     krwPrice:string;
     createdAt: string;

@@ -4,6 +4,11 @@ import { CollectionStat } from './styled/collection.styled'
 import { VerifiedMarker } from '@components/common/marker/verify'
 import { CollectionSweeper } from './collectionsweeper'
 import { useState } from 'react'
+import { useAccount } from 'wagmi'
+import { Icon } from '@iconify/react'
+import request from '@utils/request'
+import { useQueryClient } from 'react-query'
+import { LoadingSpinner } from '@components/common/loading'
 
 interface CollectionProps {
     collectionData: CollectionData
@@ -31,6 +36,38 @@ export const CollectionBanner = ({
     collectionData: CollectionData
     totalItems: number
 }) => {
+
+    const {address} = useAccount()
+    const queryClient = useQueryClient()
+    const [isLoading , setIsLoading] = useState(false)
+
+    const followHandler = async () => {
+        if (!address) return
+
+        try {
+            setIsLoading(true)
+            const response = await request.post(`collection/follow`, {
+                address,
+                collection_address: collectionData.address,
+            })
+
+            if (response) {
+                const foundFavorite = 
+                queryClient.getQueryData<CollectionData[] | undefined>('collection')
+                ?.find((collection: CollectionData) => {
+                    return collection.favorite.includes(address)
+                })
+                console.log("foundFavorite :: ",foundFavorite)
+                queryClient.invalidateQueries('collection',{ refetchInactive: true })
+            }
+            setIsLoading(false)
+        } catch (e) {
+            console.error(e)
+        } finally{
+            setIsLoading(false)
+        }
+    }
+
     return (
         <div className="relative flex flex-col mb-8 items-center rounded-[20px] w-10/12 mx-auto p-4 bg-white dark:bg-gray-900 bg-clip-border shadow-lg dark:!bg-navy-800 dark:text-white">
             <div className="relative flex h-32 w-full justify-center rounded-xl bg-cover">
@@ -47,6 +84,30 @@ export const CollectionBanner = ({
                     <h4 className="text-xl font-bold text-navy-700 dark:text-white mr-1">
                         {collectionData.name}
                     </h4>
+                    
+                        <div className="flex justify-center text-lg text-center ml-2">
+                            {isLoading ? 
+                            <LoadingSpinner/> : (
+                                <div className="flex justify-center text-lg text-center">
+                                    {collectionData.favorite.includes(`${address}`) ? (
+                                        <div onClick={() => followHandler()}>
+                                            <Icon
+                                                icon="noto-v1:star"
+                                                className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
+                                            />
+                                        </div>
+                                    ) : (
+                                        <div onClick={() => followHandler()}>
+                                            <Icon
+                                                icon="fluent:star-add-24-regular"
+                                                className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
+                                            />
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                   
                     {collectionData.verified && <VerifiedMarker />}
                 </div>
                 <p className="text-base font-normal text-gray-500">{collectionData.description}</p>

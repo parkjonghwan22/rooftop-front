@@ -33,7 +33,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const [isOpenAlert, setIsOpenAlert] = useState(false)
     const [isOpenModal, setIsOpenModal] = useState(false)
     const [isBuyLoading, setIsBuyLoading] = useState(false)
-
     const slicedAddress = token.seller.slice(0, 6) + '...' + token.seller.slice(-4)
     const parsedPrice = convertToWei(token.price, 0)
 

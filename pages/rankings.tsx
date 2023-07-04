@@ -1,3 +1,4 @@
+import { LoadingSpinner2 } from '@components/common/loading'
 import { RootLayout } from '@components/layout/layout'
 import Stats from '@components/stats/stats'
 import request from '@utils/request'
@@ -21,11 +22,11 @@ const Rankings = () => {
 
     const isLoading = getAllCollectionLoading
 
-    if (isLoading || !allCollectionData) return <p>Loading...</p> // 로딩 컴포넌트쫌!!!
+    if (isLoading || !allCollectionData) return <LoadingSpinner2/>
 
     return (
         <RootLayout>
-            <Stats collectionDatas={allCollectionData} />
+            <Stats collectionDatas={allCollectionData}/>
         </RootLayout>
     )
 }

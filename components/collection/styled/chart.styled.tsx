@@ -28,8 +28,11 @@ export const Chart2 = ({ token, activity }: { token: TokenData, activity: Activi
                 label: 'Trading History (₩)',
                 data: priceArray,
                 fill: false,
-                backgroundColor: 'rgba(75, 192, 192, 0.4)', // hover시 나오는 background Color
-                borderColor: 'rgba(75, 192, 192, 1)', //
+                backgroundColor: 'rgba(253, 255, 255, 0.4)', // hover시 나오는 background Color
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth:3,
+                pointStyle: 'circle',
+                pointHoverRadius: 10,
             },
         ],
     }
@@ -50,12 +53,18 @@ export const Chart2 = ({ token, activity }: { token: TokenData, activity: Activi
                 radius: 4, // 데이터 포인트 크기 변경 (0으로 설정하여 숨김)
             },
         },
+        hover: { // 근처에있는거..
+            mode: 'nearest',
+            intersect: true
+          },
         plugins: {
             //
             tooltip: {
                 backgroundColor: 'rgba(0, 0, 0, 0.8)', // 툴팁 배경색 변경
                 titleColor: 'white', // 툴팁 제목 텍스트 색상 변경
                 bodyColor: 'white', // 툴팁 내용 텍스트 색상 변경
+                mode:'index', // 근처에있는거..
+                intersect:false, // 근처에있는거..
             },
             //
             legend: {
