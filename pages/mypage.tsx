@@ -6,12 +6,14 @@ import { useMarket } from "@utils/hooks/useMarket";
 import { useSign } from "@utils/hooks/useSign";
 import request from "@utils/request";
 import { useQuery } from "react-query";
+import { useAccount } from "wagmi";
 
 
 const MyPage = () => {
     const { user, isLoading } = useSign()
     const { market } = useMarket();
     const { getUserActivity } = useEvent()
+    const { address } = useAccount()
 
     const getNfts = async (userAddress: string) => {
         try {
@@ -42,9 +44,9 @@ const MyPage = () => {
       };
 
     
-      const getAllCollectionData = async () => {
+      const getFavorite = async () => {
         try {
-            const { data } = await request.get(`collection/`)
+            const { data } = await request.get(`collection?favorite=${address}`)
             console.log('getAllCollectionData : ', data)
             return data
         } catch (error: unknown) {
@@ -52,9 +54,9 @@ const MyPage = () => {
         }
     }
 
-    const { data: allCollectionData, isLoading: getAllCollectionLoading } = useQuery(
-        ['allCollection'],
-        () => getAllCollectionData(),
+    const { data: favoriteData, isLoading: getFavoriteLoading } = useQuery(
+        ['favorite'],
+        () => getFavorite(),
         {
           cacheTime: 60 * 60
         }
@@ -80,7 +82,7 @@ const MyPage = () => {
         <RootLayout>
             {isLoading ? 
             <LoadingSpinner2 />
-            : <ProfileCard user={user} tokenData={tokenData} activity={activityData} collectionData={allCollectionData}/>
+            : <ProfileCard user={user} tokenData={tokenData} activity={activityData} collectionData={favoriteData}/>
             }
         </RootLayout>
     )
