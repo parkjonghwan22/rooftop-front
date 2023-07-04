@@ -6,14 +6,14 @@ import request from '@utils/request';
 import { useRouter } from 'next/router';
 import { TokenData } from '@utils/types/nft.interface';
 import { LoadingSpinner2 } from '@components/common/loading';
+import { useEvent } from '@utils/hooks/useEvent';
 
 
 const NftPage = () => {
   const router = useRouter();
   const { _id, id } = router.query;
   const { market } = useMarket();
-
-
+  const { getTokenActivity } = useEvent()
 
   const getCollection = async (collectionAddress: string) => {
       try {
@@ -22,16 +22,6 @@ const NftPage = () => {
       } catch (error: unknown) {
         throw new Error(error as string);
       }
-  }
-
-
-  const getActivity = async (id: string | number) => {
-    try {
-      const { data } = await request.get(`event/${id}`);
-      return data;
-    } catch (error: unknown) {
-      throw new Error(error as string);
-    }
   }
 
   const getNft = async (marketId: string) => {
@@ -75,7 +65,7 @@ const NftPage = () => {
 
   const { data: activityData, isLoading: activityLoading } = useQuery(
     ['activity', id],
-    () => getActivity(id as string),
+    () => getTokenActivity(id as string),
     {
       enabled: !!id,
     }
@@ -83,7 +73,7 @@ const NftPage = () => {
 
   const isLoading = collectionLoading || nftLoading || activityLoading
 
-  if (isLoading || !tokenData || !activityData) return <p>Loading...</p> // 로딩 컴포넌트 필요
+  if (isLoading || !tokenData || !activityData) return <LoadingSpinner2 />
   return (
     <RootLayout>
       {(isLoading || !tokenData || !activityData) && <LoadingSpinner2 />}

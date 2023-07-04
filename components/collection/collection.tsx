@@ -2,7 +2,7 @@ import { CollectionData, TokenData } from '@utils/types/nft.interface'
 import { NFTCard } from './nftcard'
 import { CollectionStat } from './styled/collection.styled'
 import { VerifiedMarker } from '@components/common/marker/verify'
-import { RangeSlider } from '@components/common/range/rangeslider'
+import { CollectionSweeper } from './collectionsweeper'
 import { useState } from 'react'
 
 interface CollectionProps {
@@ -32,7 +32,7 @@ export const CollectionBanner = ({
     totalItems: number
 }) => {
     return (
-        <div className="relative flex flex-col mb-10 items-center rounded-[20px] w-10/12 mx-auto p-4 bg-white dark:bg-gray-900 bg-clip-border shadow-3xl shadow-shadow-500 dark:!bg-navy-800 dark:text-white dark:!shadow-none">
+        <div className="relative flex flex-col mb-8 items-center rounded-[20px] w-10/12 mx-auto p-4 bg-white dark:bg-gray-900 bg-clip-border shadow-lg dark:!bg-navy-800 dark:text-white">
             <div className="relative flex h-32 w-full justify-center rounded-xl bg-cover">
                 <img
                     src="https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png"
@@ -61,43 +61,23 @@ export const CollectionBanner = ({
     )
 }
 
-
-export const CollectionSweeper = ({ tokenData }: { tokenData: TokenData[] }) => {
-    const [selectedCount, setSelectedCount] = useState(0);
-    const filterdTokenData = tokenData.filter(token => !token.sold)
-  
-    const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const count = parseInt(e.target.value);
-      setSelectedCount(count);
-    };
-
-    const calculateTotalPrice = (tokenData: TokenData[], selectedCount: number): number => {
-        const selectedTokens = tokenData.slice(0, selectedCount);
-        return selectedTokens.reduce((totalPrice, token) => totalPrice + token.price, 0);
-    };
-
-  
-    return (
-      <div className="w-10/12 mx-auto mb-10 flex items-center">
-        <RangeSlider
-          tokenData={filterdTokenData}
-          selectedCount={selectedCount}
-          onSliderChange={handleSliderChange}
-        />
-        <div>SWEEP {calculateTotalPrice(filterdTokenData, selectedCount) / (10 ** 18)} MATIC</div>
-      </div>
-    );
-  };
-
 export const NFTList = ({ tokenData }: { tokenData: TokenData[] }) => {
+    const [selectedItems, setSelectedItems] = useState<TokenData[]>([]);
     const sortedData = tokenData ? tokenData.sort((a, b) => b.id - a.id) : []
+
 
     return (
         <>
-            <CollectionSweeper tokenData={tokenData} />
+            <div className="w-10/12 mx-auto mb-10">
+                <CollectionSweeper tokenData={tokenData} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
+            </div>
             <div className="flex flex-wrap justify-center">
                 {sortedData.map((token) => (
-                    <NFTCard key={token.id} token={token} />
+                    <NFTCard 
+                        key={token.id} 
+                        token={token} 
+                        isSelected={selectedItems.some((item) => item.id === token.id)}
+                    />
                 ))}
             </div>
         </>

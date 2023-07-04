@@ -1,6 +1,7 @@
 import { LoadingSpinner2 } from "@components/common/loading";
 import { RootLayout } from "@components/layout/layout"
 import { ProfileCard } from "@components/profile/profile";
+import { useEvent } from "@utils/hooks/useEvent";
 import { useMarket } from "@utils/hooks/useMarket";
 import { useSign } from "@utils/hooks/useSign";
 import request from "@utils/request";
@@ -10,6 +11,7 @@ import { useQuery } from "react-query";
 const MyPage = () => {
     const { user, isLoading } = useSign()
     const { market } = useMarket();
+    const { getUserActivity } = useEvent()
 
     const getNfts = async (userAddress: string) => {
         try {
@@ -38,16 +40,6 @@ const MyPage = () => {
           throw new Error(error as string);
         }
       };
-
-      const getUserActivity = async (from: string) => {
-        try {
-          const { data } = await request.get(`event?from=${from}`);
-          return data;
-        } catch (error: unknown) {
-          throw new Error(error as string);
-        }
-      }
-    
 
       const { data: activityData, isLoading: activityLoading } = useQuery(
         ['activity', user?.address],

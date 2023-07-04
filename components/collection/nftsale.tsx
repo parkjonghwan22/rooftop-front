@@ -37,6 +37,17 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const slicedAddress = token.seller.slice(0, 6) + '...' + token.seller.slice(-4)
     const parsedPrice = convertToWei(token.price, 0)
 
+    // const getAuction = async () => {
+    //     const data = await market.TokenOnSale(token.id)
+    //     console.log(data)
+    // }
+
+    // useEffect(()=>{
+    //     if (!market) return
+    //     getAuction()
+    // },[market])
+
+
     const handleBuy = async () => {
         try {
             setIsBuyLoading(true)
@@ -70,6 +81,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     }
 
     if (isLoading || isBuyLoading) return <LoadingSpinner2 />
+    // if (token.highestBid == 0 && token.openingPrice !== 0) return <>낙찰자 없이 경매가 종료되었습니다</>
     return (
         <>
             <div className="container mx-auto px-8 xl:px-32">
@@ -165,7 +177,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                     </div>
                     <div className="lg:col-span-5">
                         <div className="my-5 flow-root">
-                            <h1 className="text-3xl font-bold mb-3">Chart</h1>
+                            <h1 className="text-3xl font-bold mb-3">Price History</h1>
                         </div>
                         <Chart2 token={token} activity={activity} />
                     </div>

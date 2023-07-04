@@ -2,25 +2,18 @@ import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import request from "@utils/request";
 import { useMarket } from "@utils/hooks/useMarket";
-import { Hero, Category, Collection, Slide } from "./styled"
+import { Hero, RankingChart, Collection, Slide } from "@components/main"
 import { LoadingSpinner2 } from "@components/common/loading";
+import { useEvent } from "@utils/hooks/useEvent";
 
 const Main = () => {
   const { market } = useMarket();
   const [randomAddress, setRandomAddress] = useState<string | undefined>('');
+  const { getAllEvents } = useEvent();
 
   const getAllCollections = async () => {
     try {
       const { data } = await request.get(`collection`);
-      return data;
-    } catch (error: unknown) {
-      throw new Error(error as string);
-    }
-  };
-
-  const getAllEvents = async () => {
-    try {
-      const { data } = await request.get(`event?time=72&event=transfer`); // 시간 내의 transfer 이벤트 검색
       return data;
     } catch (error: unknown) {
       throw new Error(error as string);
@@ -99,7 +92,7 @@ const Main = () => {
     <div className="mx-auto flex flex-col items-center">
       <Hero />
       <Slide tokenData={tokenData} />
-      <Category collectionDatas={collectionDatas} activityDatas={activityDatas} />
+      <RankingChart collectionDatas={collectionDatas} activityDatas={activityDatas} />
       <Collection collectionDatas={collectionDatas} />
     </div>
   );

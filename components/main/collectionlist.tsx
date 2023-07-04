@@ -52,7 +52,7 @@ export const Collection = ({ collectionDatas }: CollectionProps) => {
   const verifiedCollectionDatas = collectionDatas
   .filter((collection) => collection.verified === true)
   .sort((a, b) => b.totalVolume - a.totalVolume)
-  .slice(0, 10);
+  .slice(0, 8);
   
   const sortedCollectionDatas = collectionDatas.sort((a, b) => {
     const dateA = new Date(a.createdAt);

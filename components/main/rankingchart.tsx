@@ -4,14 +4,26 @@ import Image from "next/image";
 import Link from "next/link";
 import { CollectionData, ActivityData } from "@utils/types/nft.interface";
 import { VerifiedMarker } from "@components/common/marker/verify";
+import { useEvent } from "@utils/hooks/useEvent";
+import { useQuery } from "react-query";
 
 interface CollectionProps {
   collectionDatas: CollectionData[]
   activityDatas: ActivityData[]
 }
 
-const CategoryItem = ({ collection, index }: { collection: CollectionData, index: number }) => {
+const ChartItem = ({ collection, index }: { collection: CollectionData, index: number }) => {
+  const { getTradeSummary } = useEvent()
 
+  const { data: summary, isLoading: summaryLoading } = useQuery(
+    ['activity', collection.address],
+    () => getTradeSummary(collection.address, 48),
+    {
+      enabled: !!collection,
+    }
+  );
+
+  console.log(summary)
 
   const TdStyled = tw.td`
     py-4 whitespace-no-wrap dark:bg-gray-700
@@ -55,7 +67,7 @@ const CategoryItem = ({ collection, index }: { collection: CollectionData, index
 
 
 
-export const Category = ({ collectionDatas, activityDatas }: CollectionProps) => {
+export const RankingChart = ({ collectionDatas, activityDatas }: CollectionProps) => {
   const [selectedSort, setSelectedSort] = useState('trending');
 
   // trendig 정렬
@@ -96,7 +108,7 @@ export const Category = ({ collectionDatas, activityDatas }: CollectionProps) =>
       <table className="min-w-full lg:w-full">
         <tbody className="lg:grid grid-cols-2 gap-1">
           {selectedDatas.map((collection, index) => (
-            <CategoryItem key={collection._id} collection={collection} index={index} />
+            <ChartItem key={collection._id} collection={collection} index={index} />
           ))}
         </tbody>
       </table>

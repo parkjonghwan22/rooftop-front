@@ -25,7 +25,7 @@ export const Chart2 = ({ token, activity }: { token: TokenData, activity: Activi
         labels: dateArray, // X축
         datasets: [
             {
-                label: 'NFT Trading Chart',
+                label: 'Trading History (₩)',
                 data: priceArray,
                 fill: false,
                 backgroundColor: 'rgba(75, 192, 192, 0.4)', // hover시 나오는 background Color
@@ -47,7 +47,7 @@ export const Chart2 = ({ token, activity }: { token: TokenData, activity: Activi
         },
         elements: {
             point: {
-                radius: 5, // 데이터 포인트 크기 변경 (0으로 설정하여 숨김)
+                radius: 4, // 데이터 포인트 크기 변경 (0으로 설정하여 숨김)
             },
         },
         plugins: {

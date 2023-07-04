@@ -9,7 +9,7 @@ interface RangeSliderProps {
 export const RangeSlider = ({ tokenData, selectedCount, onSliderChange }: RangeSliderProps) => {
 
     return (
-        <div className="flex items-center bg-gray-100 dark:bg-gray-900 shadow rounded-full w-72">
+        <div className="flex items-center bg-gray-100 dark:bg-gray-800 shadow rounded-full w-64 md:w-72">
             <div className="flex flex-col space-y-2 p-2 pl-4 pt-4 w-4/5">
                 <input
                     type="range"
