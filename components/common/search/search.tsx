@@ -36,7 +36,7 @@ export const SearchBox = () => {
                     :
                     <>
                         {searchResult.map(collection =>
-                            <Link href={`/collections/${collection.address}`}>
+                            <Link key={collection.address} href={`/collections/${collection.address}`}>
                                 <div className="flex items-center py-3 px-4 hover:bg-gray-200 hover:dark:bg-gray-900 rounded-lg transition-all duration-150">
                                     <div>
                                         <Image

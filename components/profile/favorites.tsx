@@ -19,7 +19,7 @@ export const Favorites = ({ collectionData }: CollectionProps) => {
             <FavoriteWrap>
                 <div className="flex flex-wrap justify-center mt-2">
                     {collectionData.map((collection: CollectionData) => (
-                      <Link href={`/collections/${collection.address}`}>
+                      <Link key={collection.address} href={`/collections/${collection.address}`}>
                         <div className="w-40 hover:transform hover:scale-105 transition duration-300 cursor-pointer mx-2 my-3 border-2 rounded-lg">
                             <div>
                                 <Image

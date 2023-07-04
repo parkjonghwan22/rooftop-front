@@ -2,8 +2,10 @@ import { ethers } from "ethers";
 import MarketABI from '@contracts/Marketplace.json';
 import { useState, useEffect } from "react";
 import request from "@utils/request";
+import { useAccount } from "wagmi";
 
 export const useMarket = () => {
+  const { address } = useAccount()
   const [market, setMarket] = useState<any>(null);
   const [latestId, setLatestId] = useState<number | null>(null);
   const marketAddress = MarketABI.networks[80001].address
@@ -67,7 +69,7 @@ export const useMarket = () => {
   };
 
   useEffect(() => {
-    if (window.ethereum) {
+    if (window.ethereum && address ) {
       const walletProvider = new ethers.BrowserProvider(window.ethereum as any, 80001);
 
       const fetchMarket = async () => {
