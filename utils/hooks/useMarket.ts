@@ -66,10 +66,9 @@ export const useMarket = () => {
     }
   };
 
-
   useEffect(() => {
     if (window.ethereum) {
-      const walletProvider = new ethers.BrowserProvider(window.ethereum as any);
+      const walletProvider = new ethers.BrowserProvider(window.ethereum as any, 80001);
 
       const fetchMarket = async () => {
         const signer = await walletProvider.getSigner();

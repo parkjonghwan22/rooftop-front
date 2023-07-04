@@ -1,4 +1,4 @@
-import { TitleContainer, Button, Stats, StatsAhref } from './styled/Header.styled'
+import { TitleContainer, Button, Stats } from './styled/Header.styled'
 import { Icon } from '@iconify/react'
 import { Modal } from '@components/common/modal/Modal'
 import { useEffect, useState } from 'react'
@@ -26,12 +26,14 @@ const Header = () => {
             <header>
             <div className={`border-gray-200 px-4 lg:px-6 py-2.5 opacity-90 fixed top-0 left-0 right-0 z-10 ${!isScrolling ? 'bg-transparent' : 'bg-white dark:bg-gray-800'}`}>
                     <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-                        <Link href="/">
-                            <TitleContainer />
-                        </Link>
-                        <Stats>
-                            <StatsAhref href="/rankings">Stats</StatsAhref>
-                        </Stats>
+                        <div className="flex items-center">
+                            <Link href="/">
+                                <TitleContainer />
+                            </Link>
+                            <Link href="/rankings">
+                            <Stats>Collections</Stats>
+                            </Link>
+                        </div>
                         <SearchContainer>
                             <SearchBox />
                         </SearchContainer>

@@ -17,6 +17,7 @@ export const PriceInputBox = ({ name, value, onChange, onInput, placeholder, ico
                 onChange={onChange}
                 onInput={onInput}
                 step="0.001"
+                min="0"
                 className={`${inputStyled}`}
             />
         </div>

@@ -1,4 +1,7 @@
-const discover = [
+import config from "../../config"
+import Image from 'next/image';
+
+const totalData = [
     {
         total: "100k+",
         field: "Sales",
@@ -29,7 +32,7 @@ export const Hero = () => {
                         </div>
                         <div className="hidden gap-[30px] sm:flex sm:flex-col">
                             <div className="flex w-full justify-between gap-[30px]">
-                                {discover.map((data, index) => {
+                                {totalData.map((data, index) => {
                                     return (
                                         <div key={index} className="w-full max-w-[150px]">
                                             <div className="!font-spacemono text-[22px] font-bold md:text-[22px] md:leading-[35px] lg:leading-[39px]">
@@ -44,13 +47,15 @@ export const Hero = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="w-full rounded-xl text-gray-800 dark:text-white invisible h-0 md:visible md:max-w-[300px] lg:max-w-[460px]">
-                        <img
-                            src={"https://www.tailwindtap.com/assets/crypto/space.png"}
-                            alt="space"
-                            className="w-full"
+                    <div className="rounded-xl shadow-2xl dark:shadow-cyan-700/50 text-gray-800 dark:text-white hidden md:block overflow-hidden md:max-w-[360px] lg:max-w-[420px]">
+                        <Image
+                            src={`${config.APP_URL}/maincard.png`}
+                            alt="nft image"
+                            width={1000}
+                            height={1000}
+                            className="object-cover h-72 lg:h-96"
                         />
-                        <div className="flex h-24 flex-col justify-start gap-2.5 rounded-b-[20px] shadow-lg dark:bg-gray-800 dark:shadow-cyan-700/50 px-5 py-4">
+                        <div className="flex h-24 flex-col justify-start gap-2.5 rounded-b-[20px] dark:bg-gray-800 px-5 py-4">
                             <div className="flex text-2xl font-semibold leading-[30px]">
                                 #34. Space Opera
                             </div>

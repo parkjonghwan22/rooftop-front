@@ -29,6 +29,10 @@ export const TitleContainer = () => {
     )
 }
 
+export const Stats = tw.div`
+    font-semibold text-md md:text-xl cursor-pointer ml-6
+`
+
 const backgroundColors: StyledOptions = {
     red: 'bg-red-500',
     orange: 'bg-red-500',
@@ -54,13 +58,7 @@ interface ButtonProps extends StyledProps {
     onClick: () => void
 }
 
-export const Stats = tw.div`
-  flex justify-center items-center
-`
 
-export const StatsAhref = tw.a`
-font-semibold text-2xl cursor-pointer
-`
 
 export const Button = ({ onClick, backgroundColor, color, fontSize, children }: ButtonProps) => {
     const buttonStyled: string = `inline-flex items-center order-0 py-1.5 px-3 mr-3 focus:outline-none hover:bg-gray-400 rounded text-base mt-4 md:mt-0 transition duration-300 ease-in-out`

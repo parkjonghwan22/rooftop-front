@@ -12,7 +12,6 @@ import { Alert } from "@components/common/alert";
 import { MyNFT, Activity, Favorites } from "./index"
 import { ActivityData, CollectionData, TokenData } from "@utils/types/nft.interface";
 
-
 interface ProfileProps {
   user: UserType | null;
   tokenData: TokenData[]
@@ -25,6 +24,12 @@ export const ProfileCard = ({ user, tokenData, activity,collectionData}: Profile
   const [modify, setModify] = useState(false);
   const [userImg, setUserImg] = useState<string>("");
   const [activeTab, setActiveTab] = useState("nfts");
+
+  const [days, setDays] = useState<number>(0);
+  const [hours, setHours] = useState<number>(0);
+  const [minutes, setMinutes] = useState<number>(0);
+  const [seconds, setSeconds] = useState<number>(0);
+
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);

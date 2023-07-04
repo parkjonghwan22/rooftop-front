@@ -12,30 +12,31 @@ export const useIpfs = (token: TokenData | CartType ) => {
         return response.json()
     }
 
-    const fetchImageData = async (ipfs: string) => {
-        if (!ipfs) return
-        const ipfsUrl = ipfs.replace('ipfs://', '')
-        const response = await fetch(`https://ipfs.io/ipfs/${ipfsUrl}`)
-        if (!response.ok) {
-            throw new Error('이미지 데이터를 가져오는데 실패했습니다')
-        }
-        const imageData = await response.blob()
-        const imageUrl = URL.createObjectURL(imageData)
-        return imageUrl
-    }
+    // const fetchImageData = async (ipfs: string) => {
+    //     if (!ipfs) return
+    //     const ipfsUrl = ipfs.replace('ipfs://', '')
+    //     const response = await fetch(`https://ipfs.io/ipfs/${ipfsUrl}`)
+    //     if (!response.ok) {
+    //         throw new Error('이미지 데이터를 가져오는데 실패했습니다')
+    //     }
+    //     const imageData = await response.blob()
+    //     const imageUrl = URL.createObjectURL(imageData)
+    //     return imageUrl
+    // }
 
-    const { data: metaData, isLoading: isMetadataLoading } = useQuery(
+    const { data: metaData, isLoading } = useQuery(
         ['metadata', token.metadata],
         () => fetchMetadata(token.metadata),
         { cacheTime: 300000 }
     )
-    const { data: imageUrl, isLoading: isImageLoading } = useQuery(
-        ['image', metaData?.ipfs],
-        () => fetchImageData(metaData?.ipfs),
-        { cacheTime: 300000 }
-    )
+    // const { data: imageUrl, isLoading: isImageLoading } = useQuery(
+    //     ['image', metaData?.ipfs],
+    //     () => fetchImageData(metaData?.ipfs),
+    //     { cacheTime: 300000 }
+    // )
 
-    const isLoading = isMetadataLoading || isImageLoading
+    const imageUrl = metaData?.ipfs.replace('ipfs://', 'https://ipfs.io/ipfs/');
+
 
     return { metaData, imageUrl, isLoading }
 }
