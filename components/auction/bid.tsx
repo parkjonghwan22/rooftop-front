@@ -1,7 +1,58 @@
+import { BidModal } from "@components/common/modal";
+import { BidContent } from "@components/common/modal/styled/Bid.styled";
+import { useMarket } from "@utils/hooks/useMarket";
+import { TokenData } from "@utils/types/nft.interface";
+import { useState } from "react";
 import tw from "tailwind-styled-components";
 import Image from "next/image";
+import { useIpfs } from "@utils/hooks/useIpfs";
+import { PriceInputBox } from "@components/common/input";
+import { useInput } from "@utils/hooks/useInput";
+import { ethers } from "ethers";
+import { useAccount } from "wagmi";
+import { toast } from "react-toastify";
 
-const Bid = () => {
+
+interface BidProps {
+  token: TokenData;
+  setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const Bid = ({ token, setIsOpenModal } : BidProps) => {
+  const { address } = useAccount();
+  const [isLoading, setIsLoading] = useState(false);
+  const { metaData, imageUrl } = useIpfs(token);
+  const { market } = useMarket();
+  const nftPrice = useInput("");
+
+  const success = () => toast.success('Success Place Bid !!')
+
+  const handleBid = async () => {
+    try{
+      if (!market || !nftPrice.value) return
+      setIsLoading(true)
+
+      const priceInWei = ethers.parseEther(nftPrice.value.toString());
+      const placeBid = await market.bidInAuction(token.id, {
+        from: address,
+        value: priceInWei
+      })
+
+      const receipt = await placeBid.wait()
+      if(receipt) {
+        console.log(receipt)
+        setIsLoading(false)
+        success()
+        setIsOpenModal(false)
+      }
+
+    } catch(e:any) {
+      console.log(e.message)
+
+    }
+    
+  }
+
   return (
     <>
       <div className="mx-auto px-4 py-4 h-full">
@@ -10,15 +61,17 @@ const Bid = () => {
           <div className="w-1/2">
             <div className="mt-5">
               <Image
-                src="http://localhost:3000/test2.png"
+                src={
+                  imageUrl ? imageUrl : "https://dummyimage.com/480x480/ccc/000"
+                }
                 alt="test"
                 width={1000}
                 height={1000}
                 className="object-fill w-64 h-64 mx-auto rounded-full border-4 border-red-500 dark:border-white"
               />
             </div>
-            <div className="text-center mt-4 text-2xl font-bold">
-              NFT name..
+            <div className="text-center mt-4 text-2xl font-bold text-ellipsis overflow-hidden">
+              {metaData.name}
             </div>
           </div>
           <div className="w-1/2 px-2 py-2">
@@ -42,22 +95,26 @@ const Bid = () => {
               <div className="font-bold ml-1">Polygon</div>
             </div>
             <div className="mt-2 text-sm text-gray-400">시작가</div>
-            <div className="font-bold">$90</div>
+            <div className="font-bold">${token.openingPrice}</div>
             <div className="mt-2 text-sm text-gray-400">
               경매 종료까지 남은시간
             </div>
-            <div className="font-bold">4d 11h 35m ..</div>
+            <div className="font-bold">{token.auctionEndTime}</div>
             <div className="mt-2 border-2 dark:border-0 dark:bg-gray-900 rounded-lg px-2 py-2">
               <div className="text-sm text-gary-400">
-                입찰가는 $90 이상이어야 합니다
+                입찰가는 ${token.openingPrice} 이상이어야 합니다
               </div>
-              <input
-                className="mt-2 w-full py-3 pl-2 border rounded-lg focus:outline-none dark:border-0 dark:bg-gray-700 "
-                placeholder="입찰 금액을 입력해주세요"
+              <PriceInputBox
+                value={nftPrice.value}
+                onChange={nftPrice.onChange}
+                name="price"
+                icon="cryptocurrency-color:matic"
+                placeholder="0.000"
               />
-              <div className="mt-4 bg-red-500 dark:bg-purple-500 rounded-lg px-20 py-3 text-2xl font-bold text-center hover:bg-gray-400 dark:hover:bg-gray-400 text-white cursor-pointer">
+              <button onClick={handleBid}
+              className="mt-4 bg-red-500 dark:bg-purple-500 rounded-lg px-20 py-3 text-2xl font-bold text-center hover:bg-gray-400 dark:hover:bg-gray-400 text-white cursor-pointer">
                 입찰하기
-              </div>
+              </button>
             </div>
           </div>
         </div>
@@ -65,5 +122,3 @@ const Bid = () => {
     </>
   );
 };
-
-export default Bid;

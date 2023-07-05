@@ -51,6 +51,7 @@ export const AuctionContent = ({
         try {
           setIsLoading(false)
           setIsOpenModal(false)
+          setAuctionEnded(false)
 
           const currentTime = new Date()
           const endTime = new Date(currentTime.getTime() + duration * 1000)
