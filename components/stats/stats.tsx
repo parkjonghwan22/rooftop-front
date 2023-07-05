@@ -11,33 +11,49 @@ import {
     RankingFollowSvg,
 } from './styled/stats.styled'
 import { Icon } from '@iconify/react'
-import { useQueryClient } from 'react-query'
+import { useQueryClient, useQuery } from 'react-query'
 import { LoadingSpinner, LoadingSpinner2 } from '@components/common/loading'
+import { useEvent } from '@utils/hooks/useEvent'
 
 interface CollectionsProps {
     collectionDatas: CollectionData[]
 }
 
-const Stats = ({ collectionDatas }: CollectionsProps) => {
+interface CollectionChangeProps {
+    collection: CollectionData
+    index: number
+}
+
+const CollectionChange = ({ collection, index }: CollectionChangeProps) => {
     const { address } = useAccount()
     const queryClient = useQueryClient()
     const [isLoading, setIsLoading] = useState<boolean[]>(
-        new Array(collectionDatas.length).fill(false)
+        new Array(collection.address.length).fill(false)
     )
+
+    const { getTradeSummary } = useEvent()
+
+    const { data: summary, isLoading: summaryLoading } = useQuery(
+        ['activity', collection.address],
+        () => getTradeSummary(collection.address, 48),
+        {
+            enabled: !!collection,
+        }
+    )
+    if (summary === undefined) return null
 
     const followHandler = async (index: number) => {
         if (!address) return
-
         try {
             setIsLoading((prevLoading) => {
-                const newLoading = Array.isArray(prevLoading) ? [...prevLoading] : [];
+                const newLoading = [...prevLoading]
                 newLoading[index] = true
                 return newLoading
             })
 
             const response = await request.post(`collection/follow`, {
                 address,
-                collection_address: collectionDatas[index].address,
+                collection_address: collection.address,
             })
 
             if (response) {
@@ -46,13 +62,109 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                     ?.find((collection: CollectionData) => {
                         return collection.favorite.includes(address)
                     })
-                queryClient.invalidateQueries('allCollection',{ refetchInactive: true })
-                setIsLoading(false)
+                queryClient.invalidateQueries('allCollection', { refetchInactive: true })
+                setIsLoading((prevLoading) => {
+                    const newLoading = [...prevLoading]
+                    newLoading[index] = false
+                    return newLoading
+                })
             }
         } catch (e) {
             console.error(e)
         }
     }
+
+    return (
+        <tr className="h-24">
+            <td className="p-2 whitespace-nowrap">
+                <Link href={`/collections/${collection.address}`}>
+                    <div className="flex items-center">
+                        <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
+                            {collection.logo ? (
+                                <img
+                                    className="rounded-full"
+                                    src={collection.logo}
+                                    width="40"
+                                    height="40"
+                                    alt="Alex Shatov"
+                                />
+                            ) : (
+                                <></>
+                            )}
+                        </div>
+                        <div className="font-medium text-2xl">{collection.name}</div>
+                    </div>
+                </Link>
+            </td>
+            <td className="p-2 whitespace-nowrap">
+                <div className="flex items-center">
+                    <div className="text-center font-normal pl-5 w-16 text-2xl">
+                        {collection.totalVolume}
+                    </div>
+
+                    <div className="text-left font-normal pl-5 w-16 text-2xl">MATIC</div>
+                </div>
+            </td>
+            <td className="py-4 whitespace-nowrap">
+                <div className="flex items-center">
+                    <div className="text-center font-normal pl-5 w-1/4 text-2xl">
+                        {collection.floorPrice}
+                    </div>
+
+                    <div className="text-left font-normal pl-5 w-1/4 text-2xl">MATIC</div>
+                </div>
+            </td>
+            <td className="py-4 whitespace-nowrap">
+                <div className="flex items-center ml-7">
+                    <div className="text-center font-normal pl-5 w-1/4 text-2xl">
+                        {Number(summary.percentage) === 0 ? (
+                            <div className="px-2 inline-flex text-3xl leading-7 black:text-white white:text-black">
+                                <Icon icon="carbon:undefined-filled" />
+                            </div>
+                        ) : Number(summary.percentage) > 0 ? (
+                            <div className="px-2 inline-flex text-xl leading-7 font-semibold rounded-full text-green-600">
+                                {`+` + Number(summary.percentage) + `%`}
+                            </div>
+                        ) : (
+                            <div className="px-2 inline-flex text-xl leading-7 font-semibold rounded-full text-red-600">
+                                {Number(summary.percentage) + `%`}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </td>
+            <td className="p-2 whitespace-nowrap">
+                {isLoading[index] ? (
+                    <LoadingSpinner />
+                ) : collection.favorite.includes(`${address}`) ? (
+                    <div className="flex justify-center text-lg text-center">
+                        <div onClick={() => followHandler(index)}>
+                            <Icon
+                                icon="noto-v1:star"
+                                className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
+                            />
+                        </div>
+                    </div>
+                ) : (
+                    <div className="flex justify-center text-lg text-center">
+                        <div onClick={() => followHandler(index)}>
+                            <Icon
+                                icon="fluent:star-add-24-regular"
+                                className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
+                            />
+                        </div>
+                    </div>
+                )}
+            </td>
+        </tr>
+    )
+}
+
+// ===========================================================================
+
+const Stats = ({ collectionDatas }: CollectionsProps) => {
+    const { address } = useAccount()
+    const queryClient = useQueryClient()
 
     return (
         <>
@@ -82,81 +194,16 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                                     </div>
                                 </th>
                                 <th className="p-2 whitespace-nowrap">
+                                    <div className="font-semibold text-left text-3xl">% Change</div>
+                                </th>
+                                <th className="p-2 whitespace-nowrap">
                                     <div className="font-semibold text-center text-3xl">Follow</div>
                                 </th>
                             </tr>
                         </thead>
                         {collectionDatas.map((collection, index) => (
                             <tbody className="text-sm divide-y divide-gray-100" key={index}>
-                                <tr className="h-24">
-                                    <td className="p-2 whitespace-nowrap">
-                                        <Link href={`/collections/${collection.address}`}>
-                                            <div className="flex items-center">
-                                                <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                                                    {collection.logo ? (
-                                                        <img
-                                                            className="rounded-full"
-                                                            src={collection.logo}
-                                                            width="40"
-                                                            height="40"
-                                                            alt="Alex Shatov"
-                                                        />
-                                                    ) : (
-                                                        <></>
-                                                    )}
-                                                </div>
-                                                <div className="font-medium text-2xl">
-                                                    {collection.name}
-                                                </div>
-                                            </div>
-                                        </Link>
-                                    </td>
-                                    <td className="p-2 whitespace-nowrap">
-                                        <div className="flex items-center">
-                                            <div className="text-center font-normal pl-5 w-16 text-2xl">
-                                                {collection.totalVolume}
-                                            </div>
-
-                                            <div className="text-left font-normal pl-5 w-16 text-2xl">
-                                                MATIC
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="py-4 whitespace-nowrap">
-                                        <div className="flex items-center">
-                                            <div className="text-center font-normal pl-5 w-1/4 text-2xl">
-                                                {collection.floorPrice}
-                                            </div>
-
-                                            <div className="text-left font-normal pl-5 w-1/4 text-2xl">
-                                                MATIC
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="p-2 whitespace-nowrap">
-                                        {isLoading[index] ? (
-                                            <LoadingSpinner />
-                                        ) : (
-                                            <div className="flex justify-center text-lg text-center">
-                                                {collection.favorite.includes(`${address}`) ? (
-                                                    <div onClick={() => followHandler(index)}>
-                                                        <Icon
-                                                            icon="noto-v1:star"
-                                                            className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
-                                                        />
-                                                    </div>
-                                                ) : (
-                                                    <div onClick={() => followHandler(index)}>
-                                                        <Icon
-                                                            icon="fluent:star-add-24-regular"
-                                                            className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
-                                                        />
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
-                                    </td>
-                                </tr>
+                                <CollectionChange collection={collection} index={index} />
                             </tbody>
                         ))}
                     </table>
