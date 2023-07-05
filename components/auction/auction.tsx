@@ -118,7 +118,9 @@ export const Auction = ({ token }: AuctionProps) => {
   const handleEndAuction = async () => {
     try {
       setIsLoading(true)
-      const endAuction = await market.endAuction(token.id)
+      const endAuction = await market.endAuction(token.id, {
+        gasLimit: 800000
+      })
       const receipt = await endAuction.wait()
 
       console.log(receipt)
