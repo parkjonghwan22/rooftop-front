@@ -5,12 +5,15 @@ import { useEffect, useState } from "react";
 import { AuctionContent } from "./auctionContent";
 import { useMarket } from "@utils/hooks/useMarket";
 import request from "@utils/request";
+import { useAccount } from "wagmi";
 
 interface AuctionProps {
   token: TokenData;
 }
 
 export const Auction = ({ token }: AuctionProps) => {
+  const { address } = useAccount();
+
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [days, setDays] = useState<number>(0);
   const [hours, setHours] = useState<number>(0);
@@ -19,6 +22,10 @@ export const Auction = ({ token }: AuctionProps) => {
   const [newTimer, setNewTimer] = useState<number>(0);
   const [auctionEnded, setAuctionEnded] = useState(false)
   const { market } = useMarket()
+
+  const isRegister = address && address === token.seller && !auctionEnded && token.openingPrice == 0
+  const isCancel = address && address === token.seller && !auctionEnded && token.openingPrice !== 0
+  const isEnded = address && address === token.seller && auctionEnded
 
   const getAuction = async () => {
     const {data} = await request.get(`auction/${token.id}`)
@@ -100,7 +107,6 @@ export const Auction = ({ token }: AuctionProps) => {
   }
 
   const handleEndAuction = async () => {
-    console.log('market~~~~~', market)
     try {
       const endAuction = await market.endAuction(token.id)
       console.log("endAuction ====",endAuction)
@@ -109,7 +115,7 @@ export const Auction = ({ token }: AuctionProps) => {
       if(receipt) {
         try {
           await request.delete(`auction/${token.id}`)
-          console.log(`등록된 경매가 해제됬습니다`)
+          console.log(`등록된 경매가 완료됐습니다`)
         } catch(e:any) {
           console.log(e.message)
         }
@@ -135,7 +141,7 @@ export const Auction = ({ token }: AuctionProps) => {
           minutes={minutes}
           seconds={seconds}
         />
-        {!auctionEnded && token.openingPrice == 0 &&(
+        {isRegister &&(
         <button
           type="button"
           onClick={() => {
@@ -146,7 +152,7 @@ export const Auction = ({ token }: AuctionProps) => {
           Auction Register
         </button>
         )}
-        {!auctionEnded && token.openingPrice !== 0 &&(
+        {isCancel &&(
         <button
           type="button"
           onClick={handleCancelAuction}
@@ -155,7 +161,7 @@ export const Auction = ({ token }: AuctionProps) => {
           Cancel Auction
         </button>
         )}
-        {auctionEnded && (
+        {isEnded && (
           <button
           type="button"
           onClick={handleEndAuction}

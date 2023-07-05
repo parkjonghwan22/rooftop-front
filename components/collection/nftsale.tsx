@@ -149,7 +149,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                   Set New Price
                 </Button>
               )} 
-              {/* {isBid && (
+               {isBid && (
                 <Button
                   color="purple"
                   size="w-40"
@@ -159,16 +159,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                   Place Bid
                 </Button>
               )}
-   
-                {/* <Button
-                  color="purple"
-                  size="w-40"
-                  fontSize="md"
-                  onClick={() => handleOpenModal("Bid")}
-                >
-                  Place Bid
-                </Button>
-       */}
+          
             </div>
             <ul className="mt-4 space-y-3">
               <h1 className="text-lg font-bold py-2">Collection</h1>
