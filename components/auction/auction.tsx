@@ -6,6 +6,8 @@ import { AuctionContent } from "./auctionContent";
 import { useMarket } from "@utils/hooks/useMarket";
 import request from "@utils/request";
 import { useAccount } from "wagmi";
+import { toast } from "react-toastify";
+import { LoadingSpinner } from "@components/common/loading";
 
 interface AuctionProps {
   token: TokenData;
@@ -13,7 +15,6 @@ interface AuctionProps {
 
 export const Auction = ({ token }: AuctionProps) => {
   const { address } = useAccount();
-
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [days, setDays] = useState<number>(0);
   const [hours, setHours] = useState<number>(0);
@@ -21,11 +22,16 @@ export const Auction = ({ token }: AuctionProps) => {
   const [seconds, setSeconds] = useState<number>(0);
   const [newTimer, setNewTimer] = useState<number>(0);
   const [auctionEnded, setAuctionEnded] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+
   const { market } = useMarket()
 
   const isRegister = address && address === token.seller && !auctionEnded && token.openingPrice == 0
   const isCancel = address && address === token.seller && !auctionEnded && token.openingPrice !== 0
   const isEnded = address && address === token.seller && auctionEnded
+
+  const successCancel = () => toast.success('Success Cancel Auction !!')
+  const successEnd = () => toast.success('Success Ended Auction !!')
 
   const getAuction = async () => {
     const {data} = await request.get(`auction/${token.id}`)
@@ -89,6 +95,7 @@ export const Auction = ({ token }: AuctionProps) => {
 
   const handleCancelAuction = async () => {
     try {
+      setIsLoading(true)
       const cancelAuction = await market.cancelAuction(token.id)
       console.log("cancelAuction",cancelAuction)
       const receipt = await cancelAuction.wait()
@@ -97,6 +104,8 @@ export const Auction = ({ token }: AuctionProps) => {
         try {
           await request.delete(`auction/${token.id}`)
           console.log(`등록된 경매가 해제됬습니다`)
+          setIsLoading(false)
+          successCancel()
         } catch(e:any) {
           console.log(e.message)
         }
@@ -108,17 +117,16 @@ export const Auction = ({ token }: AuctionProps) => {
 
   const handleEndAuction = async () => {
     try {
+      setIsLoading(true)
       const endAuction = await market.endAuction(token.id)
-      console.log("endAuction ====",endAuction)
       const receipt = await endAuction.wait()
+
+      console.log(receipt)
       
       if(receipt) {
-        try {
           await request.delete(`auction/${token.id}`)
-          console.log(`등록된 경매가 완료됐습니다`)
-        } catch(e:any) {
-          console.log(e.message)
-        }
+          setIsLoading(false)
+          successEnd()
       }
 
     } catch (e:any) {
@@ -141,7 +149,7 @@ export const Auction = ({ token }: AuctionProps) => {
           minutes={minutes}
           seconds={seconds}
         />
-        {isRegister &&(
+        {isRegister && (
         <button
           type="button"
           onClick={() => {
@@ -152,13 +160,13 @@ export const Auction = ({ token }: AuctionProps) => {
           Auction Register
         </button>
         )}
-        {isCancel &&(
+        {isCancel && (
         <button
           type="button"
-          onClick={handleCancelAuction}
+          onClick={handleEndAuction}
           className=" mt-4 inline-flex items-center justify-center rounded-md border-2 border-transparent dark:bg-purple-500 bg-none px-32 py-2 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow dark:hover:bg-blue-800"
         >
-          Cancel Auction
+          {isLoading ? <><LoadingSpinner/>Pending...</> : <>Cancel Auction</>} 
         </button>
         )}
         {isEnded && (
@@ -167,7 +175,7 @@ export const Auction = ({ token }: AuctionProps) => {
           onClick={handleEndAuction}
           className=" mt-4 inline-flex items-center justify-center rounded-md border-2 border-transparent dark:bg-purple-500 bg-none px-32 py-2 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow dark:hover:bg-blue-800"
         >
-          Auction End          
+          {isLoading ? <><LoadingSpinner/>Pending...</> : <>End Auction</>} 
         </button>
         )}
       </div>

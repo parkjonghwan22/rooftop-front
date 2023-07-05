@@ -11,6 +11,7 @@ import { useInput } from "@utils/hooks/useInput";
 import { ethers } from "ethers";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
+import { LoadingSpinner } from "@components/common/loading";
 
 
 interface BidProps {
@@ -111,10 +112,18 @@ export const Bid = ({ token, setIsOpenModal } : BidProps) => {
                 icon="cryptocurrency-color:matic"
                 placeholder="0.000"
               />
+              {!isLoading && (
               <button onClick={handleBid}
               className="mt-4 bg-red-500 dark:bg-purple-500 rounded-lg px-20 py-3 text-2xl font-bold text-center hover:bg-gray-400 dark:hover:bg-gray-400 text-white cursor-pointer">
                 입찰하기
               </button>
+              )}
+              {isLoading && (
+                <button onClick={handleBid}
+                className="mt-4 bg-red-500 dark:bg-purple-500 rounded-lg px-20 py-3 text-2xl font-bold text-center hover:bg-gray-400 dark:hover:bg-gray-400 text-white cursor-pointer">
+                  <LoadingSpinner/> 입찰하기
+                </button>
+              )}
             </div>
           </div>
         </div>

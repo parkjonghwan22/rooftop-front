@@ -46,6 +46,8 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     setIsOpenModal(true);
   };
 
+  console.log("token ::::::",token)
+
   const isBuy = address && address !== token.seller && token.openingPrice == 0;
   const isResale =
     address && address === token.seller && token.openingPrice == 0;
