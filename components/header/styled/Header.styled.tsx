@@ -22,15 +22,15 @@ export const TitleContainer = () => {
             >
                 <path d="M19 16h3L12 7L2 16h3l7-6.31L19 16M7 8.81V7H4v4.5l3-2.69Z"></path>
             </Logo>
-            <span className="pl-2 self-center text-xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="pl-2 self-center hidden lg:block lg:text-xl font-semibold whitespace-nowrap dark:text-white">
                 ROOFTOP
             </span>
         </div>
     )
 }
 
-export const Stats = tw.div`
-    font-semibold text-md md:text-xl cursor-pointer ml-6
+export const HeaderLink = tw.div`
+    font-semibold text-lg lg:text-xl cursor-pointer ml-3 lg:ml-6
 `
 
 const backgroundColors: StyledOptions = {

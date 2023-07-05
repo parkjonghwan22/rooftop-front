@@ -9,37 +9,40 @@ import { Icon } from '@iconify/react'
 import request from '@utils/request'
 import { useQueryClient } from 'react-query'
 import { LoadingSpinner } from '@components/common/loading'
+import { AirdropSweeper } from '@components/airdrop/airdropsweeper'
 
 interface CollectionProps {
     collectionData: CollectionData
     tokenData: TokenData[]
 }
+interface BannerProps {
+    collectionData: CollectionData
+    totalItems: number
+    isCreator: boolean
+}
 
 export const Collection = ({ collectionData, tokenData }: CollectionProps) => {
+    const { address } = useAccount()
+    const isCreator = address === collectionData?.creator
+
     return (
         <>
-            {collectionData && (
+            {collectionData && address &&  (
                 <CollectionBanner
                     collectionData={collectionData}
                     totalItems={tokenData ? tokenData.length : 0}
+                    isCreator={isCreator}
                 />
             )}
-            {tokenData && <NFTList tokenData={tokenData} />}
+            {tokenData && <NFTList tokenData={tokenData} isCreator={isCreator} />}
         </>
     )
 }
 
-export const CollectionBanner = ({
-    collectionData,
-    totalItems,
-}: {
-    collectionData: CollectionData
-    totalItems: number
-}) => {
-
-    const {address} = useAccount()
+export const CollectionBanner = ({ collectionData, totalItems, isCreator }: BannerProps) => {
+    const { address } = useAccount()
     const queryClient = useQueryClient()
-    const [isLoading , setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
 
     const followHandler = async () => {
         if (!address) return
@@ -52,18 +55,18 @@ export const CollectionBanner = ({
             })
 
             if (response) {
-                const foundFavorite = 
-                queryClient.getQueryData<CollectionData[] | undefined>('collection')
-                ?.find((collection: CollectionData) => {
-                    return collection.favorite.includes(address)
-                })
-                console.log("foundFavorite :: ",foundFavorite)
-                queryClient.invalidateQueries('collection',{ refetchInactive: true })
+                const foundFavorite =
+                    queryClient.getQueryData<CollectionData[] | undefined>('collection')
+                        ?.find((collection: CollectionData) => {
+                            return collection.favorite.includes(address)
+                        })
+                console.log("foundFavorite :: ", foundFavorite)
+                queryClient.invalidateQueries('collection', { refetchInactive: true })
             }
             setIsLoading(false)
         } catch (e) {
             console.error(e)
-        } finally{
+        } finally {
             setIsLoading(false)
         }
     }
@@ -84,31 +87,31 @@ export const CollectionBanner = ({
                     <h4 className="text-xl font-bold text-navy-700 dark:text-white mr-1">
                         {collectionData.name}
                     </h4>
-                    
-                        <div className="flex justify-center text-lg text-center ml-2">
-                            {isLoading ? 
-                            <LoadingSpinner/> : (
-                                <div className="flex justify-center text-lg text-center">
-                                    {collectionData.favorite.includes(`${address}`) ? (
-                                        <div onClick={() => followHandler()}>
-                                            <Icon
-                                                icon="noto-v1:star"
-                                                className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div onClick={() => followHandler()}>
-                                            <Icon
-                                                icon="fluent:star-add-24-regular"
-                                                className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                   
                     {collectionData.verified && <VerifiedMarker />}
+                    {!isCreator &&
+                        <div className="flex justify-center text-lg text-center ml-2">
+                            {isLoading ?
+                                <LoadingSpinner /> : (
+                                    <div className="flex justify-center text-lg text-center">
+                                        {collectionData.favorite.includes(`${address}`) ? (
+                                            <div onClick={() => followHandler()}>
+                                                <Icon
+                                                    icon="noto-v1:star"
+                                                    className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div onClick={() => followHandler()}>
+                                                <Icon
+                                                    icon="fluent:star-add-24-regular"
+                                                    className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                        </div>
+                    }
                 </div>
                 <p className="text-base font-normal text-gray-500">{collectionData.description}</p>
             </div>
@@ -122,21 +125,23 @@ export const CollectionBanner = ({
     )
 }
 
-export const NFTList = ({ tokenData }: { tokenData: TokenData[] }) => {
+export const NFTList = ({ tokenData, isCreator }: { tokenData: TokenData[], isCreator: boolean }) => {
     const [selectedItems, setSelectedItems] = useState<TokenData[]>([]);
     const sortedData = tokenData ? tokenData.sort((a, b) => b.id - a.id) : []
-
 
     return (
         <>
             <div className="w-10/12 mx-auto mb-10">
-                <CollectionSweeper tokenData={tokenData} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
+                {isCreator
+                    ? <AirdropSweeper tokenData={tokenData} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
+                    : <CollectionSweeper tokenData={tokenData} selectedItems={selectedItems} setSelectedItems={setSelectedItems} />
+                }
             </div>
             <div className="flex flex-wrap justify-center">
                 {sortedData.map((token) => (
-                    <NFTCard 
-                        key={token.id} 
-                        token={token} 
+                    <NFTCard
+                        key={token.id}
+                        token={token}
                         isSelected={selectedItems.some((item) => item.id === token.id)}
                     />
                 ))}

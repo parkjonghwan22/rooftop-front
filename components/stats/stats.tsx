@@ -47,7 +47,11 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                         return collection.favorite.includes(address)
                     })
                 queryClient.invalidateQueries('allCollection',{ refetchInactive: true })
-                setIsLoading(false)
+                setIsLoading((prevLoading) => {
+                    const newLoading = Array.isArray(prevLoading) ? [...prevLoading] : [];
+                    newLoading[index] = false
+                    return newLoading
+                })
             }
         } catch (e) {
             console.error(e)
