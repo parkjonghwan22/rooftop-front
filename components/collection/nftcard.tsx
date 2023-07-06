@@ -22,7 +22,7 @@ export const NFTCard = ({ token, isSelected }: NFTCardProps) => {
     const router = useRouter();
     const { _id } = router.query;
     const { metaData, imageUrl, isLoading } = useIpfs(token)
-    const [ isCartLoading, setIsCartLoading ] = useState(false)
+    const [isCartLoading, setIsCartLoading] = useState(false)
 
     const handleAddToCart = async () => {
         try {
@@ -37,7 +37,7 @@ export const NFTCard = ({ token, isSelected }: NFTCardProps) => {
                 setIsCartLoading(false)
                 return;
             }
-    
+
             const { data } = await request.post('cart/add', {
                 shopper: address,
                 seller: token.seller,
@@ -50,10 +50,10 @@ export const NFTCard = ({ token, isSelected }: NFTCardProps) => {
             if (data) {
                 queryClient.setQueryData('cart', (prevData: CartType[] | undefined) => {
                     if (prevData) {
-                      return [...prevData, data];
+                        return [...prevData, data];
                     }
                     return [data];
-                  }); 
+                });
                 setIsCartLoading(false)
             }
         } catch (e) {
@@ -82,7 +82,7 @@ export const NFTCard = ({ token, isSelected }: NFTCardProps) => {
                     alt="nft image"
                     width={480}
                     height={480}
-                    className="object-cover w-full h-48 hover:scale-110 transition-transform duration-300"
+                    className="object-cover w-full h-48 hover:scale-105 transition-transform duration-300"
                 />
             </Link>
             <div className="flex items-center justify-between px-4 py-2 bg-gray-900">
@@ -90,16 +90,11 @@ export const NFTCard = ({ token, isSelected }: NFTCardProps) => {
                     <Icon icon="cryptocurrency-color:matic" className="mr-1" />
                     {token.price / 10 ** 18}
                 </h1>
-                {!token.sold
-                    ?
+                {!token.sold && address !== token.seller &&
                     <button onClick={handleAddToCart} className="px-2 py-1 text-xs font-semibold text-white uppercase transition-colors duration-150 transform bg-red-500 rounded hover:bg-gray-600 focus:bg-gray-700 focus:outline-none">
-                        {isCartLoading? <LoadingSpinner /> : `Add to cart`}
-                    </button>
-                    :
-                    <button className="px-2 py-1 text-xs font-semibold text-white uppercase transition-colors duration-150 transform bg-gray-500 rounded focus:outline-none disabled">
-                        Sold Out
-                    </button>
-                }
+                        {isCartLoading ? <LoadingSpinner /> : `Add to cart`}
+                    </button>}
+                {token.sold && <button className="px-2 py-1 text-xs font-semibold text-white uppercase transition-colors duration-150 transform bg-gray-500 rounded focus:outline-none disabled">Sold Out</button>}
             </div>
         </div>
     )

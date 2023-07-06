@@ -23,7 +23,7 @@ const CollectionCard = ({ collection }: { collection : CollectionData }) => {
         alt="test"
         width={1000}
         height={1000}
-        className="object-fill w-72 h-60 mx-auto rounded-t-lg"
+        className="object-cover w-66 h-60 mx-auto rounded-t-lg"
       />
     </div>
     <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90 ">

@@ -5,20 +5,14 @@ import { useMarket } from "@utils/hooks/useMarket";
 import { Hero, RankingChart, Collection, Slide } from "@components/main"
 import { LoadingSpinner2 } from "@components/common/loading";
 import { useEvent } from "@utils/hooks/useEvent";
+import { useCollection } from "@utils/hooks/useCollection";
 
 const Main = () => {
   const { market } = useMarket();
   const [randomAddress, setRandomAddress] = useState<string | undefined>('');
   const { getAllEvents } = useEvent();
+  const { getAllCollections } = useCollection()
 
-  const getAllCollections = async () => {
-    try {
-      const { data } = await request.get(`collection`);
-      return data;
-    } catch (error: unknown) {
-      throw new Error(error as string);
-    }
-  };
 
   const getNfts = async (collectionAddress: string) => {
     try {
@@ -65,8 +59,8 @@ const Main = () => {
   );
 
   const getRandomAddress = () => {
-    const randomIndex = Math.floor(Math.random() * collectionDatas.length);
-    return collectionDatas[randomIndex]?.address;
+    const randomIndex = Math.floor(Math.random() * collectionDatas!.length);
+    return collectionDatas![randomIndex]?.address;
   };
 
   const { data: tokenData, isLoading: nftsLoading } = useQuery(
@@ -87,7 +81,7 @@ const Main = () => {
 
   const isLoading = collectionLoading || nftsLoading || activityLoading;
 
-  if (isLoading) return <LoadingSpinner2 />
+  if (isLoading || !collectionDatas) return <LoadingSpinner2 />
   return (
     <div className="mx-auto flex flex-col items-center">
       <Hero />

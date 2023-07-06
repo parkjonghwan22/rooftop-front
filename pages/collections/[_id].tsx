@@ -5,20 +5,13 @@ import { useMarket } from '@utils/hooks/useMarket';
 import { useQuery } from 'react-query';
 import request from '@utils/request';
 import { LoadingSpinner2 } from '@components/common/loading';
+import { useCollection } from '@utils/hooks/useCollection';
 
 const CollectionPage = () => {
   const router = useRouter();
   const { _id } = router.query;
   const { market } = useMarket();
-
-  const getCollection = async (collectionAddress: string) => {
-    try {
-      const { data } = await request.get(`collection/${collectionAddress}`);
-      return data[0];
-    } catch (error: unknown) {
-      throw new Error(error as string);
-    }
-  }
+  const { getCollection } = useCollection();
 
   const getNfts = async (collectionAddress: string) => {
     try {
@@ -65,7 +58,7 @@ const CollectionPage = () => {
   );
   const isLoading = collectionLoading || nftsLoading
 
-  if (isLoading) return <LoadingSpinner2 />
+  if (isLoading || !collectionData) return <LoadingSpinner2 />
   return (
     <RootLayout>
         <Collection collectionData={collectionData} tokenData={tokenData} />

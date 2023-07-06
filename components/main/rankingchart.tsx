@@ -90,18 +90,14 @@ const ChartItem = ({ collection, index }: { collection: CollectionData; index: n
 export const RankingChart = ({ collectionDatas, activityDatas }: CollectionProps) => {
     const [selectedSort, setSelectedSort] = useState('trending')
 
-    // trendig 정렬
-    const sortedByTrending = [...collectionDatas]
-        .sort((a, b) => {
-            const countA = activityDatas.filter(
-                (activity) => activity.NFTaddress === a.address
-            ).length
-            const countB = activityDatas.filter(
-                (activity) => activity.NFTaddress === b.address
-            ).length
-            return countB - countA
-        })
-        .slice(0, 10)
+
+  // trendig 정렬
+  const sortedByTrending = [...collectionDatas].sort((a, b) => {
+    const countA = activityDatas?.filter((activity) => activity.NFTaddress === a.address).length;
+    const countB = activityDatas?.filter((activity) => activity.NFTaddress === b.address).length;
+    return countB - countA;
+  }).slice(0, 10);
+
 
     // top 정렬
     const sortedByTop = [...collectionDatas]

@@ -1,4 +1,4 @@
-import { TitleContainer, Button, Stats } from './styled/Header.styled'
+import { TitleContainer, Button, HeaderLink } from './styled/Header.styled'
 import { Icon } from '@iconify/react'
 import { Modal } from '@components/common/modal/Modal'
 import { useEffect, useState } from 'react'
@@ -31,7 +31,10 @@ const Header = () => {
                                 <TitleContainer />
                             </Link>
                             <Link href="/rankings">
-                            <Stats>Collections</Stats>
+                                <HeaderLink>Collections</HeaderLink>
+                            </Link>
+                            <Link href="/drops">
+                                <HeaderLink>Airdrop</HeaderLink>
                             </Link>
                         </div>
                         <SearchContainer>

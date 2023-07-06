@@ -1,14 +1,14 @@
 import { StyledOptions, StyledProps } from "@utils/types/style.interface";
 
 const backgroundColors: StyledOptions = {
-    red: "bg-red-500",
-    orange: "bg-red-500",
-    blue: "bg-blue-600",
-    green: "bg-green-600",
-    yellow: "bg-yellow-500",
-    purple: "bg-purple-500",
-    cyan: "bg-cyan-500",
-    gray: "bg-gray-100",
+    red: "bg-red-500 hover:bg-red-700",
+    orange: "bg-red-500 hover:bg-orange-700",
+    blue: "bg-blue-600 hover:bg-blue-800",
+    green: "bg-green-600 hover:bg-green-800",
+    yellow: "bg-yellow-500 hover:bg-yellow-700",
+    purple: "bg-purple-500 hover:bg-purple-700",
+    cyan: "bg-cyan-500 hover:bg-cyan-700",
+    gray: "bg-gray-100 hover:bg-gray-400",
   };
   
   const textSizes: StyledOptions = {
@@ -26,7 +26,7 @@ const backgroundColors: StyledOptions = {
   }
   
   export const Button = ({ onClick, type, color, size, fontSize, disabled, children }: ButtonProps) => {
-    const buttonStyled: string = `flex items-center justify-center py-2.5 px-2.5 mr-3 focus:outline-none hover:bg-gray-400 rounded text-white mt-4 md:mt-0 transition duration-300 ease-in-out`;
+    const buttonStyled: string = `flex items-center justify-center py-2.5 px-2.5 mr-3 focus:outline-none rounded text-white mt-4 md:mt-0 transition duration-300 ease-in-out`;
 
     let bgColor = backgroundColors[color ? color : "gray"];
     let txtSize = textSizes[fontSize ? fontSize : "sm"];

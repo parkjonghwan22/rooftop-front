@@ -4,9 +4,10 @@ interface RangeSliderProps {
     tokenData: TokenData[];
     selectedCount: number;
     onSliderChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    disabled?: boolean
 }
 
-export const RangeSlider = ({ tokenData, selectedCount, onSliderChange }: RangeSliderProps) => {
+export const RangeSlider = ({ tokenData, selectedCount, onSliderChange, disabled }: RangeSliderProps) => {
 
     return (
         <div className="flex items-center bg-gray-100 dark:bg-gray-800 shadow rounded-full w-64 md:w-72">
@@ -19,6 +20,7 @@ export const RangeSlider = ({ tokenData, selectedCount, onSliderChange }: RangeS
                     step="1"
                     value={selectedCount}
                     onChange={onSliderChange}
+                    disabled={disabled}
                 />
                 <ul className="flex justify-between w-full px-[10px]">
                     {tokenData.slice(0, selectedCount).map((token, index) => (

@@ -26,18 +26,16 @@ export const CreateNft = ({
     const [isLoading, setIsLoading] = useState(false)
     const [nftImage, setNftImage] = useState('')
     const [metaData, setMetaData] = useState('')
-    const [isSuccessAlert , setSuccessAlert] = useState(false)
 
     const nftName = useInput('')
     const nftPrice = useInput('')
     const nftDescription = useInput('')
 
-    const success = () => toast.success('Image Upload Successfully! try Market On')
+    const success = () => toast.success(`Image Upload Successfully!\nYou can mint now`)
     const pending = () => toast.info('Data is loading...');
     
     const handlePinataSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
-
         setIsLoading(true)
 
         try {
@@ -55,15 +53,15 @@ export const CreateNft = ({
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log('mint3 resData', data)
+                    // console.log('mint3 resData', data)
                     const tokenURI = `ipfs://${data.IpfsHash}`
                     setMetaData(tokenURI)
                     setIsLoading(false)
                     success()
                 })
                 .catch((error) => console.log(error))
-        } catch (e: any) {
-            console.log(e.message)
+        } catch (e: unknown) {
+            console.error(e as Error)
         }
     }
 
@@ -72,7 +70,7 @@ export const CreateNft = ({
             <CreateNftWrapper>
                 <NftFormContainer onSubmit={handlePinataSubmit}>
                     <NftTitle className="text-center">
-                        Welcome! This is where you register your NFT.
+                        List NFT on your Collection
                     </NftTitle>
                     <NftLabel htmlFor="NftName">NFT Name</NftLabel>
                     <InputBox
@@ -122,7 +120,6 @@ export const CreateNft = ({
                             royalty={royalty}
                             price={nftPrice.value as string | number}
                             metaData={metaData}
-                            setSuccessAlert={setSuccessAlert}
                             setIsOpenModal={setIsOpenModal}
                         >
                             List NFT on Market

@@ -74,3 +74,16 @@ export type PinataRes = {
     Timestamp: string
     isDuplicate: boolean
 }
+
+export interface AirdropData {
+    _id: string;
+    NFTaddress: string;
+    targets: string[];
+    marketIds: number[];
+    tokenIds: number[];
+    mintDate: string;
+    price: number;
+    createdAt: string;
+    updatedAt: string;
+    __v: number;
+}
