@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import tw from 'tailwind-styled-components'
-import { useWindowSize } from '@utils/hooks/useWindowSize'
 import { Icon } from '@iconify/react'
 import { VerifiedMarker } from '@components/common/marker/verify'
 
@@ -66,27 +65,23 @@ export const CollectionDatas = ({
     creatorFee,
     follows,
 }: CollectionProps) => {
-    const windowSize = useWindowSize()
-    const isScreenSmall = windowSize.width < 820
 
     return (
         <div className="mt-2 flex flex-row items-center space-x-6 invisible w-0 lg:visible lg:w-full">
-            {!isScreenSmall && (
-                <>
-                    <CollectionData
-                        data={totalVolume}
-                        icon="ri:exchange-box-fill"
-                        text="총 거래량"
-                    />
-                    <CollectionData data={floorPrice} icon="game-icons:token" text="최저 거래가" />
-                    <CollectionData
-                        data={creatorFee}
-                        icon="heroicons-solid:receipt-tax"
-                        text="작가 로열티"
-                    />
-                    <CollectionData data={follows} icon="mdi:heart" text="팔로워" />
-                </>
-            )}
+            <>
+                <CollectionData
+                    data={totalVolume}
+                    icon="ri:exchange-box-fill"
+                    text="총 거래량"
+                />
+                <CollectionData data={floorPrice} icon="game-icons:token" text="최저 거래가" />
+                <CollectionData
+                    data={creatorFee}
+                    icon="heroicons-solid:receipt-tax"
+                    text="작가 로열티"
+                />
+                <CollectionData data={follows} icon="mdi:heart" text="팔로워" />
+            </>
         </div>
     )
 }

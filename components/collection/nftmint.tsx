@@ -8,11 +8,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { Button } from '@components/common/button'
 import { LoadingSpinner } from '@components/common/loading'
 import request from '@utils/request'
-import { SuccessAlert } from '@components/common/successAlert'
-import { useCoinGecko } from '@utils/hooks/useCoingecko'
 import { useDecode } from '@utils/hooks/useDecode'
-
-
 
 
 interface MintProps {
@@ -20,12 +16,11 @@ interface MintProps {
     collectionAddress: string
     royalty: string
     price: number | string
-    setSuccessAlert: React.Dispatch<React.SetStateAction<boolean>>
     setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>
     children: string | React.ReactNode
 }
 
-export const NFTMint = ({ collectionAddress, royalty, metaData, price, setSuccessAlert, setIsOpenModal, children }: MintProps) => {
+export const NFTMint = ({ collectionAddress, royalty, metaData, price, setIsOpenModal, children }: MintProps) => {
     const { market } = useMarket()
     const { decodeMinted } = useDecode()
     const { signer } = useEthers()
@@ -46,6 +41,9 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, setSucces
             })
             const receipt = await mintTx.wait()
             const latestTokenId = await instance.getLatestTokenId()
+            if (latestTokenId) {
+                toast.success("NFT Minted Successfully")
+            }
             await tokenOnMarket(price, latestTokenId)
         } catch (e: unknown) {
             console.log(e as Error)
@@ -69,12 +67,11 @@ export const NFTMint = ({ collectionAddress, royalty, metaData, price, setSucces
             const receipt = await addOnMarket.wait()
             if (receipt.logs) {
                 const decodedData = decodeMinted(receipt, collectionAddress)
-                console.log(`decodedData ::`, decodedData)
                 const response = await request.post("event/minted", {
                     ...decodedData,
                 });
                 if (response.statusText === "Created") {
-                    toast.success("NFT Minted Successfully")
+                    toast.success("Your NFT Listed on Market")
                     setIsOpenModal(false)
                 }
                 setIsLoading(false)

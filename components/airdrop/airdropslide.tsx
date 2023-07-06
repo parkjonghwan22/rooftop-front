@@ -1,6 +1,6 @@
 import tw from "tailwind-styled-components";
 import { LoadingSpinner2 } from "@components/common/loading/loading2";
-import { CollectionData } from "@utils/types/nft.interface";
+import { AirdropData, CollectionData } from "@utils/types/nft.interface";
 import Link from "next/link";
 import Image from "next/image";
 import Slider from "react-slick";
@@ -64,7 +64,7 @@ const SlideItem = ({ collection }: { collection: CollectionData }) => {
   );
 };
 
-export const AirdropSlide = ({ collectionData }: { collectionData: CollectionData[] }) => {
+export const AirdropUpcoming = () => {
     const settings = {
       infinite: true,
       speed: 700,
@@ -77,7 +77,7 @@ export const AirdropSlide = ({ collectionData }: { collectionData: CollectionDat
   
     return (
       <>
-        <div className="justify-self-center text-3xl lg:text-4xl font-bold mb-10 text-gray-800 dark:text-gray-100">
+        {/* <div className="justify-self-center text-3xl lg:text-4xl font-bold mb-10 text-gray-800 dark:text-gray-100">
           <h2>Today&apos;s Collection</h2>
         </div>
         <SlideWrap>
@@ -86,7 +86,7 @@ export const AirdropSlide = ({ collectionData }: { collectionData: CollectionDat
               <SlideItem key={collection._id} collection={collection} />
             ))}
           </Slider>
-        </SlideWrap>
+        </SlideWrap> */}
       </>
     );
   };
