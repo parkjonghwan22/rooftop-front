@@ -45,7 +45,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     setModalContent(content);
     setIsOpenModal(true);
   };
-  const isBuy = address && address !== token.seller && token.openingPrice == 0;
+  const isBuy = address && address !== token.seller && token.openingPrice == 0 && !token.sold;
   const isResale =
     address && address === token.seller && token.openingPrice == 0;
   const isBid = address && address !== token.seller && token.openingPrice !== 0;
@@ -94,7 +94,13 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
         <div className="lg:col-gap-12 xl:col-gap-16 mt-8 grid grid-cols-1 gap-12 lg:mt-12 lg:grid-cols-5 lg:gap-16">
           <div className="lg:col-span-3 lg:row-end-1">
             <div className="lg:flex lg:items-start">
-              <div className="lg:w-[576px]  overflow-hidden rounded-lg">
+              <div className="lg:w-[576px]  overflow-hidden rounded-lg absolute">
+                {token.sold 
+                ? <div className="w-full h-full bg-gray-700 dark:bg-slate-300 opacity-75 absolute top-0 left-0">
+                  <div className="w-3/4 text-[70px] font-bold text-green-600 mx-auto mt-56 -rotate-12">SOLD OUT !</div>
+                </div> 
+                : <div></div>
+                }
                 <Image
                   src={
                     imageUrl
