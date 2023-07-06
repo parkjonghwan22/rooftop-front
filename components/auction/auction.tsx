@@ -27,8 +27,8 @@ export const Auction = ({ token }: AuctionProps) => {
   const { market } = useMarket()
 
   const isRegister = address && address === token.seller && !auctionEnded && token.openingPrice == 0
-  const isCancel = address && address === token.seller && !auctionEnded && token.openingPrice !== 0
-  const isEnded = address && address === token.seller && auctionEnded
+  const isCancel = address && address === token.seller && (!auctionEnded && token.openingPrice !== 0 || auctionEnded && token.highestBid == 0)
+  const isEnded = address && address === token.seller && (auctionEnded && token.highestBid !== 0)
 
   const successCancel = () => toast.success('Success Cancel Auction !!')
   const successEnd = () => toast.success('Success Ended Auction !!')
@@ -48,7 +48,9 @@ export const Auction = ({ token }: AuctionProps) => {
     // }
 
       const endTime= Number(new Date(data.endTime).getTime())
+      console.log(endTime)
       const currentTime = Number(new Date().getTime())
+      console.log(currentTime)
       console.log(endTime - currentTime)
       if (endTime <= currentTime) {
         setAuctionEnded(true)

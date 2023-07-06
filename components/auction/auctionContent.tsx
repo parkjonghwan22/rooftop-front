@@ -141,7 +141,7 @@ export const AuctionContent = ({
                   {isLoading && (
                 <button
                   onClick={handleClick}
-                  className="flex items-centerbg-red-500 text-lg font-semibold font-redhat w-full py-2 md:text-xl rounded-lg text-white hover:bg-rose-500 hover:text-rose-100 transition duration-300 ease-in"
+                  className="flex items-center justify-center bg-red-500 text-lg font-semibold font-redhat w-full py-2 md:text-xl rounded-lg text-white hover:bg-rose-500 hover:text-rose-100 transition duration-300 ease-in"
                 >
                     <LoadingSpinner/> Registering..
                 </button>
