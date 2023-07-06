@@ -6,5 +6,5 @@ fixed z-40 top-0 left-0 w-full h-full flex justify-center items-center bg-black 
 `;
 
 export const AuctionContent = tw.div<StyledProps>`
-relative rounded-lg shadow bg-white dark:bg-gray-700 w-1/4 h-1/3
+relative rounded-lg shadow bg-white dark:bg-gray-700 w-1/4 h-3/4
 `;
