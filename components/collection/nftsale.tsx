@@ -45,7 +45,11 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     setModalContent(content);
     setIsOpenModal(true);
   };
-  const isBuy = address && address !== token.seller && token.openingPrice == 0 && !token.sold;
+  const isBuy =
+    address &&
+    address !== token.seller &&
+    token.openingPrice == 0 &&
+    !token.sold;
   const isResale =
     address && address === token.seller && token.openingPrice == 0;
   const isBid = address && address !== token.seller && token.openingPrice !== 0;
@@ -95,12 +99,15 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
           <div className="lg:col-span-3 lg:row-end-1">
             <div className="lg:flex lg:items-start">
               <div className="lg:w-[576px]  overflow-hidden rounded-lg absolute">
-                {token.sold 
-                ? <div className="w-full h-full bg-gray-700 dark:bg-slate-300 opacity-75 absolute top-0 left-0">
-                  <div className="w-3/4 text-[70px] font-bold text-green-600 mx-auto mt-56 -rotate-12">SOLD OUT !</div>
-                </div> 
-                : <div></div>
-                }
+                {token.sold ? (
+                  <div className="w-full h-full bg-gray-700 dark:bg-slate-300 opacity-75 absolute top-0 left-0">
+                    <div className="w-3/4 text-[70px] font-bold text-green-600 mx-auto mt-56 -rotate-12">
+                      SOLD OUT !
+                    </div>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
                 <Image
                   src={
                     imageUrl
@@ -125,14 +132,39 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
               </p>
             </div>
             <div className="mt-5 flex flex-col items-center justify-between space-y-4 border-t border-b border-gray-200 dark:border-gray-400 py-4 sm:flex-row sm:space-y-0">
-              <div className="flex flex-col justify-center items-center">
-                <h1 className="text-3xl font-bold flex items-center">
-                  <Icon icon="cryptocurrency-color:matic" className="mr-2" />
-                  {token.price / 10 ** 18}
-                </h1>
-                <span className="text-sm text-gray-500 dark:text-gray-400">
-                  {convertKRW(token.price)}￦
-                </span>
+              <div className="flex flex-col justify-center">
+                {token.highestBid !== 0 && (
+                  <>
+                    <h1 className="text-3xl font-bold flex items-center">
+                      <Icon
+                        icon="cryptocurrency-color:matic"
+                        className="mr-2"
+                      />
+                      {token.highestBid / 10 ** 18}
+                      <span className="text-sm bg-red-500 text-white rounded-lg px-1 ml-2 animate-bounce">
+                        HighestBid
+                      </span>
+                    </h1>
+
+                    <span className="ml-10 text-sm text-gray-500 dark:text-gray-400">
+                      {convertKRW(token.highestBid)}￦
+                    </span>
+                  </>
+                )}
+                {token.highestBid == 0 && (
+                  <>
+                    <h1 className="text-3xl font-bold flex items-center">
+                      <Icon
+                        icon="cryptocurrency-color:matic"
+                        className="mr-2"
+                      />
+                      {token.price / 10 ** 18}
+                    </h1>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                      {convertKRW(token.price)}￦
+                    </span>
+                  </>
+                )}
               </div>
               {isBuy && (
                 <Button
@@ -153,8 +185,8 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                 >
                   Set New Price
                 </Button>
-              )} 
-               {isBid && (
+              )}
+              {isBid && (
                 <Button
                   color="purple"
                   size="w-40"
@@ -164,7 +196,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                   Place Bid
                 </Button>
               )}
-          
             </div>
             <ul className="mt-4 space-y-3">
               <h1 className="text-lg font-bold py-2">Collection</h1>
@@ -220,11 +251,17 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
         지갑 주소가 복사되었습니다
       </Alert>
       {modalContent && isOpenModal && (
-        <Modal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} width="24rem" >
+        <Modal
+          isOpenModal={isOpenModal}
+          setIsOpenModal={setIsOpenModal}
+          width="24rem"
+        >
           {modalContent === "ReSale" && (
             <ReSale token={token} setIsOpenModal={setIsOpenModal} />
           )}
-          {modalContent === "Bid" && <Bid token={token} setIsOpenModal={setIsOpenModal}/>}
+          {modalContent === "Bid" && (
+            <Bid token={token} setIsOpenModal={setIsOpenModal} />
+          )}
         </Modal>
       )}
     </>
