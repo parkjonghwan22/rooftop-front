@@ -165,7 +165,7 @@ export const Auction = ({ token }: AuctionProps) => {
         {isCancel && (
         <button
           type="button"
-          onClick={handleEndAuction}
+          onClick={handleCancelAuction}
           className=" mt-4 inline-flex items-center justify-center rounded-md border-2 border-transparent dark:bg-purple-500 bg-none px-32 py-2 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow dark:hover:bg-blue-800"
         >
           {isLoading ? <><LoadingSpinner/>Pending...</> : <>Cancel Auction</>} 

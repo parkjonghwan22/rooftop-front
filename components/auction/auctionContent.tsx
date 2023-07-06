@@ -97,7 +97,7 @@ export const AuctionContent = ({
 
   return (
     <>
-      <div className="px-3 py-3 w-full h-5/6">
+      <div className="px-3 py-3 w-full h-full max-h-9/10 overflow-y-scroll">
         <div className="text-3xl font-bold ml-3">Auction</div>
         <div className="mx-auto mt-6">
           <div className="w-full">

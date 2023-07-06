@@ -214,7 +214,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
         지갑 주소가 복사되었습니다
       </Alert>
       {modalContent && isOpenModal && (
-        <Modal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal}>
+        <Modal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} width="24rem" >
           {modalContent === "ReSale" && (
             <ReSale token={token} setIsOpenModal={setIsOpenModal} />
           )}

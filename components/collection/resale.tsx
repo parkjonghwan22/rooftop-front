@@ -1,3 +1,4 @@
+import { Button } from "@components/common/button";
 import { PriceInputBox } from "@components/common/input";
 import { LoadingSpinner } from "@components/common/loading";
 import { useInput } from "@utils/hooks/useInput";
@@ -5,7 +6,6 @@ import { useIpfs } from "@utils/hooks/useIpfs";
 import { useMarket } from "@utils/hooks/useMarket";
 import { TokenData } from "@utils/types/nft.interface";
 import { ethers } from "ethers";
-import { Button } from "flowbite-react";
 import Image from "next/image";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
@@ -55,9 +55,9 @@ export const ReSale = ({ token, setIsOpenModal }: NftProps) => {
 
   return (
     <>
-      <div className="px-3 py-3 w-full h-5/6">
-        <div className="text-2xl font-bold ml-3">판매하기</div>
-        <div className="flex mt-4">
+      <div className="px-3 py-3 w-[400px] md:w-[700px] h-[600px] md:h-[400px]">
+        <div className="text-3xl font-bold ml-3">Register NFT</div>
+        <div className="flex flex-col md:flex-row mt-4">
           <div className="w-1/2 ml-4">
             <Image
               src={
@@ -66,16 +66,16 @@ export const ReSale = ({ token, setIsOpenModal }: NftProps) => {
               alt="test"
               width={1000}
               height={1000}
-              className="object-fill w-60 h-60 mx-auto rounded-lg border-4 border-red-500 dark:border-white"
+              className="object-fill w-68 h-68 mx-auto rounded-full border-4 border-red-500 dark:border-white"
             />
           </div>
           <div className="w-1/2 flex flex-col mt-10 pl-10">
             <div className="flex items-center">
-              <div className="text-xl font-bold">{metaData.name}</div>
+              <div className="text-3xl font-bold text-ellipsis overflow-hidden">{metaData.name}</div>
               <div className="text-sm ml-2">#{token.tokenId}</div>
             </div>
-            <div className="text-xl mr-4 mt-4 mb-1">Price</div>
-            <form onSubmit={handleReAddSubmit}>
+            <div className="text-xl mr-4 mt-12 mb-1">Price</div>
+            <form onSubmit={handleReAddSubmit} className="flex flex-col gap-5 w-4/5 mt-2">
             <PriceInputBox
               value={nftPrice.value}
               onChange={nftPrice.onChange}
@@ -86,15 +86,15 @@ export const ReSale = ({ token, setIsOpenModal }: NftProps) => {
             {!isLoading && (
             <Button
               type="submit"
-              className="w-3/4 mt-4 inline-flex items-center justify-center rounded-md border-2 border-transparent bg-purple-500 bg-none px-8 py-1 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-400 cursor-pointer"
+              color="purple"
+              fontSize="xl"
             >
-              등록하기
+              Register
             </Button>
             )}
             {isLoading && (
               <Button
               type="submit"
-              className="w-3/4 mt-4 inline-flex items-center justify-center rounded-md border-2 border-transparent bg-purple-500 bg-none px-8 py-1 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow hover:bg-gray-400 cursor-pointer"
             >
               <LoadingSpinner /> Uploading...
             </Button>
