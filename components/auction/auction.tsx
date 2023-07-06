@@ -30,6 +30,7 @@ export const Auction = ({ token }: AuctionProps) => {
   const isCancel = address && address === token.seller && (!auctionEnded && token.openingPrice !== 0 || auctionEnded && token.highestBid == 0)
   const isEnded = address && address === token.seller && (auctionEnded && token.highestBid !== 0)
 
+
   const successCancel = () => toast.success('Success Cancel Auction !!')
   const successEnd = () => toast.success('Success Ended Auction !!')
 
@@ -142,17 +143,23 @@ export const Auction = ({ token }: AuctionProps) => {
     
     getAuction()
     handleTimerStart(newTimer)
+    console.log(token)
   }, [token, newTimer])
 
   return (
     <>
       <div className="w-full mt-4">
-        <TimerContainer
+        {address && address !== token.seller && token.openingPrice == 0
+        ? <></> 
+        : <TimerContainer
           days={days}
           hours={hours}
           minutes={minutes}
           seconds={seconds}
         />
+        }
+          
+   
         {isRegister && (
         <button
           type="button"

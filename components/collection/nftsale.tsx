@@ -8,7 +8,6 @@ import {
   ActivityData,
 } from "@utils/types/nft.interface";
 import Link from "next/link";
-import { UserAddress } from "./styled/nft.styled";
 import { Alert } from "@components/common/alert";
 import { useMarket } from "@utils/hooks/useMarket";
 import { useAccount } from "wagmi";
@@ -23,6 +22,7 @@ import { toast } from "react-toastify";
 import { useDecode } from "@utils/hooks/useDecode";
 import { Auction, AuctionContent, Bid } from "@components/auction";
 import { Button } from "@components/common/button";
+import { UserAddress } from "@components/common/copy/address";
 
 interface NftProps {
   collectionData: CollectionData;
@@ -36,7 +36,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
   const { decodeTransfer } = useDecode();
   const { metaData, imageUrl, isLoading } = useIpfs(token);
   const { convertKRW } = useCoinGecko();
-  const [isOpenAlert, setIsOpenAlert] = useState(false);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isBuyLoading, setIsBuyLoading] = useState(false);
   const [modalContent, setModalContent] = useState<string | null>(null);
@@ -53,9 +52,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
   const isResale =
     address && address === token.seller && token.openingPrice == 0;
   const isBid = address && address !== token.seller && token.openingPrice !== 0;
-
-  const slicedAddress =
-    token.seller.slice(0, 6) + "..." + token.seller.slice(-4);
   const parsedPrice = convertToWei(token.price, 0);
 
   const handleBuy = async () => {
@@ -85,10 +81,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     }
   };
 
-  const handleCopy = (address: string) => {
-    navigator.clipboard.writeText(address);
-    setIsOpenAlert(true);
-  };
 
   if (isLoading || isBuyLoading) return <LoadingSpinner2 />;
   // if (token.highestBid == 0 && token.openingPrice !== 0) return <>낙찰자 없이 경매가 종료되었습니다</>
@@ -101,7 +93,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
               <div className="lg:w-[576px]  overflow-hidden rounded-lg absolute">
                 {token.sold ? (
                   <div className="w-full h-full bg-gray-700 dark:bg-slate-300 opacity-75 absolute top-0 left-0">
-                    <div className="w-3/4 text-[70px] font-bold text-green-600 mx-auto mt-56 -rotate-12">
+                    <div className="w-3/4 text-[70px] font-bold text-gray-300 dark:text-gray-800 mx-auto mt-56 -rotate-12">
                       SOLD OUT !
                     </div>
                   </div>
@@ -217,12 +209,12 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
               <li className="flex items-center text-left text-sm font-medium text-gray-600  dark:text-gray-400 px-3">
                 {metaData.description}
               </li>
-              <h1 className="text-lg font-bold py-2">Owner</h1>
+
+              <h1 className="text-lg font-bold py-2">
+                {(token.highestBid !== 0) ? `HighestBidder` : `Owner`}
+                </h1>
               <li className="flex items-center text-left text-sm font-medium text-gray-600  dark:text-gray-400 px-3">
-                <UserAddress onClick={() => handleCopy(token.seller)}>
-                  {slicedAddress}
-                  <Icon icon="bxs:copy" className="ml-1" />
-                </UserAddress>
+              <UserAddress address={(token.highestBid !== 0) ? token.highestBidder :token.seller} />
               </li>
             </ul>
             <Auction token={token} />
@@ -242,14 +234,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
           </div>
         </div>
       </div>
-      {/* {isSuccessAlert && <SuccessAlert/>} */}
-      <Alert
-        isOpenAlert={isOpenAlert}
-        setIsOpenAlert={setIsOpenAlert}
-        color="green"
-      >
-        지갑 주소가 복사되었습니다
-      </Alert>
       {modalContent && isOpenModal && (
         <Modal
           isOpenModal={isOpenModal}
