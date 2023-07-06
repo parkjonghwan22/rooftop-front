@@ -1,7 +1,7 @@
 import { CollectionData } from '@utils/types/nft.interface'
 import request from '@utils/request'
 import Link from 'next/link'
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import {
     RankingCollectionWrapper,
@@ -22,15 +22,22 @@ interface CollectionsProps {
 interface CollectionChangeProps {
     collection: CollectionData
     index: number
+    sortColumn: string
+    setSortColumn: React.Dispatch<React.SetStateAction<string>>
 }
 
-const CollectionChange = ({ collection, index }: CollectionChangeProps) => {
+const CollectionChange = ({
+    collection,
+    index,
+    sortColumn,
+    setSortColumn,
+}: CollectionChangeProps) => {
     const { address } = useAccount()
     const queryClient = useQueryClient()
+
     const [isLoading, setIsLoading] = useState<boolean[]>(
         new Array(collection.address.length).fill(false)
     )
-
     const { getTradeSummary } = useEvent()
 
     const { data: summary, isLoading: summaryLoading } = useQuery(
@@ -40,6 +47,7 @@ const CollectionChange = ({ collection, index }: CollectionChangeProps) => {
             enabled: !!collection,
         }
     )
+
     if (summary === undefined) return null
 
     const followHandler = async (index: number) => {
@@ -61,7 +69,7 @@ const CollectionChange = ({ collection, index }: CollectionChangeProps) => {
                     .getQueryData<CollectionData[] | undefined>('allCollection')
                     ?.find((collection: CollectionData) => {
                         return collection.favorite.includes(address)
-                    })
+                })
                 queryClient.invalidateQueries('allCollection', { refetchInactive: true })
                 setIsLoading((prevLoading) => {
                     const newLoading = [...prevLoading]
@@ -86,7 +94,6 @@ const CollectionChange = ({ collection, index }: CollectionChangeProps) => {
                                     src={collection.logo}
                                     width="40"
                                     height="40"
-                                    alt="Alex Shatov"
                                 />
                             ) : (
                                 <></>
@@ -101,8 +108,7 @@ const CollectionChange = ({ collection, index }: CollectionChangeProps) => {
                     <div className="text-center font-normal pl-5 w-16 text-2xl">
                         {collection.totalVolume}
                     </div>
-
-                    <div className="text-left font-normal pl-5 w-16 text-2xl">MATIC</div>
+                    <div className="text-left font-normal pl-7 w-16 text-2xl">MATIC</div>
                 </div>
             </td>
             <td className="py-4 whitespace-nowrap">
@@ -111,7 +117,7 @@ const CollectionChange = ({ collection, index }: CollectionChangeProps) => {
                         {collection.floorPrice}
                     </div>
 
-                    <div className="text-left font-normal pl-5 w-1/4 text-2xl">MATIC</div>
+                    <div className="text-left font-normal pl-7 w-1/4 text-2xl">MATIC</div>
                 </div>
             </td>
             <td className="py-4 whitespace-nowrap">
@@ -163,9 +169,46 @@ const CollectionChange = ({ collection, index }: CollectionChangeProps) => {
 // ===========================================================================
 
 const Stats = ({ collectionDatas }: CollectionsProps) => {
-    const { address } = useAccount()
-    const queryClient = useQueryClient()
+    const [sortColumn, setSortColumn] = useState('Volume');
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+    const [sortedCollectionDatas, setSortedCollectionDatas] = useState<CollectionData[]>([]);
+    
 
+    useEffect(() => {
+      const sortedByVolume = [...collectionDatas].sort((a, b) => {
+        if (a.totalVolume < b.totalVolume) {
+          return sortDirection === 'asc' ? -1 : 1;
+        } else if (a.totalVolume > b.totalVolume) {
+          return sortDirection === 'asc' ? 1 : -1;
+        } else {
+          return 0;
+        }
+      });
+  
+      const sortedByFloorPrice = [...collectionDatas].sort((a, b) => {
+        if (a.floorPrice < b.floorPrice) {
+          return sortDirection === 'asc' ? -1 : 1;
+        } else if (a.floorPrice > b.floorPrice) {
+          return sortDirection === 'asc' ? 1 : -1;
+        } else {
+          return 0;
+        }
+      });
+      const selectedSortData = sortColumn === 'Volume' ? sortedByVolume : sortedByFloorPrice;
+  
+      setSortedCollectionDatas(selectedSortData);
+    }, [sortColumn, sortDirection]);
+  
+
+    const handleSortColumn = (column: string) => {
+      if (column === sortColumn) {
+        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+      } else {
+        setSortColumn(column);
+        setSortDirection('desc');
+      }
+    };
+  
     return (
         <>
             <TitleCollectionDiv>
@@ -183,27 +226,67 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                                         Collection
                                     </div>
                                 </th>
-                                <th className="p-2 whitespace-nowrap">
-                                    <div className="font-semibold text-left pl-8 text-3xl">
+                                <th
+                                    className="p-2 whitespace-nowrap"
+                                    onClick={() => handleSortColumn('Volume')}
+                                >
+                                    <div className="flex justify-evenly items-center font-semibold text-left pl-5 text-3xl">
                                         Volume
+                                        {sortColumn === 'Volume' && (
+                                            <>
+                                                {sortDirection === 'desc' ? (
+                                                    <Icon icon="fluent-mdl2:sort-down" style={{ fontSize: '1.5rem' }} />
+                                                ) : (
+                                                    <Icon icon="fluent-mdl2:sort-up" style={{ fontSize: '1.5rem' }} />
+                                                )}
+                                            </>
+                                        )}
+                                        {sortColumn !== 'Volume' && (
+                                            <Icon icon="radix-icons:caret-sort"/>
+                                        )}
                                     </div>
+
                                 </th>
-                                <th className="p-2 whitespace-nowrap">
-                                    <div className="font-semibold text-left text-3xl">
+                                <th
+                                    className="p-2 whitespace-nowrap"
+                                    onClick={() => handleSortColumn('FloorPrice')}
+                                >
+                                    <div className="flex justify-evenly items-center font-semibold text-left pl-5 text-3xl">
                                         Floor Price
+                                        {sortColumn === 'FloorPrice' && (
+                                            <>
+                                                {sortDirection === 'desc' ? (
+                                                    <Icon icon="fluent-mdl2:sort-down" style={{ fontSize: '1.5rem' }} />
+                                                ) : (
+                                                    <Icon icon="fluent-mdl2:sort-up" style={{ fontSize: '1.5rem' }}/>
+                                                )}
+                                            </>
+                                        )}
+                                        {sortColumn !== 'FloorPrice' && (
+                                            <Icon icon="radix-icons:caret-sort" />
+                                        )}
                                     </div>
                                 </th>
                                 <th className="p-2 whitespace-nowrap">
-                                    <div className="font-semibold text-left text-3xl">% Change</div>
+                                    <div className="flex justify-evenly items-center font-semibold text-left text-3xl">
+                                        % Change
+                                    </div>
                                 </th>
                                 <th className="p-2 whitespace-nowrap">
-                                    <div className="font-semibold text-center text-3xl">Follow</div>
+                                    <div className="flex justify-evenly items-center font-semibold text-center text-3xl">
+                                        Follow
+                                    </div>
                                 </th>
                             </tr>
                         </thead>
-                        {collectionDatas.map((collection, index) => (
+                        {sortedCollectionDatas.map((collection, index) => (
                             <tbody className="text-sm divide-y divide-gray-100" key={index}>
-                                <CollectionChange collection={collection} index={index} />
+                                <CollectionChange
+                                    collection={collection}
+                                    index={index}
+                                    sortColumn={sortColumn}
+                                    setSortColumn={setSortColumn}
+                                />
                             </tbody>
                         ))}
                     </table>

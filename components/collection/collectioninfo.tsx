@@ -21,7 +21,8 @@ import { CollectionData } from '@utils/types/nft.interface'
 export const CollectionInfo = ({ address }: { address: string }) => {
     const [collections, setCollections] = useState<CollectionData[]>([])
     const [isOpenModal, setIsOpenModal] = useState(false)
-    
+    const [isIndex , setIsIndex] = useState(0)
+
     const getCollections = async () => {
         try {
             const { data } = await request.get(`collection/${address}`)
@@ -40,7 +41,7 @@ export const CollectionInfo = ({ address }: { address: string }) => {
 
     return (
         <>
-            {collections.map((collection) => (
+            {collections.map((collection,index) => (
                 <SectionWrap key={collection.address}>
                     <Logo
                         src={collection.logo}
@@ -61,6 +62,7 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                         <Button
                             onClick={() => {
                                 setIsOpenModal(true)
+                                setIsIndex(index)
                             }}
                             color="blue"
                             size="w-28 h-10"
@@ -79,8 +81,8 @@ export const CollectionInfo = ({ address }: { address: string }) => {
             >
                 <CreateNft
                     setIsOpenModal={setIsOpenModal}
-                    collectionAddress={collections[0].address}
-                    royalty={collections[0].creatorFee}
+                    collectionAddress={collections[isIndex].address}
+                    royalty={collections[isIndex].creatorFee}
                 />
             </Modal>
         </>
