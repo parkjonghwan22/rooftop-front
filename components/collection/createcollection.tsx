@@ -44,7 +44,7 @@ export const AddNewCollection = () => {
 
     return (
         <SectionWrap>
-            <Button onClick={() => { setIsOpenModal(true) }} color="green" size="w-32" fontSize="lg" >
+            <Button onClick={() => setIsOpenModal(true)} color="green" size="w-32" fontSize="lg" >
                 <Icon icon="typcn:plus" className="text-xl mr-1" />
                 새 컬렉션
             </Button>

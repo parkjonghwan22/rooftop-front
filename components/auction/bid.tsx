@@ -65,11 +65,12 @@ export const Bid = ({ token, setIsOpenModal } : BidProps) => {
 
   return (
     <>
-      <div className="mx-auto px-4 py-4 w-[600px] h-full">
-        <div className="text-3xl font-bold ml-6">Place Bid</div>
-        <div className="flex flex-wrap h-4/5 mt-4">
-          <div className="w-1/2">
-            <div className="mt-5">
+      <div className="px-4 py-4 w-[420px] md:w-[600px]">
+        <h2 className="text-3xl font-bold ml-6">Place Bid</h2>
+        <div className="flex md:flex-row flex-col">
+
+          <div className="md:w-1/2 w-full">
+            <div className="mt-5" >
               <Image
                 src={
                   imageUrl ? imageUrl : "https://dummyimage.com/480x480/ccc/000"
@@ -84,7 +85,7 @@ export const Bid = ({ token, setIsOpenModal } : BidProps) => {
               {metaData.name}
             </div>
           </div>
-          <div className="w-1/2 pl-5 py-2">
+          <div className="md:w-1/2 w-full pl-5 py-2">
             <div className="text-sm text-gray-400">NetWork</div>
             <div className="flex items-center">
               <svg
@@ -112,7 +113,7 @@ export const Bid = ({ token, setIsOpenModal } : BidProps) => {
             <div className="font-bold">{remainingTime} minutes</div>
             <div className="mt-2 border-2 dark:border-0 dark:bg-gray-900 rounded-lg px-2 py-2">
               <div className="text-sm text-gary-400 pb-2">
-                 Current Highest Bid ${token.openingPrice/ (10 ** 18)} 
+                 Current Highest Bid ${token.highestBid / (10 ** 18)} 
               </div>
               <PriceInputBox
                 value={nftPrice.value}

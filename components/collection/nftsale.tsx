@@ -42,6 +42,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const isBuy = address && address !== token.seller && token.openingPrice == 0 && !token.sold;
     const isResale = address && address === token.seller && token.openingPrice == 0;
     const isBid = address && address !== token.seller && token.openingPrice !== 0;
+
     const parsedPrice = convertToWei(token.price, 0);
 
     const handleBuy = async () => {
