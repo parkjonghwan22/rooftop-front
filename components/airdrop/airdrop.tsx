@@ -1,4 +1,4 @@
-import { AirdropCurrent, AirdropUpcoming } from "./"
+import { AirdropCurrent, AirdropUpcoming, LeaderBoard } from "./"
 import { AirdropData } from "@utils/types/nft.interface"
 
 
@@ -18,8 +18,8 @@ export const Airdrop = ({ airdropData }: AirdropProps) => {
     return (
       <>
         <AirdropCurrent airdrop={currentAirdrop} />
+        <LeaderBoard airdrop={currentAirdrop} />
         <AirdropUpcoming />
-        <div>leaderboard</div>
       </>
     );
   };

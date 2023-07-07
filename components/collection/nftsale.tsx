@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Chart2 } from "./styled/chart.styled";
 import { Icon } from "@iconify/react";
-import {
-  CollectionData,
-  TokenData,
-  ActivityData,
-} from "@utils/types/nft.interface";
+import { CollectionData,TokenData, ActivityData } from "@utils/types/nft.interface";
 import Link from "next/link";
 import { UserAddress } from "./styled/nft.styled";
 import { Alert } from "@components/common/alert";
@@ -46,8 +42,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     setIsOpenModal(true);
   };
   const isBuy = address && address !== token.seller && token.openingPrice == 0;
-  const isResale =
-    address && address === token.seller && token.openingPrice == 0;
+  const isResale =address && address === token.seller && token.openingPrice == 0;
   const isBid = address && address !== token.seller && token.openingPrice !== 0;
 
   const slicedAddress =
@@ -63,7 +58,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
         gasLimit: 800000,
       });
       const receipt = await buyNFT.wait();
-      console.log("=====================", receipt);
       if (receipt.logs) {
         const decodedData = decodeTransfer(receipt, token);
         const response = await request.post("event/transfer", {
@@ -87,7 +81,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
   };
 
   if (isLoading || isBuyLoading) return <LoadingSpinner2 />;
-  // if (token.highestBid == 0 && token.openingPrice !== 0) return <>낙찰자 없이 경매가 종료되었습니다</>
   return (
     <>
       <div className="container mx-auto px-8 xl:px-32">
@@ -96,11 +89,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
             <div className="lg:flex lg:items-start">
               <div className="lg:w-[576px]  overflow-hidden rounded-lg">
                 <Image
-                  src={
-                    imageUrl
-                      ? imageUrl
-                      : "https://dummyimage.com/480x480/ccc/000"
-                  }
+                  src={ imageUrl ? imageUrl : "https://dummyimage.com/480x480/ccc/000" }
                   alt="nft image"
                   width={720}
                   height={720}
@@ -129,32 +118,17 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                 </span>
               </div>
               {isBuy && (
-                <Button
-                  color="blue"
-                  size="w-40"
-                  fontSize="md"
-                  onClick={handleBuy}
-                >
+                <Button color="blue" size="w-40" fontSize="md" onClick={handleBuy}>
                   Buy Now
                 </Button>
               )}
               {isResale && (
-                <Button
-                  color="red"
-                  size="w-40"
-                  fontSize="md"
-                  onClick={() => handleOpenModal("ReSale")}
-                >
+                <Button color="red" size="w-40" fontSize="md" onClick={() => handleOpenModal("ReSale")}>
                   Set New Price
                 </Button>
               )} 
                {isBid && (
-                <Button
-                  color="purple"
-                  size="w-40"
-                  fontSize="md"
-                  onClick={() => handleOpenModal("Bid")}
-                >
+                <Button color="purple" size="w-40" fontSize="md" onClick={() => handleOpenModal("Bid")}>
                   Place Bid
                 </Button>
               )}
