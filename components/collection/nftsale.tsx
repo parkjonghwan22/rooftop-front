@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Chart2 } from "./styled/chart.styled";
+import { Icon } from "@iconify/react";
 import { CollectionData, TokenData, ActivityData } from "@utils/types/nft.interface";
 import Link from "next/link";
 import { useMarket } from "@utils/hooks/useMarket";
@@ -69,7 +70,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
         }
     };
 
-
     if (isLoading || isBuyLoading) return <LoadingSpinner2 />;
     return (
         <>
@@ -106,18 +106,18 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                         <div className="mt-5 flex flex-col items-center justify-between space-y-4 border-t border-b border-gray-200 dark:border-gray-400 py-4 sm:flex-row sm:space-y-0">
                             <CurrentPrice price={token.price} bid={token.highestBid} />
                             {isBuy && (
-                                <Button color="blue" size="w-40" fontSize="md" onClick={handleBuy}>
+                                <Button color="blue" size="w-40" fontSize="md" fontWeight="bold" onClick={handleBuy}>
                                     Buy Now
                                 </Button>
                             )}
                             {isResale && (
-                                <Button color="red" size="w-40" fontSize="md" onClick={() => handleOpenModal("ReSale")}>
+                                <Button color="red" size="w-40" fontSize="md" fontWeight="bold" onClick={() => handleOpenModal("ReSale")}>
                                     Set New Price
                                 </Button>
 
                             )}
                             {isBid && (
-                                <Button color="purple" size="w-40" fontSize="md" onClick={() => handleOpenModal("Bid")}>
+                                <Button color="purple" size="w-40" fontSize="md" fontWeight="bold" onClick={() => handleOpenModal("Bid")}>
                                     Place Bid
                                 </Button>
                             )}

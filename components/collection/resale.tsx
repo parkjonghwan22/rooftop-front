@@ -95,6 +95,8 @@ export const ReSale = ({ token, setIsOpenModal }: NftProps) => {
             {isLoading && (
               <Button
               type="submit"
+              color="purple"
+              fontSize="xl"
             >
               <LoadingSpinner /> Uploading...
             </Button>
