@@ -1,3 +1,4 @@
+import { Button } from "@components/common/button";
 import { PriceInputBox } from "@components/common/input";
 import { LoadingSpinner } from "@components/common/loading";
 import { useInput } from "@utils/hooks/useInput";
@@ -9,6 +10,7 @@ import { ethers } from "ethers";
 
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 interface NftProps {
   token: TokenData;
@@ -52,6 +54,7 @@ export const AuctionContent = ({
           setIsLoading(false)
           setIsOpenModal(false)
           setAuctionEnded(false)
+          toast.success("Success Start Auction")
 
           const currentTime = new Date()
           const endTime = new Date(currentTime.getTime() + duration * 1000)
@@ -131,29 +134,38 @@ export const AuctionContent = ({
 
               <div className="space-y-4 flex flex-wrap md:flex-row items-center md:space-y-0">
                 <input
-                  className="border border-gray-600 text-xl md:text-lg font-redhat outline-none mb-5 px-2 py-1 w-full rounded-lg bg-gray-800 text-white"
+                  className="border border-gray-300 text-xl md:text-lg font-redhat outline-none mb-5 px-2 py-1 w-full rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white"
                   name="Timer Input"
                   type="number"
                   placeholder="Please set the auction period."
                   onChange={handleChange}
                   min={0}
                 />
+                <div className="">
+
                   {isLoading && (
-                <button
+                <Button
+                  color="red"
+                  size="w-52"
+                  fontSize="md"
+                  fontWeight="bold"
                   onClick={handleClick}
-                  className="flex items-center justify-center bg-red-500 text-lg font-semibold font-redhat w-full py-2 md:text-xl rounded-lg text-white hover:bg-rose-500 hover:text-rose-100 transition duration-300 ease-in"
                 >
                     <LoadingSpinner/> Registering..
-                </button>
+                </Button>
                   )}
                   {!isLoading && (
-                    <button
+                    <Button
+                    color="red"
+                  size="w-52"
+                  fontSize="md"
+                  fontWeight="bold"
                     onClick={handleClick}
-                    className="bg-red-500 text-xl font-semibold font-redhat w-full py-2 md:text-xl rounded-lg text-white hover:bg-purple-500 hover:text-rose-100 transition duration-300 ease-in"
                   >
                     Register
-                  </button>
+                  </Button>
                   )}
+                </div>
               </div>
             </div>
           </div>
