@@ -19,9 +19,9 @@ export const useEvent = () => {
             throw new Error(error as string);
         }
     }
-    const getUserActivity = async (from: string) => {
+    const getUserActivity = async (to: string) => {
         try {
-            const { data } = await request.get(`event?from=${from}`);
+            const { data } = await request.get(`event?to=${to}`);
             return data;
         } catch (error: unknown) {
             throw new Error(error as string);

@@ -1,4 +1,4 @@
-import { CollectionData, TokenData } from '@utils/types/nft.interface'
+import { ActivityData, CollectionData, TokenData } from '@utils/types/nft.interface'
 import { useIpfs } from '@utils/hooks/useIpfs'
 import { MynftsWrap } from './styled/Mynfts.styled'
 import Image from 'next/image'
@@ -6,11 +6,11 @@ import Link from 'next/link'
 import { LoadingSpinner } from '@components/common/loading'
 import { useCoinGecko } from '@utils/hooks/useCoingecko'
 
-const NFTItem = ({ token }: { token: TokenData }) => {
+const NFTItem = ({ token ,activity}: { token: TokenData,activity: ActivityData[] }) => {
     const { metaData, imageUrl, isLoading } = useIpfs(token)
-    const {getHistoricalPrice} = useCoinGecko()
-
-
+    const { getHistoricalPrice } = useCoinGecko()
+    console.log("NFTItem activity :", activity)
+    console.log("NFTItem token :" , token)
     if (isLoading) return <LoadingSpinner />
     return (
         <>
@@ -61,15 +61,15 @@ const NFTItem = ({ token }: { token: TokenData }) => {
     )
 }
 
-export const MyNFT = ({ tokenData }: { tokenData: TokenData[] }) => {
+export const MyNFT = ({ tokenData, activity }: { tokenData: TokenData[]; activity: ActivityData[] }) => {
     const sortedData = tokenData ? tokenData.sort((a, b) => b.id - a.id) : []
-
+    console.log("tokenData MyNFT :: " , tokenData )
     return (
         <>
             <MynftsWrap>
                 <div className="flex flex-col justify-center mt-2 w-full">
                     {sortedData.map((token) => (
-                        <NFTItem key={token.id} token={token} />
+                        <NFTItem key={token.id} token={token} activity={activity}/>
                     ))}
                 </div>
             </MynftsWrap>

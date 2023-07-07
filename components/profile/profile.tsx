@@ -141,7 +141,7 @@ export const ProfileCard = ({ user, tokenData, activity,collectionData}: Profile
           </div>
         </div>
         <div className=" mx-auto ml-6 mr-6 dark:bg-gray-600 shadow rounded-b-lg border-t-2 dark:border-t-2 dark:border-gray-900">
-          {activeTab === "nfts" && <MyNFT tokenData={tokenData} />}
+          {activeTab === "nfts" && <MyNFT tokenData={tokenData} activity={activity}/>}
           {activeTab === "activity" && <Activity activity={activity} />}
           {activeTab === "favorites" && <Favorites collectionData = {collectionData}/>}
         </div>
