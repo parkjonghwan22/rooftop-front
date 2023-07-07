@@ -149,7 +149,7 @@ export const Auction = ({ token }: AuctionProps) => {
   return (
     <>
       <div className="w-full mt-4">
-        {address && address !== token.seller && token.openingPrice == 0
+        {address && address !== token.seller && (token.openingPrice == 0 || token.auctionEndTime) 
         ? <></> 
         : <TimerContainer
           days={days}
