@@ -9,6 +9,7 @@ import { ethers } from "ethers";
 import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 import { LoadingSpinner } from "@components/common/loading";
+import { Button } from "@components/common/button";
 
 
 interface BidProps {
@@ -120,18 +121,19 @@ export const Bid = ({ token, setIsOpenModal } : BidProps) => {
                 icon="cryptocurrency-color:matic"
                 placeholder="0.000"
               />
+              <div className="mt-3">
               {!isLoading && (
-              <button onClick={handleBid}
-              className="mt-4 bg-red-500 dark:bg-purple-500 rounded-lg w-full py-3 text-2xl font-bold text-center hover:bg-red-500 dark:hover:bg-red-500 text-white cursor-pointer">
+              <Button onClick={handleBid} color="purple"fontSize="md" fontWeight="bold">
                 Bid
-              </button>
+              </Button>
               )}
               {isLoading && (
-                <button onClick={handleBid}
-                className="mt-4 bg-red-500 dark:bg-purple-500 rounded-lg w-full py-3 text-2xl font-bold text-center hover:bg-red-500 dark:hover:bg-red-500 text-white cursor-pointer">
+                <Button onClick={handleBid} color="purple" fontSize="md" fontWeight="bold">
                   <LoadingSpinner/> Bid
-                </button>
+                </Button>
               )}
+
+              </div>
             </div>
           </div>
         </div>

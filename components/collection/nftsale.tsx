@@ -2,7 +2,11 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Chart2 } from "./styled/chart.styled";
 import { Icon } from "@iconify/react";
-import { CollectionData,TokenData, ActivityData } from "@utils/types/nft.interface";
+import {
+  CollectionData,
+  TokenData,
+  ActivityData,
+} from "@utils/types/nft.interface";
 import Link from "next/link";
 import { Alert } from "@components/common/alert";
 import { useMarket } from "@utils/hooks/useMarket";
@@ -77,7 +81,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     }
   };
 
-
   if (isLoading || isBuyLoading) return <LoadingSpinner2 />;
   return (
     <>
@@ -96,7 +99,11 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                   <div></div>
                 )}
                 <Image
-                  src={ imageUrl ? imageUrl : "https://dummyimage.com/480x480/ccc/000" }
+                  src={
+                    imageUrl
+                      ? imageUrl
+                      : "https://dummyimage.com/480x480/ccc/000"
+                  }
                   alt="nft image"
                   width={720}
                   height={720}
@@ -150,21 +157,33 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                 )}
               </div>
               {isBuy && (
-                <Button color="blue" size="w-40" fontSize="md" onClick={handleBuy}>
+                <Button
+                  color="blue"
+                  size="w-40"
+                  fontSize="md"
+                  fontWeight="bold"
+                  onClick={handleBuy}
+                >
                   Buy Now
                 </Button>
               )}
               {isResale && (
-                <Button color="red" size="w-40" fontSize="md" onClick={() => handleOpenModal("ReSale")}>
+                <Button
+                  color="red"
+                  size="w-40"
+                  fontSize="md"
+                  fontWeight="bold"
+                  onClick={() => handleOpenModal("ReSale")}
+                >
                   Set New Price
                 </Button>
-
               )}
               {isBid && (
                 <Button
                   color="purple"
                   size="w-40"
                   fontSize="md"
+                  fontWeight="bold"
                   onClick={() => handleOpenModal("Bid")}
                 >
                   Place Bid
@@ -193,10 +212,14 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
               </li>
 
               <h1 className="text-lg font-bold py-2">
-                {(token.highestBid !== 0) ? `HighestBidder` : `Owner`}
-                </h1>
+                {token.highestBid !== 0 ? `HighestBidder` : `Owner`}
+              </h1>
               <li className="flex items-center text-left text-sm font-medium text-gray-600  dark:text-gray-400 px-3">
-              <UserAddress address={(token.highestBid !== 0) ? token.highestBidder :token.seller} />
+                <UserAddress
+                  address={
+                    token.highestBid !== 0 ? token.highestBidder : token.seller
+                  }
+                />
               </li>
             </ul>
             <Auction token={token} />
