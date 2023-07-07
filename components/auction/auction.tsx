@@ -27,8 +27,9 @@ export const Auction = ({ token }: AuctionProps) => {
   const { market } = useMarket()
 
   const isRegister = address && address === token.seller && !auctionEnded && token.openingPrice == 0
-  const isCancel = address && address === token.seller && !auctionEnded && token.openingPrice !== 0
-  const isEnded = address && address === token.seller && auctionEnded
+  const isCancel = address && address === token.seller && (!auctionEnded && token.openingPrice !== 0 || auctionEnded && token.highestBid == 0)
+  const isEnded = address && address === token.seller && (auctionEnded && token.highestBid !== 0)
+
 
   const successCancel = () => toast.success('Success Cancel Auction !!')
   const successEnd = () => toast.success('Success Ended Auction !!')
@@ -48,7 +49,9 @@ export const Auction = ({ token }: AuctionProps) => {
     // }
 
       const endTime= Number(new Date(data.endTime).getTime())
+      console.log(endTime)
       const currentTime = Number(new Date().getTime())
+      console.log(currentTime)
       console.log(endTime - currentTime)
       if (endTime <= currentTime) {
         setAuctionEnded(true)
@@ -140,17 +143,23 @@ export const Auction = ({ token }: AuctionProps) => {
     
     getAuction()
     handleTimerStart(newTimer)
+    console.log(token)
   }, [token, newTimer])
 
   return (
     <>
       <div className="w-full mt-4">
-        <TimerContainer
+        {address && address !== token.seller && (token.openingPrice == 0 || token.auctionEndTime) 
+        ? <></> 
+        : <TimerContainer
           days={days}
           hours={hours}
           minutes={minutes}
           seconds={seconds}
         />
+        }
+          
+   
         {isRegister && (
         <button
           type="button"
@@ -165,7 +174,7 @@ export const Auction = ({ token }: AuctionProps) => {
         {isCancel && (
         <button
           type="button"
-          onClick={handleEndAuction}
+          onClick={handleCancelAuction}
           className=" mt-4 inline-flex items-center justify-center rounded-md border-2 border-transparent dark:bg-purple-500 bg-none px-32 py-2 text-center text-base font-bold text-white transition-all duration-200 ease-in-out focus:shadow dark:hover:bg-blue-800"
         >
           {isLoading ? <><LoadingSpinner/>Pending...</> : <>Cancel Auction</>} 

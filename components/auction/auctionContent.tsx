@@ -97,10 +97,10 @@ export const AuctionContent = ({
 
   return (
     <>
-      <div className="px-3 py-3 w-full h-5/6">
-        <div className="text-2xl font-bold ml-3">Auction</div>
-        <div className="flex mt-2">
-          <div className="w-1/2 ml-4">
+      <div className="px-3 py-3 w-full h-full max-h-9/10 overflow-y-scroll">
+        <div className="text-3xl font-bold ml-3">Auction</div>
+        <div className="mx-auto mt-6">
+          <div className="w-full">
             <Image
               src={
                 imageUrl ? imageUrl : "https://dummyimage.com/480x480/ccc/000"
@@ -108,17 +108,17 @@ export const AuctionContent = ({
               alt="test"
               width={1000}
               height={1000}
-              className="object-fill w-60 h-60 mx-auto rounded-lg border-4 border-red-500 dark:border-white"
+              className="object-fill w-80 h-80 mx-auto rounded-full border-4 border-red-500 dark:border-white"
             />
           </div>
-          <div className="w-1/2 flex flex-col pl-10">
-            <div className="flex items-center">
-              <div className="w-2/4 text-xl font-bold text-ellipsis overflow-hidden">
+          <div className="w-full flex flex-col mt-7 pl-32">
+            <div className="flex items-center mb-6">
+              <div className="text-3xl font-bold text-ellipsis overflow-hidden">
                 {metaData.name}
               </div>
-              <div className="text-sm ml-2">#{token.tokenId}</div>
+              <div className="text-sm ml-4">#{token.tokenId}</div>
             </div>
-            <div className="text-lg mr-4 mt-2 mb-1">Starting price</div>
+            <div className="text-lg mr-4 mb-1">Starting price</div>
             <div className="w-2/3">
               <PriceInputBox
                 value={nftPrice.value}
@@ -127,21 +127,21 @@ export const AuctionContent = ({
                 icon="cryptocurrency-color:matic"
                 placeholder="0.000"
               />
-              <div className="text-lg mt-2">Auction period</div>
+              <div className="text-lg mt-2 mb-1">Auction period</div>
 
-              <div className="mx-auto space-y-4 flex flex-wrap md:flex-row justify-center items-center md:space-y-0">
+              <div className="space-y-4 flex flex-wrap md:flex-row items-center md:space-y-0">
                 <input
-                  className="text-xl md:text-lg font-redhat outline-none mb-3 px-2 py-1 w-40 rounded-lg bg-gray-800 text-white"
+                  className="border border-gray-600 text-xl md:text-lg font-redhat outline-none mb-5 px-2 py-1 w-full rounded-lg bg-gray-800 text-white"
                   name="Timer Input"
                   type="number"
-                  placeholder="시간설정"
+                  placeholder="Please set the auction period."
                   onChange={handleChange}
                   min={0}
                 />
                   {isLoading && (
                 <button
                   onClick={handleClick}
-                  className="flex items-center mt-1 bg-red-500 text-lg font-semibold font-redhat px-4 py-1 md:text-xl rounded-lg text-white hover:bg-rose-500 hover:text-rose-100 transition duration-300 ease-in"
+                  className="flex items-center justify-center bg-red-500 text-lg font-semibold font-redhat w-full py-2 md:text-xl rounded-lg text-white hover:bg-rose-500 hover:text-rose-100 transition duration-300 ease-in"
                 >
                     <LoadingSpinner/> Registering..
                 </button>
@@ -149,7 +149,7 @@ export const AuctionContent = ({
                   {!isLoading && (
                     <button
                     onClick={handleClick}
-                    className="mt-1 bg-red-500 text-xl font-semibold font-redhat px-12 py-1 md:text-xl rounded-lg text-white hover:bg-rose-500 hover:text-rose-100 transition duration-300 ease-in"
+                    className="bg-red-500 text-xl font-semibold font-redhat w-full py-2 md:text-xl rounded-lg text-white hover:bg-purple-500 hover:text-rose-100 transition duration-300 ease-in"
                   >
                     Register
                   </button>

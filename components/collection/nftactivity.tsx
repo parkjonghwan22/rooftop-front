@@ -22,7 +22,6 @@ export const NFTActivity = ({ token, activity }: { token: TokenData, activity: A
     const TdStyled = tw.td`
         px-6 py-3 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 dark:bg-gray-600
     `
-
     return (
         <>
             <div className="flex flex-col">

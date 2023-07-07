@@ -30,6 +30,7 @@ module.exports = {
         zoomIn: "zoomIn 1s",
         zoomOut: "zoomOut 1s",
         flip: "flip 1s cubic-bezier(0, 0, 0.2, 1) infinite",
+        bounce: "bounce 1s infinite"
       },
       keyframes: {
         flip: {
@@ -50,11 +51,11 @@ module.exports = {
         },
         bounce: {
           "0%, 100%": {
-            transform: "translateY(-55%)",
+            transform: "translateY(-25%)",
             "animation-timing-function": "cubic-bezier(0.8,0,1,1)",
           },
           "50%": {
-            transform: "none",
+            transform: "translateY(0)",
             "animation-timing-function": "cubic-bezier(0,0,0.2,1)",
           },
         },

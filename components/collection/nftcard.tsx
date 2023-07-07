@@ -6,7 +6,7 @@ import { Icon } from '@iconify/react';
 import { useIpfs } from '@utils/hooks/useIpfs';
 import request from '@utils/request';
 import { useAccount } from 'wagmi';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useQueryClient } from "react-query";
 import { LoadingSpinner } from '@components/common/loading';
 import { CartType } from '@utils/types/user.interface';
@@ -23,7 +23,8 @@ export const NFTCard = ({ token, isSelected }: NFTCardProps) => {
     const { _id } = router.query;
     const { metaData, imageUrl, isLoading } = useIpfs(token)
     const [isCartLoading, setIsCartLoading] = useState(false)
-
+    const [remainingTime, setRemainingTime] = useState(0)
+    
     const handleAddToCart = async () => {
         try {
             if (!address) return
@@ -61,6 +62,20 @@ export const NFTCard = ({ token, isSelected }: NFTCardProps) => {
         }
     }
 
+    useEffect(() => {
+        const endTime = token.auctionEndTime * 1000
+        console.log(endTime)
+        const currentTime = new Date().getTime()
+        console.log(currentTime)
+        if(endTime > currentTime) {
+            const AuctionTime = Math.floor((endTime-currentTime) / (1000))
+            const Time = Math.floor(AuctionTime / 60)
+            setRemainingTime(Time)
+        }
+    }, [token])
+
+    console.log("++++++++++",remainingTime)
+
     if (isLoading) return <LoadingSpinner />
     return (
         <div className={`w-64 mb-10 mx-5 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 relative 
@@ -73,7 +88,7 @@ export const NFTCard = ({ token, isSelected }: NFTCardProps) => {
             </div>
             {token.openingPrice !== 0 && (
                 <div className="absolute top-2 right-2 text-white bg-purple-600 px-2 py-1 rounded-lg text-xs font-semibold">
-                    {token.auctionEndTime}시간 후 경매종료
+                    {remainingTime} 분 후 경매종료
                 </div>
             )}
             <Link href={`/collections/${_id}/nft?id=${token.id}`}>
