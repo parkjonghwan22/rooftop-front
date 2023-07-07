@@ -3,14 +3,14 @@ import { StyledOptions, StyledProps } from '@utils/types/style.interface'
 import { Icon } from '@iconify/react'
 import tw from 'tailwind-styled-components'
 
-const Logo = tw.svg`
+const Logo = tw.div`
   w-10 h-10 text-white p-2 bg-red-500 rounded-full
 `
 
 export const TitleContainer = () => {
     return (
         <div className="flex items-center">
-            <Logo
+            {/* <Logo
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 stroke="currentColor"
@@ -21,7 +21,12 @@ export const TitleContainer = () => {
                 viewBox="0 0 24 24"
             >
                 <path d="M19 16h3L12 7L2 16h3l7-6.31L19 16M7 8.81V7H4v4.5l3-2.69Z"></path>
-            </Logo>
+            </Logo> */}
+            {/* <Logo>
+                <Icon icon="icon-park-outline:floor-tile" className="text-2xl text-white" />
+                <Icon icon="simple-icons:databricks" className="text-2xl" />
+            </Logo> */}
+            <Icon icon="cryptocurrency:matic" className="text-3xl text-red-500" />
             <span className="pl-2 self-center hidden lg:block lg:text-xl font-semibold whitespace-nowrap dark:text-white">
                 ROOFTOP
             </span>

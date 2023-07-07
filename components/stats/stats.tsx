@@ -10,8 +10,8 @@ import {
     TitleCollectionH2,
 } from './styled/stats.styled'
 import { Icon } from '@iconify/react'
-import { useQueryClient, useQuery } from 'react-query'
-import { LoadingSpinner, LoadingSpinner2 } from '@components/common/loading'
+import { useQuery } from 'react-query'
+import { LoadingSpinner } from '@components/common/loading'
 import { useEvent } from '@utils/hooks/useEvent'
 
 interface CollectionsProps {
@@ -23,21 +23,33 @@ interface CollectionChangeProps {
     index: number
     sortColumn: string
     setSortColumn: React.Dispatch<React.SetStateAction<string>>
-    isCollectionLoading: boolean
-    setIsCollectionLoading: React.Dispatch<React.SetStateAction<boolean[]>>
 }
 
-const CollectionChange = ({
-    collection,
-    index,
-    sortColumn,
-    setSortColumn,
-    isCollectionLoading,
-    setIsCollectionLoading,
-}: CollectionChangeProps) => {
+const ChartItem = ({ collection, index, sortColumn, setSortColumn }: CollectionChangeProps) => {
     const { address } = useAccount()
-    const queryClient = useQueryClient()
     const { getTradeSummary } = useEvent()
+    const [isCollectionLoading, setIsCollectionLoading] = useState(false)
+    const [isFavorite, setIsFavorite] = useState(false)
+
+    const followHandler = async (index: number) => {
+        if (!address) return
+        try {
+            setIsCollectionLoading(true)
+
+            const { data } = await request.post(`collection/follow`, {
+                address,
+                collection_address: collection.address,
+            })
+
+            if (data) {
+                setIsFavorite((prevState) => !prevState);
+                setIsCollectionLoading(false)
+            }
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
 
     const { data: summary, isLoading: summaryLoading } = useQuery(
         ['activity', collection.address],
@@ -47,94 +59,61 @@ const CollectionChange = ({
         }
     )
 
-    if (summary === undefined) return null
-
-  
-    const followHandler = async (index: number) => {
-        if (!address) return
-
-        try {
-            setIsCollectionLoading(prev => {
-                const updatedLoading = [...prev]
-                updatedLoading[index] = true
-                return updatedLoading
-            })
-
-            const response = await request.post(`collection/follow`, {
-                address,
-                collection_address: collection.address,
-            })
-
-            if (response) {
-                const foundFavorite = queryClient
-                    .getQueryData<CollectionData[] | undefined>('collection')
-                    ?.find((collection: CollectionData) => {
-                        return collection.favorite.includes(address)
-                    })
-                queryClient.invalidateQueries('collection',{ refetchInactive: true })
-                setIsCollectionLoading(prev => {
-                    const updatedLoading = [...prev]
-                    updatedLoading[index] = false
-                    return updatedLoading
-                })
-    
-            }
-        } catch (e) {
-            console.error(e)
+    useEffect(() => {
+        if (collection.favorite.includes(`${address}`)) {
+            setIsFavorite(true)
         }
-    }
+    }, [address, collection])
 
+    if (summary === undefined) return null
     return (
-        <tr className="h-24">
+        <tr className="h-24 text-lg md:text-xl">
             <td className="p-2 whitespace-nowrap">
                 <Link href={`/collections/${collection.address}`}>
                     <div className="flex items-center">
                         <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
-                            {collection.logo ? (
+                            {collection.logo && (
                                 <img
                                     className="rounded-full"
                                     src={collection.logo}
                                     width="40"
                                     height="40"
                                 />
-                            ) : (
-                                <></>
                             )}
                         </div>
-                        <div className="font-medium text-2xl">{collection.name}</div>
+                        <div className="font-medium">{collection.name}</div>
                     </div>
                 </Link>
             </td>
             <td className="p-2 whitespace-nowrap">
-                <div className="flex items-center">
-                    <div className="text-center font-normal pl-5 w-16 text-2xl">
-                        {collection.totalVolume}
+                <div className="flex items-center lg:pl-4">
+                    <div className="text-center flex items-center">
+                        <Icon icon="cryptocurrency-color:matic" />
+                        <span className="ml-1">{collection.totalVolume}</span>
                     </div>
-                    <div className="text-left font-normal pl-7 w-16 text-2xl">MATIC</div>
                 </div>
             </td>
             <td className="py-4 whitespace-nowrap">
-                <div className="flex items-center">
-                    <div className="text-center font-normal pl-5 w-1/4 text-2xl">
-                        {collection.floorPrice}
+                <div className="flex items-center lg:pl-6">
+                    <div className="text-center flex items-center">
+                        <Icon icon="cryptocurrency-color:matic" />
+                        <span className="ml-1">{collection.floorPrice}</span>
                     </div>
-
-                    <div className="text-left font-normal pl-7 w-1/4 text-2xl">MATIC</div>
                 </div>
             </td>
             <td className="py-4 whitespace-nowrap">
-                <div className="flex items-center ml-7">
-                    <div className="text-center font-normal pl-5 w-1/4 text-2xl">
+                <div className="flex items-center justify-center">
+                    <div className="text-left">
                         {Number(summary.percentage) === 0 ? (
-                            <div className="px-2 inline-flex text-3xl leading-7 black:text-white white:text-black">
+                            <div className="px-2 inline-flex leading-7 black:text-white white:text-black">
                                 <Icon icon="carbon:undefined-filled" />
                             </div>
                         ) : Number(summary.percentage) > 0 ? (
-                            <div className="px-2 inline-flex text-xl leading-7 font-semibold rounded-full text-green-600">
+                            <div className="px-2 inline-flex leading-7 font-semibold rounded-full text-green-600">
                                 {`+` + Number(summary.percentage) + `%`}
                             </div>
                         ) : (
-                            <div className="px-2 inline-flex text-xl leading-7 font-semibold rounded-full text-red-600">
+                            <div className="px-2 inline-flex leading-7 font-semibold rounded-full text-red-600">
                                 {Number(summary.percentage) + `%`}
                             </div>
                         )}
@@ -142,27 +121,16 @@ const CollectionChange = ({
                 </div>
             </td>
             <td className="p-2 whitespace-nowrap">
-                {isCollectionLoading ? 
-                    <LoadingSpinner />
-                 : (collection.favorite.includes(`${address}`)) ? (
-                    <div className="flex justify-center text-lg text-center">
+                {isCollectionLoading ?
+                    <LoadingSpinner /> :
+                    <div className="flex justify-center text-center">
                         <div onClick={() => followHandler(index)}>
                             <Icon
-                                icon="noto-v1:star"
-                                className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
+                                icon={isFavorite ? "noto-v1:star" : "fluent:star-add-24-regular"}
+                                className="text-gray-600 dark:text-gray-300 cursor-pointer text-[30px]"
                             />
                         </div>
-                    </div>
-                ) : (
-                    <div className="flex justify-center text-lg text-center">
-                        <div onClick={() => followHandler(index)}>
-                            <Icon
-                                icon="fluent:star-add-24-regular"
-                                className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
-                            />
-                        </div>
-                    </div>
-                )}
+                    </div>}
             </td>
         </tr>
     )
@@ -170,13 +138,19 @@ const CollectionChange = ({
 
 // ===========================================================================
 
-const Stats = ({ collectionDatas }: CollectionsProps) => {
+const ChartList = ({ collectionDatas }: CollectionsProps) => {
     const [sortColumn, setSortColumn] = useState('Volume')
     const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
     const [sortedCollectionDatas, setSortedCollectionDatas] = useState<CollectionData[]>([])
-    const [isCollectionLoading, setIsCollectionLoading] = useState<boolean[]>(
-        new Array(collectionDatas.length).fill(false)
-    )
+
+    const handleSortColumn = (column: string) => {
+        if (column === sortColumn) {
+            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+        } else {
+            setSortColumn(column)
+            setSortDirection('desc')
+        }
+    }
 
     useEffect(() => {
         const sortedByVolume = [...collectionDatas].sort((a, b) => {
@@ -203,14 +177,6 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
         setSortedCollectionDatas(selectedSortData)
     }, [sortColumn, sortDirection])
 
-    const handleSortColumn = (column: string) => {
-        if (column === sortColumn) {
-            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
-        } else {
-            setSortColumn(column)
-            setSortDirection('desc')
-        }
-    }
 
     return (
         <>
@@ -220,20 +186,20 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                 </TitleCollectionDiv2>
             </TitleCollectionDiv>
             <RankingCollectionWrapper>
-                <div className="w-full overflow-x-auto ">
-                    <table className="min-w-full divide-y divide-gray-200 lg:w-full md: w-3/4 sm:w-2/4 mx-auto">
-                        <thead className="font-semibold uppercase lg:w-full md: w-3/4 sm:w-2/4">
+                <div className="w-full overflow-x-auto">
+                    <table className="table-auto w-3/4 lg:w-full">
+                        <thead className="text-xl font-semibold uppercase">
                             <tr>
-                                <th className="p-2 whitespace-nowrap">
-                                    <div className="font-semibold text-left pl-8 text-3xl">
+                                <th className="p-2 whitespace-nowrap lg:w-1/3">
+                                    <div className="font-semibold pl-10 text-left">
                                         Collection
                                     </div>
                                 </th>
                                 <th
-                                    className="p-2 whitespace-nowrap"
+                                    className="p-2 whitespace-nowrap lg:w-1/5"
                                     onClick={() => handleSortColumn('Volume')}
                                 >
-                                    <div className="flex justify-evenly items-center font-semibold text-left pl-5 text-3xl">
+                                    <div className="flex justify-evenly items-center font-semibold text-center">
                                         Volume
                                         {sortColumn === 'Volume' && (
                                             <>
@@ -256,10 +222,10 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                                     </div>
                                 </th>
                                 <th
-                                    className="p-2 whitespace-nowrap"
+                                    className="p-2 whitespace-nowrap lg:w-1/5"
                                     onClick={() => handleSortColumn('FloorPrice')}
                                 >
-                                    <div className="flex justify-evenly items-center font-semibold text-left pl-5 text-3xl">
+                                    <div className="flex justify-evenly items-center font-semibold text-center">
                                         Floor Price
                                         {sortColumn === 'FloorPrice' && (
                                             <>
@@ -281,13 +247,13 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                                         )}
                                     </div>
                                 </th>
-                                <th className="p-2 whitespace-nowrap">
-                                    <div className="flex justify-evenly items-center font-semibold text-left text-3xl">
+                                <th className="p-2 whitespace-nowrap lg:w-1/8">
+                                    <div className="flex justify-evenly items-center font-semibold text-left">
                                         % Change
                                     </div>
                                 </th>
-                                <th className="p-2 whitespace-nowrap">
-                                    <div className="flex justify-evenly items-center font-semibold text-center text-3xl">
+                                <th className="p-2 whitespace-nowrap lg:w-1/8">
+                                    <div className="flex justify-evenly items-center font-semibold text-center">
                                         Follow
                                     </div>
                                 </th>
@@ -295,13 +261,11 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                         </thead>
                         {sortedCollectionDatas.map((collection, index) => (
                             <tbody className="text-sm divide-y divide-gray-100" key={index}>
-                                <CollectionChange
+                                <ChartItem
                                     collection={collection}
                                     index={index}
                                     sortColumn={sortColumn}
                                     setSortColumn={setSortColumn}
-                                    isCollectionLoading={isCollectionLoading[index]}
-                                    setIsCollectionLoading={setIsCollectionLoading}
                                 />
                             </tbody>
                         ))}
@@ -312,4 +276,4 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
     )
 }
 
-export default Stats
+export default ChartList

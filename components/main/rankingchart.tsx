@@ -69,15 +69,15 @@ const ChartItem = ({ collection, index }: { collection: CollectionData; index: n
       </div>
       <TdStyled className="px-6 lg:visible invisible">
         {Number(summary.percentage) === 0 ?
-          <div className="px-2 inline-flex text-3xl leading-7 black:text-white white:text-black">
+          <div className="px-2 inline-flex text-2xl leading-7 text-gray-500 dark:text-gray-400">
             <Icon icon="carbon:undefined-filled" />
           </div>
           : Number(summary.percentage) > 0 ?
-            <div className="px-2 inline-flex text-xl leading-7 font-semibold rounded-full text-green-600">
+            <div className="px-2 inline-flex text-lg leading-7 font-semibold rounded-full text-green-600 dark:text-green-500">
               {`+` + Number(summary.percentage) + `%`}
             </div>
             :
-            <div className="px-2 inline-flex text-xl leading-7 font-semibold rounded-full text-red-600">
+            <div className="px-2 inline-flex text-lg leading-7 font-semibold rounded-full text-red-600">
               {Number(summary.percentage) + `%`}
             </div>
         }

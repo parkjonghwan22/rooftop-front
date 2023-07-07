@@ -14,7 +14,7 @@ export const SearchBox = () => {
 
     return (
         <>
-            <div className="relative flex justify-center items-center shadow-md border rounded-xl border-gray-200 dark:border-gray-600 overflow-hidden dark:bg-gray-700">
+            <div className="relative flex justify-center items-center shadow-md border rounded-xl border-gray-300 dark:border-gray-600 overflow-hidden dark:bg-gray-700">
                 <div className="w-96">
                     <div className="input-group relative flex items-center w-full">
                         <div className="text-xl ml-4 lg:ml-0">
@@ -22,7 +22,7 @@ export const SearchBox = () => {
                         </div>
                         <input
                             type="search"
-                            className="form-control relative min-w-0 w-full px-3 py-2 text-sm bg-transparent dark:placeholder-gray-400 dark:text-gray-300 transition ease-in-out m-0 focus:text-gray-700  focus:outline-none"
+                            className="form-control relative min-w-0 w-full px-3 py-2 text-sm bg-transparent placeholder-gray-500 dark:placeholder-gray-400 dark:text-gray-300 transition ease-in-out m-0 focus:text-gray-700  focus:outline-none"
                             placeholder="Search collection"
                             value={searchWord}
                             onChange={handleSearch}

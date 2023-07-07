@@ -61,7 +61,7 @@ export const useEvent = () => {
     const getTradeSummary = async (NFTaddress: string, duration: number) => {
         try {
             const { data } = await request.get(`event/trade/${NFTaddress}?time=${duration}`)
-            console.log(data)
+            // console.log(data)
             return data
         } catch (error: unknown) {
             throw new Error(error as string);
