@@ -6,15 +6,17 @@ import Link from 'next/link'
 import { LoadingSpinner } from '@components/common/loading'
 import { useCoinGecko } from '@utils/hooks/useCoingecko'
 
-const NFTItem = ({ token ,activity}: { token: TokenData,activity: ActivityData[] }) => {
+const NFTItem = ({ token ,activity }: { token: TokenData,activity: ActivityData[] }) => {
     const { metaData, imageUrl, isLoading } = useIpfs(token)
     const { convertKRW } = useCoinGecko()
-    const [filterActivity] = activity.filter((item) => item.to === token.seller && item.id === token.id)
-    console.log('filterActivity : ' , filterActivity)
-    const filterPrice = filterActivity.price
+    let filterActivity;
+    if (activity && activity.length > 0) {
+      filterActivity = activity.find((item) => item.to === token.seller && item.id === token.id);
+    }
+    const filterPrice = filterActivity?.price || 0
     const todayKrwPrice = convertKRW(filterPrice) // 오늘 환율계산가격
-    const lossAmount = (Number(todayKrwPrice) - Number(filterActivity.krwPrice))
-    const lossRate = (lossAmount / (Number(filterActivity.krwPrice))) * 100
+    const lossAmount = (Number(todayKrwPrice) - Number(filterActivity?.krwPrice))
+    const lossRate = (lossAmount / (Number(filterActivity?.krwPrice))) * 100
     /*
     손실액 = (판매 시점 단가 - 구매 시점 단가) * 수량
     손실율 = (손실액 / (구매 시점 단가 * 수량)) * 100
@@ -42,7 +44,7 @@ const NFTItem = ({ token ,activity}: { token: TokenData,activity: ActivityData[]
                         />
                     </div>
                     <div className="w-1/5 flex items-center justify-between">
-                        <span className="text-md lg:text-md font-semibold">NFT 수익률</span>
+                        <span className="text-md lg:text-md font-semibold">Earning</span>
                     </div>
 
                     <div className="w-3/5 flex flex-col justify-center">

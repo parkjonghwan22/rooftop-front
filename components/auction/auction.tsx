@@ -1,5 +1,5 @@
 import { TimerContainer } from "@components/common/Timer/timecontainer";
-import { AuctionModal } from "@components/common/modal/Auction";
+import { Modal } from "@components/common/modal";
 import { TokenData } from "@utils/types/nft.interface";
 import { useEffect, useState } from "react";
 import { AuctionContent } from "./auctionContent";
@@ -221,14 +221,14 @@ export const Auction = ({ token }: AuctionProps) => {
         </div>
       </div>
       {isOpenModal && (
-        <AuctionModal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal}>
+        <Modal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal}>
           <AuctionContent
             token={token}
             setIsOpenModal={setIsOpenModal}
             handleTimerStart={handleTimerStart}
             setAuctionEnded={setAuctionEnded}
           />
-        </AuctionModal>
+        </Modal>
       )}
     </>
   );
