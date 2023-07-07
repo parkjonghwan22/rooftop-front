@@ -24,6 +24,8 @@ interface CollectionChangeProps {
     index: number
     sortColumn: string
     setSortColumn: React.Dispatch<React.SetStateAction<string>>
+    isCollectionLoading: boolean
+    setIsCollectionLoading: React.Dispatch<React.SetStateAction<boolean[]>>
 }
 
 const CollectionChange = ({
@@ -31,13 +33,11 @@ const CollectionChange = ({
     index,
     sortColumn,
     setSortColumn,
+    isCollectionLoading,
+    setIsCollectionLoading,
 }: CollectionChangeProps) => {
     const { address } = useAccount()
     const queryClient = useQueryClient()
-
-    const [isLoading, setIsLoading] = useState<boolean[]>(
-        new Array(collection.address.length).fill(false)
-    )
     const { getTradeSummary } = useEvent()
 
     const { data: summary, isLoading: summaryLoading } = useQuery(
@@ -50,13 +50,15 @@ const CollectionChange = ({
 
     if (summary === undefined) return null
 
+  
     const followHandler = async (index: number) => {
         if (!address) return
+
         try {
-            setIsLoading((prevLoading) => {
-                const newLoading = [...prevLoading]
-                newLoading[index] = true
-                return newLoading
+            setIsCollectionLoading(prev => {
+                const updatedLoading = [...prev]
+                updatedLoading[index] = true
+                return updatedLoading
             })
 
             const response = await request.post(`collection/follow`, {
@@ -66,16 +68,17 @@ const CollectionChange = ({
 
             if (response) {
                 const foundFavorite = queryClient
-                    .getQueryData<CollectionData[] | undefined>('allCollection')
+                    .getQueryData<CollectionData[] | undefined>('collection')
                     ?.find((collection: CollectionData) => {
                         return collection.favorite.includes(address)
+                    })
+                queryClient.invalidateQueries('collection',{ refetchInactive: true })
+                setIsCollectionLoading(prev => {
+                    const updatedLoading = [...prev]
+                    updatedLoading[index] = false
+                    return updatedLoading
                 })
-                queryClient.invalidateQueries('allCollection', { refetchInactive: true })
-                setIsLoading((prevLoading) => {
-                    const newLoading = [...prevLoading]
-                    newLoading[index] = false
-                    return newLoading
-                })
+    
             }
         } catch (e) {
             console.error(e)
@@ -140,9 +143,9 @@ const CollectionChange = ({
                 </div>
             </td>
             <td className="p-2 whitespace-nowrap">
-                {isLoading[index] ? (
+                {isCollectionLoading ? 
                     <LoadingSpinner />
-                ) : collection.favorite.includes(`${address}`) ? (
+                 : (collection.favorite.includes(`${address}`)) ? (
                     <div className="flex justify-center text-lg text-center">
                         <div onClick={() => followHandler(index)}>
                             <Icon
@@ -169,46 +172,47 @@ const CollectionChange = ({
 // ===========================================================================
 
 const Stats = ({ collectionDatas }: CollectionsProps) => {
-    const [sortColumn, setSortColumn] = useState('Volume');
-    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
-    const [sortedCollectionDatas, setSortedCollectionDatas] = useState<CollectionData[]>([]);
-    
+    const [sortColumn, setSortColumn] = useState('Volume')
+    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc')
+    const [sortedCollectionDatas, setSortedCollectionDatas] = useState<CollectionData[]>([])
+    const [isCollectionLoading, setIsCollectionLoading] = useState<boolean[]>(
+        new Array(collectionDatas.length).fill(false)
+    )
 
     useEffect(() => {
-      const sortedByVolume = [...collectionDatas].sort((a, b) => {
-        if (a.totalVolume < b.totalVolume) {
-          return sortDirection === 'asc' ? -1 : 1;
-        } else if (a.totalVolume > b.totalVolume) {
-          return sortDirection === 'asc' ? 1 : -1;
-        } else {
-          return 0;
-        }
-      });
-  
-      const sortedByFloorPrice = [...collectionDatas].sort((a, b) => {
-        if (a.floorPrice < b.floorPrice) {
-          return sortDirection === 'asc' ? -1 : 1;
-        } else if (a.floorPrice > b.floorPrice) {
-          return sortDirection === 'asc' ? 1 : -1;
-        } else {
-          return 0;
-        }
-      });
-      const selectedSortData = sortColumn === 'Volume' ? sortedByVolume : sortedByFloorPrice;
-  
-      setSortedCollectionDatas(selectedSortData);
-    }, [sortColumn, sortDirection]);
-  
+        const sortedByVolume = [...collectionDatas].sort((a, b) => {
+            if (a.totalVolume < b.totalVolume) {
+                return sortDirection === 'asc' ? -1 : 1
+            } else if (a.totalVolume > b.totalVolume) {
+                return sortDirection === 'asc' ? 1 : -1
+            } else {
+                return 0
+            }
+        })
+
+        const sortedByFloorPrice = [...collectionDatas].sort((a, b) => {
+            if (a.floorPrice < b.floorPrice) {
+                return sortDirection === 'asc' ? -1 : 1
+            } else if (a.floorPrice > b.floorPrice) {
+                return sortDirection === 'asc' ? 1 : -1
+            } else {
+                return 0
+            }
+        })
+        const selectedSortData = sortColumn === 'Volume' ? sortedByVolume : sortedByFloorPrice
+
+        setSortedCollectionDatas(selectedSortData)
+    }, [sortColumn, sortDirection])
 
     const handleSortColumn = (column: string) => {
-      if (column === sortColumn) {
-        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-      } else {
-        setSortColumn(column);
-        setSortDirection('desc');
-      }
-    };
-  
+        if (column === sortColumn) {
+            setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc')
+        } else {
+            setSortColumn(column)
+            setSortDirection('desc')
+        }
+    }
+
     return (
         <>
             <TitleCollectionDiv>
@@ -235,17 +239,22 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                                         {sortColumn === 'Volume' && (
                                             <>
                                                 {sortDirection === 'desc' ? (
-                                                    <Icon icon="fluent-mdl2:sort-down" style={{ fontSize: '1.5rem' }} />
+                                                    <Icon
+                                                        icon="fluent-mdl2:sort-down"
+                                                        style={{ fontSize: '1.5rem' }}
+                                                    />
                                                 ) : (
-                                                    <Icon icon="fluent-mdl2:sort-up" style={{ fontSize: '1.5rem' }} />
+                                                    <Icon
+                                                        icon="fluent-mdl2:sort-up"
+                                                        style={{ fontSize: '1.5rem' }}
+                                                    />
                                                 )}
                                             </>
                                         )}
                                         {sortColumn !== 'Volume' && (
-                                            <Icon icon="radix-icons:caret-sort"/>
+                                            <Icon icon="radix-icons:caret-sort" />
                                         )}
                                     </div>
-
                                 </th>
                                 <th
                                     className="p-2 whitespace-nowrap"
@@ -256,9 +265,15 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                                         {sortColumn === 'FloorPrice' && (
                                             <>
                                                 {sortDirection === 'desc' ? (
-                                                    <Icon icon="fluent-mdl2:sort-down" style={{ fontSize: '1.5rem' }} />
+                                                    <Icon
+                                                        icon="fluent-mdl2:sort-down"
+                                                        style={{ fontSize: '1.5rem' }}
+                                                    />
                                                 ) : (
-                                                    <Icon icon="fluent-mdl2:sort-up" style={{ fontSize: '1.5rem' }}/>
+                                                    <Icon
+                                                        icon="fluent-mdl2:sort-up"
+                                                        style={{ fontSize: '1.5rem' }}
+                                                    />
                                                 )}
                                             </>
                                         )}
@@ -286,6 +301,8 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                                     index={index}
                                     sortColumn={sortColumn}
                                     setSortColumn={setSortColumn}
+                                    isCollectionLoading={isCollectionLoading[index]}
+                                    setIsCollectionLoading={setIsCollectionLoading}
                                 />
                             </tbody>
                         ))}

@@ -55,13 +55,13 @@ export const CollectionBanner = ({ collectionData, totalItems, isCreator }: Bann
             })
 
             if (response) {
+                queryClient.invalidateQueries('collection', { refetchInactive: true })
                 const foundFavorite =
                     queryClient.getQueryData<CollectionData[] | undefined>('collection')
                         ?.find((collection: CollectionData) => {
                             return collection.favorite.includes(address)
                         })
-                console.log("foundFavorite :: ", foundFavorite)
-                queryClient.invalidateQueries('collection', { refetchInactive: true })
+                
             }
             setIsLoading(false)
         } catch (e) {
