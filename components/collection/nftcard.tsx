@@ -64,17 +64,15 @@ export const NFTCard = ({ token, isSelected }: NFTCardProps) => {
 
     useEffect(() => {
         const endTime = token.auctionEndTime * 1000
-        console.log(endTime)
+        // console.log(endTime)
         const currentTime = new Date().getTime()
-        console.log(currentTime)
+        // console.log(currentTime)
         if(endTime > currentTime) {
             const AuctionTime = Math.floor((endTime-currentTime) / (1000))
             const Time = Math.floor(AuctionTime / 60)
             setRemainingTime(Time)
         }
     }, [token])
-
-    console.log("++++++++++",remainingTime)
 
     if (isLoading) return <LoadingSpinner />
     return (
