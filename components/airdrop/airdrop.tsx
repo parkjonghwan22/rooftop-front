@@ -18,7 +18,7 @@ export const Airdrop = ({ airdropData }: AirdropProps) => {
     return (
       <>
         <AirdropCurrent airdrop={currentAirdrop} />
-        <LeaderBoard airdrop={currentAirdrop} />
+        {/* <LeaderBoard airdrop={currentAirdrop} /> */}
         <AirdropUpcoming />
       </>
     );

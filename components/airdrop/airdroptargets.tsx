@@ -57,7 +57,7 @@ export const LeaderBoard = ({ airdrop }: { airdrop: AirdropData }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {sortedTargets?.map((target, index) => (
+                            {/* {sortedTargets?.map((target, index) => (
                                 <tr
                                     className={
                                         index % 2 === 0
@@ -72,7 +72,7 @@ export const LeaderBoard = ({ airdrop }: { airdrop: AirdropData }) => {
                                     <td className="text-center">27</td>
                                     <td className="text-center">{target.score}</td>
                                 </tr>
-                            ))}
+                            ))} */}
                         </tbody>
                     </table>
                 </div>

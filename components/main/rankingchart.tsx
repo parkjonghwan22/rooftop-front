@@ -14,6 +14,8 @@ interface CollectionProps {
 }
 
 const ChartItem = ({ collection, index }: { collection: CollectionData; index: number }) => {
+  const TdStyled = tw.td` py-4 whitespace-no-wrap dark:bg-gray-700`
+
     const { getTradeSummary } = useEvent()
     
     const { data: summary, isLoading: summaryLoading } = useQuery(
@@ -23,11 +25,8 @@ const ChartItem = ({ collection, index }: { collection: CollectionData; index: n
             enabled: !!collection,
         }
     )
-    if(summary === undefined) return
     
-    const TdStyled = tw.td`
-    py-4 whitespace-no-wrap dark:bg-gray-700
-`
+    if(summary === undefined) return <></>
     return (
         <tr className="w-full flex items-center justify-between border-b border-gray-200 dark:border-gray-600">
             <div className="flex items-center">
