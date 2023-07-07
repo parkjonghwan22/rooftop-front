@@ -8,9 +8,21 @@ import { useCoinGecko } from '@utils/hooks/useCoingecko'
 
 const NFTItem = ({ token ,activity}: { token: TokenData,activity: ActivityData[] }) => {
     const { metaData, imageUrl, isLoading } = useIpfs(token)
-    const { getHistoricalPrice } = useCoinGecko()
-    console.log("NFTItem activity :", activity)
-    console.log("NFTItem token :" , token)
+    const { convertKRW } = useCoinGecko()
+    const [filterActivity] = activity.filter((item) => item.to === token.seller && item.id === token.id)
+    console.log('filterActivity : ' , filterActivity)
+    const filterPrice = filterActivity.price
+    const todayKrwPrice = convertKRW(filterPrice) // 오늘 환율계산가격
+    const lossAmount = (Number(todayKrwPrice) - Number(filterActivity.krwPrice))
+    const lossRate = (lossAmount / (Number(filterActivity.krwPrice))) * 100
+    /*
+    손실액 = (판매 시점 단가 - 구매 시점 단가) * 수량
+    손실율 = (손실액 / (구매 시점 단가 * 수량)) * 100
+    - 손실액 (todayKrwPrice - filterActivity.krwPrice)
+    - 손실율 : (손실액 / filterActivity.krwPrice) * 100
+    손실액 = (13.147 - 13.069) * 1 = 0.078
+    손실율 = (0.078 / (13.069 * 1)) * 100 = 0.596%
+    */
     if (isLoading) return <LoadingSpinner />
     return (
         <>
@@ -37,7 +49,7 @@ const NFTItem = ({ token ,activity}: { token: TokenData,activity: ActivityData[]
                         <div className="flex justify-center items-center">
                             <progress
                                 max={100}
-                                value={50 - 3}
+                                value={50 + lossRate}
                                 className="w-3/4 
                                 [&::-webkit-progress-bar]:rounded-lg 
                                 [&::-webkit-progress-value]:rounded-lg
@@ -48,7 +60,7 @@ const NFTItem = ({ token ,activity}: { token: TokenData,activity: ActivityData[]
                             />
                         </div>
                         <span className="text-md lg:text-md font-semibold ml-2 text-center mt-2">
-                            - 3%
+                            {50 + Number(lossRate.toFixed(2))} %
                         </span>
                     </div>
                 </Link>

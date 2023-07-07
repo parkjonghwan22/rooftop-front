@@ -8,7 +8,6 @@ import {
     TitleCollectionDiv,
     TitleCollectionDiv2,
     TitleCollectionH2,
-    RankingFollowSvg,
 } from './styled/stats.styled'
 import { Icon } from '@iconify/react'
 import { useQueryClient, useQuery } from 'react-query'
@@ -221,9 +220,9 @@ const Stats = ({ collectionDatas }: CollectionsProps) => {
                 </TitleCollectionDiv2>
             </TitleCollectionDiv>
             <RankingCollectionWrapper>
-                <div className="w-full overflow-x-auto">
-                    <table className="table-auto w-full">
-                        <thead className="text-xl font-semibold uppercase">
+                <div className="w-full overflow-x-auto ">
+                    <table className="min-w-full divide-y divide-gray-200 lg:w-full md: w-3/4 sm:w-2/4 mx-auto">
+                        <thead className="font-semibold uppercase lg:w-full md: w-3/4 sm:w-2/4">
                             <tr>
                                 <th className="p-2 whitespace-nowrap">
                                     <div className="font-semibold text-left pl-8 text-3xl">
