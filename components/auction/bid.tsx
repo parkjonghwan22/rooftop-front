@@ -1,9 +1,6 @@
-import { BidModal } from "@components/common/modal";
-import { BidContent } from "@components/common/modal/styled/Bid.styled";
 import { useMarket } from "@utils/hooks/useMarket";
 import { TokenData } from "@utils/types/nft.interface";
-import { useState } from "react";
-import tw from "tailwind-styled-components";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { useIpfs } from "@utils/hooks/useIpfs";
 import { PriceInputBox } from "@components/common/input";
@@ -23,6 +20,7 @@ export const Bid = ({ token, setIsOpenModal } : BidProps) => {
   const { address } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
   const { metaData, imageUrl } = useIpfs(token);
+  const [remainingTime, setRemainingTime] = useState(0)
   const { market } = useMarket();
   const nftPrice = useInput("");
 
@@ -54,10 +52,20 @@ export const Bid = ({ token, setIsOpenModal } : BidProps) => {
     
   }
 
+  useEffect(() => {
+    const endTime = token.auctionEndTime * 1000
+    const currentTime = new Date().getTime()
+    if(endTime > currentTime) {
+      const auctionTime = Math.floor((endTime - currentTime) / 1000)
+      const time = Math.floor(auctionTime / 60)
+      setRemainingTime(time)
+    }
+  }, [token])
+
   return (
     <>
-      <div className="mx-auto px-4 py-4 h-full">
-        <div className="text-2xl font-bold ml-12">입찰하기</div>
+      <div className="mx-auto px-4 py-4 w-[600px] h-full">
+        <div className="text-3xl font-bold ml-6">Place Bid</div>
         <div className="flex flex-wrap h-4/5 mt-4">
           <div className="w-1/2">
             <div className="mt-5">
@@ -75,8 +83,8 @@ export const Bid = ({ token, setIsOpenModal } : BidProps) => {
               {metaData.name}
             </div>
           </div>
-          <div className="w-1/2 px-2 py-2">
-            <div className="text-sm text-gray-400">네트워크</div>
+          <div className="w-1/2 pl-5 py-2">
+            <div className="text-sm text-gray-400">NetWork</div>
             <div className="flex items-center">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -95,15 +103,15 @@ export const Bid = ({ token, setIsOpenModal } : BidProps) => {
               </svg>
               <div className="font-bold ml-1">Polygon</div>
             </div>
-            <div className="mt-2 text-sm text-gray-400">시작가</div>
-            <div className="font-bold">${token.openingPrice}</div>
+            <div className="mt-2 text-sm text-gray-400">Starting_Bid</div>
+            <div className="font-bold">${token.openingPrice/ (10 ** 18)} MATIC</div>
             <div className="mt-2 text-sm text-gray-400">
-              경매 종료까지 남은시간
+                Auction Remaining Time
             </div>
-            <div className="font-bold">{token.auctionEndTime}</div>
+            <div className="font-bold">{remainingTime} minutes</div>
             <div className="mt-2 border-2 dark:border-0 dark:bg-gray-900 rounded-lg px-2 py-2">
-              <div className="text-sm text-gary-400">
-                입찰가는 ${token.openingPrice} 이상이어야 합니다
+              <div className="text-sm text-gary-400 pb-2">
+                 Current Highest Bid ${token.openingPrice/ (10 ** 18)} 
               </div>
               <PriceInputBox
                 value={nftPrice.value}
@@ -114,14 +122,14 @@ export const Bid = ({ token, setIsOpenModal } : BidProps) => {
               />
               {!isLoading && (
               <button onClick={handleBid}
-              className="mt-4 bg-red-500 dark:bg-purple-500 rounded-lg px-20 py-3 text-2xl font-bold text-center hover:bg-gray-400 dark:hover:bg-gray-400 text-white cursor-pointer">
-                입찰하기
+              className="mt-4 bg-red-500 dark:bg-purple-500 rounded-lg w-full py-3 text-2xl font-bold text-center hover:bg-red-500 dark:hover:bg-red-500 text-white cursor-pointer">
+                Bid
               </button>
               )}
               {isLoading && (
                 <button onClick={handleBid}
-                className="mt-4 bg-red-500 dark:bg-purple-500 rounded-lg px-20 py-3 text-2xl font-bold text-center hover:bg-gray-400 dark:hover:bg-gray-400 text-white cursor-pointer">
-                  <LoadingSpinner/> 입찰하기
+                className="mt-4 bg-red-500 dark:bg-purple-500 rounded-lg w-full py-3 text-2xl font-bold text-center hover:bg-red-500 dark:hover:bg-red-500 text-white cursor-pointer">
+                  <LoadingSpinner/> Bid
                 </button>
               )}
             </div>
