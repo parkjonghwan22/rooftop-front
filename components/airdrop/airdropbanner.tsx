@@ -11,7 +11,7 @@ export const AirdropCurrent = ({ airdrop }: { airdrop: AirdropData }) => {
     const { getCollection } = useCollection()
 
     const { data: collectionData, isLoading: collectionLoading } = useQuery(
-        ['collection', airdrop.NFTaddress],
+        ['collection', airdrop?.NFTaddress],
         () => queryClient.fetchQuery(['collection', airdrop.NFTaddress], () => getCollection(airdrop.NFTaddress)),
         {
             enabled: !!airdrop,

@@ -33,6 +33,12 @@ export interface TokenData {
     highestBid: number;
 }
 
+export interface SummaryData {
+    currentTradeVolume: number;
+    previousTradeVolume: number;
+    percentage:number;
+}
+
 export interface ActivityData {
     _id: string;
     id: number;

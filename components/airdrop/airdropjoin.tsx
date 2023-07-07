@@ -1,12 +1,40 @@
 import { Button } from "@components/common/button"
+import { LoadingSpinner } from "@components/common/loading"
 import { useInput } from "@utils/hooks/useInput"
+import request from "@utils/request"
 import { AirdropData } from "@utils/types/nft.interface"
+import { useState } from "react"
+import { toast } from "react-toastify"
+import { useAccount } from "wagmi"
 
 export const AddressInput = ({ airdrop }: {airdrop: AirdropData}) => {
+    const { address } = useAccount()
+    const [isLoading, setIsLoading] = useState(false)
     const userAddress = useInput('')
+    
 
     const handleJoinAirdrop = async () => {
-        // 에어드랍 조인
+        if (!address) return 
+
+        if (address !== userAddress.value) {
+            toast.error("Please enter correct address")
+            return
+        }
+        try {
+            setIsLoading(true)
+            const response = await request.put(`airdrop/update`, {
+                NFTaddress: airdrop.NFTaddress,
+                target: [userAddress.value],
+            })
+            if ( response.status === 200 ) {
+                toast.success('Your airdrop request has been completed')
+                setIsLoading(false)
+            }
+
+        } catch (e) {
+            setIsLoading(false)
+            console.error(e)
+        }
     }
 
     return (
@@ -26,7 +54,9 @@ export const AddressInput = ({ airdrop }: {airdrop: AirdropData}) => {
                         className="w-2/3 outline-none bg-transparent px-4 text-md text-gray-800"
                     />
                     <div className="w-1/3 px-3 pb-4 md:pb-0">
-                        <Button onClick={handleJoinAirdrop} color="purple">Submit</Button>
+                        <Button onClick={handleJoinAirdrop} color="purple">
+                            {isLoading ? <LoadingSpinner />: 'Submit'}
+                        </Button>
                     </div>
                 </div>
             </div>
