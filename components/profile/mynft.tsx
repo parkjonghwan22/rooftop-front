@@ -60,7 +60,7 @@ const NFTItem = ({ token ,activity}: { token: TokenData,activity: ActivityData[]
                             />
                         </div>
                         <span className="text-md lg:text-md font-semibold ml-2 text-center mt-2">
-                            {50 + Number(lossRate.toFixed(2))} %
+                            {Number(lossRate.toFixed(2))} %
                         </span>
                     </div>
                 </Link>

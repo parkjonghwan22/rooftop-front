@@ -73,8 +73,8 @@ const DropDownMenu = ({ setIsOpenMenu }: MenuProps) => {
                     </Link>
                 </NavLink>
                 <NavLink>
-                    <Link href="/settings" className="flex item-center">
-                        <Icon icon="mdi:settings" className="text-lg mr-2" />Settings
+                    <Link href="/helpdesk" className="flex item-center">
+                        <Icon icon="streamline:interface-help-customer-support-1-customer-headset-help-microphone-phone-support" className="text-lg mr-2" />HelpDesk
                     </Link>
                 </NavLink>
                 <NavLink>

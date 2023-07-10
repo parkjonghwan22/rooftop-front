@@ -3,7 +3,7 @@ import { NFTCard } from './nftcard'
 import { CollectionStat } from './styled/collection.styled'
 import { VerifiedMarker } from '@components/common/marker/verify'
 import { CollectionSweeper } from './collectionsweeper'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { Icon } from '@iconify/react'
 import request from '@utils/request'
@@ -42,34 +42,36 @@ export const Collection = ({ collectionData, tokenData }: CollectionProps) => {
 export const CollectionBanner = ({ collectionData, totalItems, isCreator }: BannerProps) => {
     const { address } = useAccount()
     const queryClient = useQueryClient()
+    const [isCollectionLoading, setIsCollectionLoading] = useState(false)
+    const [isFavorite, setIsFavorite] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
 
     const followHandler = async () => {
         if (!address) return
 
         try {
-            setIsLoading(true)
-            const response = await request.post(`collection/follow`, {
+            setIsCollectionLoading(true)
+            const {data} = await request.post(`collection/follow`, {
                 address,
                 collection_address: collectionData.address,
             })
 
-            if (response) {
-                queryClient.invalidateQueries('collection', { refetchInactive: true })
-                const foundFavorite =
-                    queryClient.getQueryData<CollectionData[] | undefined>('collection')
-                        ?.find((collection: CollectionData) => {
-                            return collection.favorite.includes(address)
-                        })
-                
+            if (data) {
+                setIsFavorite((prevState) => !prevState);
+                setIsCollectionLoading(false)
             }
-            setIsLoading(false)
         } catch (e) {
             console.error(e)
         } finally {
             setIsLoading(false)
         }
     }
+
+    useEffect(() => {
+        if (collectionData.favorite.includes(`${address}`)) {
+            setIsFavorite(true)
+        }
+    }, [address, collectionData])
 
     return (
         <div className="relative flex flex-col mb-8 items-center rounded-[20px] w-10/12 mx-auto p-4 bg-white dark:bg-gray-900 bg-clip-border shadow-lg dark:!bg-navy-800 dark:text-white">
@@ -89,34 +91,26 @@ export const CollectionBanner = ({ collectionData, totalItems, isCreator }: Bann
                     </h4>
                     {collectionData.verified && <VerifiedMarker />}
                     {!isCreator &&
-                        <div className="flex justify-center text-lg text-center ml-2">
-                            {isLoading ?
-                                <LoadingSpinner /> : (
-                                    <div className="flex justify-center text-lg text-center">
-                                        {collectionData.favorite.includes(`${address}`) ? (
-                                            <div onClick={() => followHandler()}>
-                                                <Icon
-                                                    icon="noto-v1:star"
-                                                    className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
-                                                />
-                                            </div>
-                                        ) : (
-                                            <div onClick={() => followHandler()}>
-                                                <Icon
-                                                    icon="fluent:star-add-24-regular"
-                                                    className="text-3xl text-gray-600 dark:text-gray-300 cursor-pointer"
-                                                />
-                                            </div>
-                                        )}
+                        <div className="flex">
+                             {isCollectionLoading ?
+                              <div className="flex text-center pl-2">
+                                <LoadingSpinner/>
+                              </div> :
+                                <div className="flex items-center text-center">
+                                    <div onClick={() => followHandler()}>
+                                        <Icon
+                                            icon={isFavorite ? "noto-v1:star" : "fluent:star-add-24-regular"}
+                                            className="text-gray-600 dark:text-gray-300 cursor-pointer text-[30px]"
+                                        />
                                     </div>
-                                )}
+                                </div>}
                         </div>
                     }
                 </div>
                 <p className="text-base font-normal text-gray-500">{collectionData.description}</p>
             </div>
             <div className="mt-5 mb-3 flex gap-14 md:!gap-14">
-                <CollectionStat value={totalItems} label="작품 수" />
+                <CollectionStat value={collectionData.favorite.length} label="팔로워 수" />
                 <CollectionStat value={collectionData.floorPrice} label="최저 거래가" />
                 <CollectionStat value={collectionData.totalVolume} label="총 거래량" />
                 <CollectionStat value={collectionData.creatorFee} label="작가 로열티" />

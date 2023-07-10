@@ -55,7 +55,7 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                             creatorFee={collection.creatorFee}
                             totalVolume={collection.totalVolume}
                             floorPrice={collection.floorPrice}
-                            follows={0}
+                            follows={collection.favorite}
                         />
                     </SectionA>
                     <SectionB>
