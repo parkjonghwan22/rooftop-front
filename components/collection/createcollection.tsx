@@ -44,9 +44,9 @@ export const AddNewCollection = () => {
 
     return (
         <SectionWrap>
-            <Button onClick={() => setIsOpenModal(true)} color="green" size="w-32" fontSize="lg" >
+            <Button onClick={() => setIsOpenModal(true)} color="red" size="w-48" fontSize="lg" >
                 <Icon icon="typcn:plus" className="text-xl mr-1" />
-                새 컬렉션
+                New Collection
             </Button>
             <Modal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} width="20rem" height="1.5rem"><LaunchPad setIsOpenModal={setIsOpenModal} /></Modal>
         </SectionWrap>
