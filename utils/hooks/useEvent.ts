@@ -28,35 +28,19 @@ export const useEvent = () => {
         }
     }
 
-    // const getLeaderBoard = async (to: string[]) => {
-    //     try {
-    //       const result: any[] = [];
-      
-    //       for (const item of to) {
-    //         const { data } = await request.get(`event?time=24&to=${item}`);
-    //         result.push(...data);
-    //       }
-      
-    //       return result;
-    //     } catch (error: unknown) {
-    //       throw new Error(error as string);
-    //     }
-    //   }
-
     const getLeaderBoard = async (to: string[]) => {
         try {
-          const result: any[] = [];
-      
-          for (const item of to) {
-            const { data } = await request.get(`event?airdrop=${item}`);
-            result.push(...data);
-          }
-      
-          return result;
+            const promises = to.map((item) => request.get(`event/leaderboard/${item}`));
+            const responses = await Promise.all(promises);
+
+            const result = responses.flatMap((response) => response.data);
+            const sortedResult = result?.sort((a: any, b: any) => b.totalPoint - a.totalPoint);
+
+            return sortedResult;
         } catch (error: unknown) {
-          throw new Error(error as string);
+            throw new Error(error as string);
         }
-      }
+    };
 
     const getTradeSummary = async (NFTaddress: string, duration: number) => {
         try {
@@ -67,7 +51,6 @@ export const useEvent = () => {
             throw new Error(error as string);
         }
     }
-
 
     return {
         getAllEvents,

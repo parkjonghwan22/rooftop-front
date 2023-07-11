@@ -42,7 +42,7 @@ const SlideItem = ({ token }: { token: TokenData }) => {
         <div className="w-full lg:h-80 lg:ml-20 mt-4 lg:mt-11">
           <div className="flex flex-wrap">
             <div className="w-full mb-2 lg:mb-10 flex justify-center lg:justify-start">
-              <span className="text-2xl lg:text-4xl font-bold">{metaData.name} #{token.id}</span>
+              <span className="text-2xl lg:text-4xl font-bold whitespace-nowrap overflow-hidden text-ellipsis">{metaData.name} #{token.id}</span>
             </div>
             <div className="hidden lg:block w-full mb-2">
               <span className="text-2xl">Current Price</span>

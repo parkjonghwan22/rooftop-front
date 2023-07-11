@@ -116,10 +116,10 @@ export const CollectionBanner = ({ collectionData, totalItems, isCreator }: Bann
                 <p className="text-base font-normal text-gray-500">{collectionData.description}</p>
             </div>
             <div className="mt-5 mb-3 flex gap-14 md:!gap-14">
-                <CollectionStat value={totalItems} label="작품 수" />
                 <CollectionStat value={collectionData.floorPrice} label="최저 거래가" />
                 <CollectionStat value={collectionData.totalVolume} label="총 거래량" />
                 <CollectionStat value={collectionData.creatorFee} label="작가 로열티" />
+                <CollectionStat value={collectionData.favorite.length} label="북마크" />
             </div>
         </div>
     )

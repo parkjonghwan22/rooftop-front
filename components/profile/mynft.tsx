@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { LoadingSpinner } from '@components/common/loading'
 import { useCoinGecko } from '@utils/hooks/useCoingecko'
+import { Icon } from '@iconify/react'
 
 const NFTItem = ({ token ,activity }: { token: TokenData,activity: ActivityData[] }) => {
     const { metaData, imageUrl, isLoading } = useIpfs(token)
@@ -32,7 +33,7 @@ const NFTItem = ({ token ,activity }: { token: TokenData,activity: ActivityData[
             <div className="group cursor-pointer mt-3 border-b-2 dark:border-gray-500">
                 <Link
                     href={`/collections/${token.NFTaddress}/nft?id=${token.id}`}
-                    className="flex justify-between w-full"
+                    className="flex justify-between w-full ml-2"
                 >
                     <div className="flex flex-wrap w-1/5">
                         <Image
@@ -40,11 +41,12 @@ const NFTItem = ({ token ,activity }: { token: TokenData,activity: ActivityData[
                             alt="nft image"
                             width={1000}
                             height={1000}
-                            className="hover:animate-[wiggle_1s_ease-in-out_infinite] object-fill w-20 h-20 mx-auto rounded-full border-2 dark:border-white mb-2"
+                            className="hover:animate-[wiggle_1s_ease-in-out_infinite] object-fill w-16 h-16 mx-auto rounded-full border-2 dark:border-white mb-2"
                         />
                     </div>
-                    <div className="w-1/5 flex items-center justify-between">
-                        <span className="text-md lg:text-md font-semibold">Earning</span>
+                    <div className="w-1/5 flex flex-col items-center justify-center">
+                        <p className="text-md lg:text-md font-semibold text-green-600 dark:text-cyan-500">{todayKrwPrice}￦</p>
+                        <p className="text-md lg:text-md font-semibold flex items-center"><Icon icon="cryptocurrency-color:matic" className="mr-1" />{(token.price) / 10 ** 18}</p>
                     </div>
 
                     <div className="w-3/5 flex flex-col justify-center">
@@ -52,17 +54,19 @@ const NFTItem = ({ token ,activity }: { token: TokenData,activity: ActivityData[
                             <progress
                                 max={100}
                                 value={50 + lossRate}
-                                className="w-3/4 
+                                className={
+                                    `w-3/4 
                                 [&::-webkit-progress-bar]:rounded-lg 
                                 [&::-webkit-progress-value]:rounded-lg
                                 [&::-webkit-progress-bar]:bg-slate-300
-                                [&::-webkit-progress-value]:bg-violet-400
+                                [&::-webkit-progress-value]:${lossRate >= 0 ? `bg-green-500` : `bg-violet-400`}
                                 [&::-moz-progress-bar]:bg-violet-400
-                                "
+                                `
+                                }
                             />
                         </div>
                         <span className="text-md lg:text-md font-semibold ml-2 text-center mt-2">
-                            {50 + Number(lossRate.toFixed(2))} %
+                            {Number(lossRate.toFixed(2))} %
                         </span>
                     </div>
                 </Link>

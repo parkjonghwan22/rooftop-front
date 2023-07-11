@@ -79,9 +79,9 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                         <div className="lg:flex lg:items-start">
                             <div className="lg:w-[576px]  overflow-hidden rounded-lg relative">
                                 {token.sold &&
-                                    <div className="w-full h-full bg-gray-700 dark:bg-slate-400 opacity-75 absolute">
-                                        <div className="text-[50px] md:text-[72px] font-bold text-gray-300 dark:text-gray-800 -rotate-12 absolute translate-y-[200%] translate-x-[20%]">
-                                            SOLD OUT !
+                                    <div className="w-full h-full bg-gray-700 dark:bg-slate-500 opacity-75 absolute">
+                                        <div className="text-[50px] md:text-[72px] font-bold text-gray-300 dark:text-gray-800 -rotate-12 absolute translate-y-[90%] translate-x-[100%]">
+                                            SOLD<br></br>OUT !
                                         </div>
                                     </div>}
                                 <Image
@@ -96,7 +96,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                     </div>
                     <div className="lg:col-span-2 lg:row-span-1 lg:row-end-1">
                         <div className="flex items-center justify-center">
-                            <h1 className="sm: text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-3xl">
+                            <h1 className="sm: text-3xl whitespace-nowrap overflow-hidden text-ellipsis  font-bold text-gray-900 dark:text-gray-100 sm:text-3xl">
                                 {metaData.name}
                             </h1>
                             <p className="sm: text-xl font-bold text-gray-500 dark:text-gray-400 sm:text-xl pl-3">

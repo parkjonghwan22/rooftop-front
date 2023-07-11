@@ -199,25 +199,25 @@ const ChartList = ({ collectionDatas }: CollectionsProps) => {
                                     className="p-2 whitespace-nowrap lg:w-1/5"
                                     onClick={() => handleSortColumn('Volume')}
                                 >
-                                    <div className="flex justify-evenly items-center font-semibold text-center">
+                                    <div className="flex justify-center items-center font-semibold text-center">
                                         Volume
                                         {sortColumn === 'Volume' && (
                                             <>
                                                 {sortDirection === 'desc' ? (
                                                     <Icon
-                                                        icon="fluent-mdl2:sort-down"
-                                                        style={{ fontSize: '1.5rem' }}
+                                                        icon="fa6-solid:sort-down"
+                                                        className="ml-2"
                                                     />
                                                 ) : (
                                                     <Icon
-                                                        icon="fluent-mdl2:sort-up"
-                                                        style={{ fontSize: '1.5rem' }}
+                                                        icon="fa6-solid:sort-up"
+                                                        className="ml-2"
                                                     />
                                                 )}
                                             </>
                                         )}
                                         {sortColumn !== 'Volume' && (
-                                            <Icon icon="radix-icons:caret-sort" />
+                                            <Icon icon="bxs:sort-alt" className="ml-2" />
                                         )}
                                     </div>
                                 </th>
@@ -225,25 +225,25 @@ const ChartList = ({ collectionDatas }: CollectionsProps) => {
                                     className="p-2 whitespace-nowrap lg:w-1/5"
                                     onClick={() => handleSortColumn('FloorPrice')}
                                 >
-                                    <div className="flex justify-evenly items-center font-semibold text-center">
+                                    <div className="flex justify-center items-center font-semibold text-center">
                                         Floor Price
                                         {sortColumn === 'FloorPrice' && (
                                             <>
                                                 {sortDirection === 'desc' ? (
                                                     <Icon
-                                                        icon="fluent-mdl2:sort-down"
-                                                        style={{ fontSize: '1.5rem' }}
+                                                        icon="fa6-solid:sort-down"
+                                                        className="ml-2"
                                                     />
                                                 ) : (
                                                     <Icon
-                                                        icon="fluent-mdl2:sort-up"
-                                                        style={{ fontSize: '1.5rem' }}
+                                                        icon="fa6-solid:sort-up"
+                                                        className="ml-2"
                                                     />
                                                 )}
                                             </>
                                         )}
                                         {sortColumn !== 'FloorPrice' && (
-                                            <Icon icon="radix-icons:caret-sort" />
+                                            <Icon icon="bxs:sort-alt" className="ml-2" />
                                         )}
                                     </div>
                                 </th>

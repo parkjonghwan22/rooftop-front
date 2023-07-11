@@ -80,7 +80,7 @@ export const NFTCard = ({ token, isSelected }: NFTCardProps) => {
             ${isSelected && "border-4 border-green-500"}`}>
             <div className="px-3 py-2">
                 <p className="text-sm text-gray-600 dark:text-gray-400">#{token.tokenId}</p>
-                <h1 className="text-xl font-bold text-gray-800 uppercase dark:text-white pl-4 py-1">
+                <h1 className="text-xl font-bold text-gray-800 uppercase whitespace-nowrap overflow-hidden text-ellipsis dark:text-white pl-4 py-1">
                     {metaData?.name}
                 </h1>
             </div>

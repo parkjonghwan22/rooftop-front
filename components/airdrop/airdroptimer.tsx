@@ -1,13 +1,21 @@
+import request from "@utils/request";
 import { AirdropData } from "@utils/types/nft.interface";
 import { useState, useEffect } from "react";
 
 export const EventTimer = ({ airdrop }: { airdrop: AirdropData }) => {
+
+    const deleteEvent = async () => {
+        const response = await request.delete(`airdrop/${airdrop.NFTaddress}`);
+        console.log(response)
+    }
+
     const getRemainingTime = () => {
         const now = new Date().getTime();
         const targetDate = new Date(airdrop.mintDate).getTime();
         const timeDiff = targetDate - now;
 
         if (timeDiff <= 0) {
+            deleteEvent()
             return {
                 hours: 0,
                 minutes: 0,

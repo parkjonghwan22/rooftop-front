@@ -1,19 +1,10 @@
 import { useEffect, useState } from 'react'
 import request from '@utils/request'
-import {
-    SectionWrap,
-    SectionA,
-    SectionB,
-    Logo,
-    CollectionName,
-    Description,
-    CollectionDatas,
-} from './styled/collectioninfo.styled'
+import { SectionWrap, SectionA, SectionB, Logo, CollectionName, Description, CollectionDatas } from './styled/collectioninfo.styled'
 import { Icon } from '@iconify/react'
 import { Button } from '@components/common/button'
 import { Modal } from '@components/common/modal/Modal'
 import { CreateNft } from '@components/collection/createNft'
-import axios from 'axios'
 import { CollectionData } from '@utils/types/nft.interface'
 
 

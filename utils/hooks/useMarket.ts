@@ -8,6 +8,7 @@ export const useMarket = () => {
   const { address } = useAccount()
   const [market, setMarket] = useState<any>(null);
   const [latestId, setLatestId] = useState<number | null>(null);
+  const [owner, setOwner] = useState(null);
   const marketAddress = MarketABI.networks[80001].address
   const marketInterface = new ethers.Interface(MarketABI.abi);
 
@@ -75,6 +76,8 @@ export const useMarket = () => {
       const fetchMarket = async () => {
         const signer = await walletProvider.getSigner();
         const marketInstance = await new ethers.Contract(marketAddress, MarketABI.abi, signer)
+        const owner = await marketInstance.owner()
+        setOwner(owner)
         setMarket(marketInstance);
       };
       fetchMarket();
@@ -94,6 +97,7 @@ export const useMarket = () => {
 
   return {
     market,
+    owner,
     marketAddress: market?.target,
     // latestId,
     decodeEvent,

@@ -87,3 +87,10 @@ export interface AirdropData {
     updatedAt: string;
     __v: number;
 }
+
+export interface LeaderBoardData {
+    address: string;
+    transfer: number;
+    minted: number;
+    totalPoint: number;
+}

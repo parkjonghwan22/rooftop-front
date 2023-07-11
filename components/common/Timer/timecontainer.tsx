@@ -70,7 +70,7 @@ export const TimerContainer = ({
   }
 
   return (
-    <div className=" md:flex md:items-center rounded-xl">
+    <div className="flex md:items-center rounded-xl">
       <NumberBox num={days} unit="Days" flip={daysFlip} />
       <span className=" hidden text-3xl mt-2 md:inline-block md:text-3xl font-normal text-gray-50 ">
         :

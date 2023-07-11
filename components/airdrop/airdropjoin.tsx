@@ -54,7 +54,7 @@ export const AddressInput = ({ airdrop }: {airdrop: AirdropData}) => {
                         className="w-2/3 outline-none bg-transparent px-4 text-md text-gray-800"
                     />
                     <div className="w-1/3 px-3 pb-4 md:pb-0">
-                        <Button onClick={handleJoinAirdrop} color="purple">
+                        <Button onClick={handleJoinAirdrop} color="purple" fontWeight="bold">
                             {isLoading ? <LoadingSpinner />: 'Submit'}
                         </Button>
                     </div>

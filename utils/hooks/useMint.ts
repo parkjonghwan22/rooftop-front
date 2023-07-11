@@ -1,51 +1,50 @@
 import { ethers } from 'ethers'
 import TokenABI from '@contracts/RTToken.json'
 import { useMarket } from '@utils/hooks/useMarket'
-import { useState, useEffect } from 'react'
 import { useEthers } from '@utils/hooks/useEthers'
-import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import request from '@utils/request'
+import { useDecode } from '@utils/hooks/useDecode'
 
-interface MintProps {
-    tokenURI: string
-    collectionAddress: string
-    royalty: string
-    tokenPrice: number | string
-}
 
-export const useMint = ({ collectionAddress, royalty, tokenURI, tokenPrice }: MintProps) => {
-    const { market } = useMarket()
+
+export const useMint = (collectionAddress: string) => {
     const { signer } = useEthers()
-    const [latestTokenId, setLatestTokenId] = useState<number>()
-    const [metaData, setMetaData] = useState<string>('')
-    const [newToken, setNewToken] = useState<string>('')
+    const { market } = useMarket()
+    const { decodeMinted } = useDecode()
 
-    const minting = async (tokenMetadata: string) => {
-        if (!signer) return
+
+    const mintNFT = async (tokenURI: string) => {
+        if (!signer || !tokenURI) return
 
         try {
             const instance = await new ethers.Contract(collectionAddress, TokenABI.abi, signer)
             const mintPrice = await instance.mint_price()
             const account = await signer.address
 
-            const mintTx = await instance._minting(tokenMetadata, {
+            const mintTx = await instance._minting(tokenURI, {
                 value: mintPrice,
                 from: account,
             })
-
             const receipt = await mintTx.wait()
-            const newTokenId = await instance.getLatestTokenId()
-            if (newTokenId) setLatestTokenId(newTokenId.toNumber())
-
-            const tokenURI = await instance.tokenURI(newTokenId)
-            setMetaData(tokenURI)
+            const latestTokenId = await instance.getLatestTokenId()
+            return latestTokenId
         } catch (e: unknown) {
             console.log(e as Error)
         }
     }
 
-    const tokenOnMarket = async (price: number | string) => {
-        if (!latestTokenId) return
+    interface NFTProps {
+        collectionAddress : string
+        latestTokenId : number
+        price : number | string
+        metaData: string
+        royalty: string
+    }
+
+    const listNFT = async ({ collectionAddress, latestTokenId, price, metaData, royalty }: NFTProps) => {
+        if (!market) return
+        const priceInWei = ethers.parseEther(price.toString()); // 10 ** 18
 
         try {
             // const gasPrice = ethers.parseUnits('20000', 'gwei');
@@ -53,28 +52,23 @@ export const useMint = ({ collectionAddress, royalty, tokenURI, tokenPrice }: Mi
             const addOnMarket = await market.addNftToMarket(
                 collectionAddress,
                 latestTokenId,
-                price,
+                priceInWei,
                 metaData,
                 creatorFee
             )
-
-            if (addOnMarket.hash) setNewToken(addOnMarket.hash)
+            const receipt = await addOnMarket.wait()
+            if (receipt.logs) {
+                const decodedData = decodeMinted(receipt, collectionAddress)
+                const response = await request.post("event/minted", {
+                    ...decodedData,
+                });
+                return response
+            }
         } catch (e) {
             console.log(e)
         }
     }
 
-    useEffect(() => {
-        if (!market || !signer) return
-        market.lowestPriceByCollection(collectionAddress).then(console.log).catch(console.log)
-        minting(tokenURI)
-    }, [market, signer])
 
-    useEffect(() => {
-        if (metaData && latestTokenId && tokenPrice) {
-            tokenOnMarket(tokenPrice)
-        }
-    }, [metaData, latestTokenId, tokenPrice])
-
-    return { newToken }
+    return { mintNFT, listNFT }
 }
