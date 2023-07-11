@@ -2,7 +2,7 @@ import { useInput } from '@utils/hooks/useInput'
 import { CreateNftWrapper, NftFormContainer, NftTitle, NftLabel } from './styled/createNft.styled'
 import React, { useState } from 'react'
 import { InputBox, PriceInputBox, TextArea } from '@components/common/input'
-import { Button } from '@components/common/button'
+import { Button, Generator } from '@components/common/button'
 import { LoadingSpinner } from '@components/common/loading'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -26,7 +26,7 @@ export const CreateNft = ({ setIsOpenModal, collectionAddress, royalty }: MintPr
     const nftPrice = useInput('')
     const nftDescription = useInput('')
 
-    
+
     const handleMintNFT = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
@@ -110,6 +110,7 @@ export const CreateNft = ({ setIsOpenModal, collectionAddress, royalty }: MintPr
                         placeholder="Please introduce your NFT"
                     />
                     <NftLabel htmlFor="NftImage">Add Image</NftLabel>
+                    {/* <Generator state={nftImage} setState={setNftImage} description={nftDescription.value} /> */}
                     <FileNftInputBox
                         state={nftImage}
                         setState={setNftImage}

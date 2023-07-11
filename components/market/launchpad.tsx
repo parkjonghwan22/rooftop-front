@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button } from "@components/common/button";
+import { Button, Generator } from "@components/common/button";
 import { CheckBox } from "@components/common/checkbox/checkbox";
 import {
   FileInputBox,
@@ -173,6 +173,7 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
             selectedOption={creatorFee}
           />
           <Label htmlFor="logo">Thumbnail</Label>
+          <Generator state={collectionLogo} setState={setCollectionLogo} description={collectionDescription.value} />
           <FileInputBox state={collectionLogo} setState={setCollectionLogo} />
           {isLoading ? (
             <Button type="submit" color="blue" disabled>

@@ -18,13 +18,13 @@ export const FileInputBox = ({ state, setState }: FileInputProps) => {
 
         const body = new FormData();
         body.append("file", file);
-        console.log(body, file)
+        // console.log(body, file)
 
         try {
             const { data } = await request.post("file/upload", body, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
-            console.log(`data :`, data)
+            // console.log(`data :`, data)
             pending()
             setState(data.fileUrl);
         } catch (error) {
@@ -39,7 +39,8 @@ export const FileInputBox = ({ state, setState }: FileInputProps) => {
                     {(state)
                         ? <img src={state} />
                         :
-                        <><Icon icon="bx:image-add" className="w-12 h-12 text-gray-400" />
+                        <>
+                            <Icon icon="bx:image-add" className="w-12 h-12 text-gray-400" />
                             <p className="mb-2 text-sm text-gray-500 dark:text-gray-400"><span className="font-semibold">이미지 파일을 선택해주세요</span></p>
                             <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG or GIF (최대 1MB)</p>
                         </>

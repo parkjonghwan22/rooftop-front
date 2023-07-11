@@ -51,6 +51,7 @@ export const FileNftInputBox = ({ state, setState, id, name, type }: FileNftInpu
             console.log(e.message)
         }
     }
+    console.log(`state:`, state)
 
     return (
         <div className="flex items-center justify-center w-full">
