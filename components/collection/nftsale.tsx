@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Chart2 } from "./styled/chart.styled";
+import { Icon } from "@iconify/react";
 import { CollectionData, TokenData, ActivityData } from "@utils/types/nft.interface";
 import Link from "next/link";
 import { useMarket } from "@utils/hooks/useMarket";
@@ -41,6 +42,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
     const isBuy = address && address !== token.seller && token.openingPrice == 0 && !token.sold;
     const isResale = address && address === token.seller && token.openingPrice == 0;
     const isBid = address && address !== token.seller && token.openingPrice !== 0;
+
     const parsedPrice = convertToWei(token.price, 0);
 
     const handleBuy = async () => {
@@ -69,7 +71,6 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
         }
     };
 
-
     if (isLoading || isBuyLoading) return <LoadingSpinner2 />;
     return (
         <>
@@ -79,9 +80,9 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                         <div className="lg:flex lg:items-start">
                             <div className="lg:w-[576px]  overflow-hidden rounded-lg relative">
                                 {token.sold &&
-                                    <div className="w-full h-full bg-gray-700 dark:bg-slate-400 opacity-75 absolute">
-                                        <div className="text-[50px] md:text-[72px] font-bold text-gray-300 dark:text-gray-800 -rotate-12 absolute translate-y-[200%] translate-x-[20%]">
-                                            SOLD OUT !
+                                    <div className="w-full h-full bg-gray-700 dark:bg-slate-500 opacity-75 absolute">
+                                        <div className="text-[50px] md:text-[72px] font-bold text-gray-300 dark:text-gray-800 -rotate-12 absolute translate-y-[90%] translate-x-[100%]">
+                                            SOLD<br></br>OUT !
                                         </div>
                                     </div>}
                                 <Image
@@ -96,7 +97,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                     </div>
                     <div className="lg:col-span-2 lg:row-span-1 lg:row-end-1">
                         <div className="flex items-center justify-center">
-                            <h1 className="sm: text-3xl font-bold text-gray-900 dark:text-gray-100 sm:text-3xl">
+                            <h1 className="sm: text-3xl whitespace-nowrap overflow-hidden text-ellipsis  font-bold text-gray-900 dark:text-gray-100 sm:text-3xl">
                                 {metaData.name}
                             </h1>
                             <p className="sm: text-xl font-bold text-gray-500 dark:text-gray-400 sm:text-xl pl-3">
@@ -106,18 +107,18 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                         <div className="mt-5 flex flex-col items-center justify-between space-y-4 border-t border-b border-gray-200 dark:border-gray-400 py-4 sm:flex-row sm:space-y-0">
                             <CurrentPrice price={token.price} bid={token.highestBid} />
                             {isBuy && (
-                                <Button color="blue" size="w-40" fontSize="md" onClick={handleBuy}>
+                                <Button color="blue" size="w-40" fontSize="md" fontWeight="bold" onClick={handleBuy}>
                                     Buy Now
                                 </Button>
                             )}
                             {isResale && (
-                                <Button color="red" size="w-40" fontSize="md" onClick={() => handleOpenModal("ReSale")}>
+                                <Button color="red" size="w-40" fontSize="md" fontWeight="bold" onClick={() => handleOpenModal("ReSale")}>
                                     Set New Price
                                 </Button>
 
                             )}
                             {isBid && (
-                                <Button color="purple" size="w-40" fontSize="md" onClick={() => handleOpenModal("Bid")}>
+                                <Button color="purple" size="w-40" fontSize="md" fontWeight="bold" onClick={() => handleOpenModal("Bid")}>
                                     Place Bid
                                 </Button>
                             )}

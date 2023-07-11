@@ -71,8 +71,8 @@ export const Collection = ({ collectionDatas }: CollectionProps) => {
         </div>
         <h2 className="text-3xl font-bold px-5 py-10">New Collections</h2>
         <div className="flex flex-wrap justify-center w-5/6">
-          {sortedCollectionDatas.map((collection) => (
-            <CollectionCard key={collection._id} collection={collection} />
+          {sortedCollectionDatas.map((collection, index) => (
+            <CollectionCard key={index} collection={collection} />
           ))}
         </div>
       </CollectionWrap>

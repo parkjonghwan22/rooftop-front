@@ -7,68 +7,81 @@ import { LoadingSpinner } from '@components/common/loading'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { FileNftInputBox } from '@components/common/input/fileNftInputBox'
-import { NFTMint } from './nftmint'
+import { useMint } from '@utils/hooks/useMint'
 
 interface MintProps {
     collectionAddress: string
     royalty: string
-}
-
-interface CreateNftProps {
     setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const CreateNft = ({
-    setIsOpenModal,
-    collectionAddress,
-    royalty,
-}: CreateNftProps & MintProps) => {
+export const CreateNft = ({ setIsOpenModal, collectionAddress, royalty }: MintProps) => {
+    const { mintNFT, listNFT } = useMint(collectionAddress)
     const [isLoading, setIsLoading] = useState(false)
     const [nftImage, setNftImage] = useState('')
     const [metaData, setMetaData] = useState('')
-
+    const [latestTokenId, setLatestTokenId] = useState<number>()
+    
     const nftName = useInput('')
     const nftPrice = useInput('')
     const nftDescription = useInput('')
 
-    const success = () => toast.success(`Image Upload Successfully!\nYou can mint now`)
-    const pending = () => toast.info('Data is loading...');
     
-    const handlePinataSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleMintNFT = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault()
         setIsLoading(true)
 
         try {
             if (!nftImage) return
 
-            pending()
-
-            fetch('/api/verify', {
-                method: 'POST',
-                body: JSON.stringify({
-                    name: nftName.value,
-                    description: nftDescription.value,
-                    image: nftImage,
-                }),
+            const body = JSON.stringify({
+                name: nftName.value,
+                description: nftDescription.value,
+                image: nftImage,
             })
-                .then((response) => response.json())
-                .then((data) => {
-                    // console.log('mint3 resData', data)
-                    const tokenURI = `ipfs://${data.IpfsHash}`
-                    setMetaData(tokenURI)
-                    setIsLoading(false)
-                    success()
-                })
-                .catch((error) => console.log(error))
+            toast.info('Data is loading...');
+
+            const response = await fetch('/api/verify', { method: 'POST', body })
+            const data = await response.json()
+            const tokenURI = `ipfs://${data.IpfsHash}`
+            setMetaData(tokenURI)
+            const tokenId = await mintNFT(tokenURI)
+            if (tokenId) {
+                setLatestTokenId(tokenId)
+                setIsLoading(false)
+                toast.success(`NFT Minting completed successfully`)
+            }
         } catch (e: unknown) {
             console.error(e as Error)
         }
     }
 
+
+    const handleListNFT = async () => {
+        if (!latestTokenId || !metaData) return
+        setIsLoading(true)
+
+        const nft = {
+            collectionAddress, 
+            latestTokenId, 
+            price: nftPrice.value as string | number,
+            metaData, 
+            royalty
+        }
+
+        const response = await listNFT(nft)
+        if (response?.statusText === "Created") {
+            toast.success("Your NFT Listed on Market")
+            setIsLoading(false)
+            setIsOpenModal(false)
+        }
+    }
+    
+
     return (
         <>
             <CreateNftWrapper>
-                <NftFormContainer onSubmit={handlePinataSubmit}>
+                <NftFormContainer onSubmit={handleMintNFT}>
                     <NftTitle className="text-center">
                         List NFT on your Collection
                     </NftTitle>
@@ -77,7 +90,7 @@ export const CreateNft = ({
                         value={nftName.value}
                         onChange={nftName.onChange}
                         name="name"
-                        icon="mdi:collection"
+                        icon="ri:nft-fill"
                         placeholder="Please write down the NFT name"
                     />
 
@@ -104,30 +117,23 @@ export const CreateNft = ({
                         name="file-upload"
                         type="file"
                     />
-                    {isLoading && !metaData && (
+                    {isLoading && (
                         <Button type="submit" color="blue" disabled>
                             <LoadingSpinner /> Uploading...
                         </Button>
                     )}
-                    {!isLoading && !metaData && (
+                    {!isLoading && !latestTokenId && (
                         <Button type="submit" color="blue">
-                            NFT Registration
+                            Create NFT
                         </Button>
                     )}
-                    {!isLoading && metaData && (
-                        <NFTMint
-                            collectionAddress={collectionAddress}
-                            royalty={royalty}
-                            price={nftPrice.value as string | number}
-                            metaData={metaData}
-                            setIsOpenModal={setIsOpenModal}
-                        >
+                    {!isLoading && latestTokenId && (
+                        <Button onClick={handleListNFT} color="green">
                             List NFT on Market
-                        </NFTMint>
+                        </Button>
                     )}
                 </NftFormContainer>
             </CreateNftWrapper>
-            {/* {isSuccessAlert && <SuccessAlert/>} */}
         </>
     )
 }

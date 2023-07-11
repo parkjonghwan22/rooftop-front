@@ -1,14 +1,5 @@
 import { ActivityData, TokenData } from '@utils/types/nft.interface'
-import {
-    Chart as ChartJS,
-    CategoryScale,
-    LinearScale,
-    PointElement,
-    LineElement,
-    Title,
-    Tooltip,
-    Legend,
-} from 'chart.js'
+import { Chart as ChartJS, CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend } from 'chart.js'
 import { ChartOptions, ChartData } from 'chart.js'
 import { Line } from 'react-chartjs-2'
 
@@ -63,7 +54,7 @@ export const Chart2 = ({ token, activity }: { token: TokenData, activity: Activi
             //
             legend: {
                 labels: {
-                    color: 'green', // 범례 텍스트 색상 변경
+                    color: '#00BCD4', // 범례 텍스트 색상 변경
                     font: {
                         size: 18, // 범례 텍스트 크기 변경
                         weight: 'bold', // 범례 텍스트 굵기 변경

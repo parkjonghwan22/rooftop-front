@@ -14,7 +14,7 @@ interface CollectionProps {
 }
 
 const ChartItem = ({ collection, index }: { collection: CollectionData; index: number }) => {
-  const TdStyled = tw.td` py-4 whitespace-no-wrap dark:bg-gray-700`
+  const TdStyled = tw.td` py-4 whitespace-nowrap text-ellipsis overflow-hidden dark:bg-gray-700`
 
   const { getTradeSummary } = useEvent()
 
@@ -104,7 +104,7 @@ export const RankingChart = ({ collectionDatas, activityDatas }: CollectionProps
   const selectedDatas = selectedSort === 'trending' ? sortedByTrending : sortedByTop
 
   return (
-    <div className="flex flex-col w-3/4 mt-20 mb-10">
+    <div className="flex flex-col w-3/4 mt-20 mb-10 overflow-hidden">
       <header className="border-b border-gray-100 dark:bg-gray-800 dark:border-gray-500 rounded-t-lg text-gray-700 dark:text-gray-100">
         <div className="px-5 py-4 flex">
           <div

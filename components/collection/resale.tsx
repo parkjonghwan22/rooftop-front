@@ -55,10 +55,10 @@ export const ReSale = ({ token, setIsOpenModal }: NftProps) => {
 
   return (
     <>
-      <div className="px-3 py-3 w-[400px] md:w-[700px] h-[600px] md:h-[400px]">
-        <div className="text-3xl font-bold ml-3">Register NFT</div>
-        <div className="flex flex-col md:flex-row mt-4">
-          <div className="w-1/2 ml-4">
+      <div className="px-3 py-3 w-[420px] h-[580px]">
+        <div className="text-3xl font-bold">New Register</div>
+        <div className="flex flex-col mt-8">
+          <div className="">
             <Image
               src={
                 imageUrl ? imageUrl : "https://dummyimage.com/480x480/ccc/000"
@@ -66,16 +66,16 @@ export const ReSale = ({ token, setIsOpenModal }: NftProps) => {
               alt="test"
               width={1000}
               height={1000}
-              className="object-fill w-68 h-68 mx-auto rounded-full border-4 border-red-500 dark:border-white"
+              className="object-fill mx-auto w-60 h-60 rounded-full border-4 border-red-500 dark:border-white"
             />
           </div>
-          <div className="w-1/2 flex flex-col mt-10 pl-10">
+          <div className="flex flex-col mt-5 mx-auto w-3/4">
             <div className="flex items-center">
               <div className="text-3xl font-bold text-ellipsis overflow-hidden">{metaData.name}</div>
               <div className="text-sm ml-2">#{token.tokenId}</div>
             </div>
-            <div className="text-xl mr-4 mt-12 mb-1">Price</div>
-            <form onSubmit={handleReAddSubmit} className="flex flex-col gap-5 w-4/5 mt-2">
+            <div className="text-xl mt-4">Price</div>
+            <form onSubmit={handleReAddSubmit} className="flex flex-col mt-2">
             <PriceInputBox
               value={nftPrice.value}
               onChange={nftPrice.onChange}
@@ -83,6 +83,7 @@ export const ReSale = ({ token, setIsOpenModal }: NftProps) => {
               icon="cryptocurrency-color:matic"
               placeholder="0.000"
             />
+            <div className="mt-3">
             {!isLoading && (
             <Button
               type="submit"
@@ -95,10 +96,13 @@ export const ReSale = ({ token, setIsOpenModal }: NftProps) => {
             {isLoading && (
               <Button
               type="submit"
+              color="purple"
+              fontSize="xl"
             >
               <LoadingSpinner /> Uploading...
             </Button>
             )}
+            </div>
 
             </form>
           </div>

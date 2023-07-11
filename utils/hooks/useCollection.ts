@@ -13,6 +13,7 @@ export const useCollection = () => {
       };
 
     const getCollection = async (collectionAddress: string) => {
+        // console.log(collectionAddress)
         try {
           const { data } = await request.get(`collection/${collectionAddress}`);
           return data[0] as CollectionData;

@@ -1,7 +1,7 @@
 import tw from 'tailwind-styled-components'
 
 export const TitleCollectionDiv = tw.div`
-  mx-auto w-5/6 pb-20 border-solid border-3 border-indigo-800 border-b-4 border-gray-400 
+  mx-auto w-5/6 pb-6 border-solid border-3 border-indigo-800 border-b border-gray-300 dark:border-gray-500
 `
 
 export const TitleCollectionDiv2 = tw.div`
@@ -13,7 +13,7 @@ export const TitleCollectionH2 = tw.h2`
 `
 
 export const RankingCollectionWrapper = tw.div`
-    mx-auto w-5/6 py-10
+    mx-auto w-5/6 py-6
 `
 
 export const RankingFollowSvg = tw.svg`

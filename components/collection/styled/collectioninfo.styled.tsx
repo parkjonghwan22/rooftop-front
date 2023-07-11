@@ -42,14 +42,14 @@ export const Logo = ({ src, link, collectionAddress }: LogoProps) => {
 export const CollectionName = ({ name, verified }: { name: string; verified: boolean }) => {
     return (
         <div className="flex h-8 flex-row items-center">
-            <div className="text-3xl font-semibold mr-1.5">{name}</div>
+            <div className="text-3xl font-semibold mr-1.5 whitespace-nowrap w-[160px] lg:w-[400px] text-ellipsis overflow-hidden">{name}</div>
             {verified && <VerifiedMarker />}
         </div>
     )
 }
 
 export const Description = ({ description }: { description: string }) => {
-    return <div className="py-1.5 text-sm text-gray-500 dark:text-gray-400">{description}</div>
+    return <div className="py-1.5 text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap w-[160px] lg:w-[400px] text-ellipsis overflow-hidden">{description}</div>
 }
 
 interface CollectionProps {

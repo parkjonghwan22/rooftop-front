@@ -1,3 +1,4 @@
+import { Button } from "@components/common/button";
 import { PriceInputBox } from "@components/common/input";
 import { LoadingSpinner } from "@components/common/loading";
 import { useInput } from "@utils/hooks/useInput";
@@ -9,6 +10,7 @@ import { ethers } from "ethers";
 
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 interface NftProps {
   token: TokenData;
@@ -32,7 +34,7 @@ export const AuctionContent = ({
   const handleClick = async () => {
     try {
       if (!market || !nftPrice.value || !newTime) return;
-        setIsLoading(true)
+      setIsLoading(true)
 
       const priceInWei = ethers.parseEther(nftPrice.value.toString());
       const duration = newTime * 60;
@@ -43,20 +45,21 @@ export const AuctionContent = ({
         duration
       );
 
-      console.log("startAuction ====",startAuction)
+      console.log("startAuction ====", startAuction)
       const receipt = await startAuction.wait();
       console.log("receipt ==== ", receipt);
 
-      if(receipt) {
+      if (receipt) {
         try {
           setIsLoading(false)
           setIsOpenModal(false)
           setAuctionEnded(false)
+          toast.success("Success Start Auction")
 
           const currentTime = new Date()
           const endTime = new Date(currentTime.getTime() + duration * 1000)
           const endTimeISO = endTime.toISOString()
-          console.log(typeof(endTimeISO))
+          console.log(typeof (endTimeISO))
           // endTime : 2023-07-04T00:43:49.291Z
 
 
@@ -65,26 +68,26 @@ export const AuctionContent = ({
             id: token.id,
             endTime: endTimeISO
           })
-          
+
           console.log('data ==========', data)
           return data
 
-        } catch(e:any) {
+        } catch (e: any) {
           console.log(e.message)
         }
       }
 
       if (newTime > 0) {
-          handleTimerStart(newTime * 60);
-        } else {
-            clearInterval(updateTimeRef.current!);
-        }
+        handleTimerStart(newTime * 60);
+      } else {
+        clearInterval(updateTimeRef.current!);
+      }
 
-        return () => {
-            clearInterval(updateTimeRef.current!);
-        };
-        
-        
+      return () => {
+        clearInterval(updateTimeRef.current!);
+      };
+
+
     } catch (e: any) {
       console.log(e.message);
     }
@@ -97,10 +100,10 @@ export const AuctionContent = ({
 
   return (
     <>
-      <div className="px-3 py-3 w-full h-full max-h-9/10 overflow-y-scroll">
-        <div className="text-3xl font-bold ml-3">Auction</div>
+      <div className="w-[380px] h-full max-h-9/10 overflow-y-scroll">
+        <h2 className="text-3xl font-bold ml-5">Auction</h2>
         <div className="mx-auto mt-6">
-          <div className="w-full">
+          <div>
             <Image
               src={
                 imageUrl ? imageUrl : "https://dummyimage.com/480x480/ccc/000"
@@ -108,18 +111,18 @@ export const AuctionContent = ({
               alt="test"
               width={1000}
               height={1000}
-              className="object-fill w-80 h-80 mx-auto rounded-full border-4 border-red-500 dark:border-white"
+              className="object-fill w-72 h-72 mx-auto rounded-full border-4 border-red-500 dark:border-white"
             />
           </div>
-          <div className="w-full flex flex-col mt-7 pl-32">
-            <div className="flex items-center mb-6">
+          <div className="w-full flex flex-col">
+            <div className="flex items-center justify-center mt-4">
               <div className="text-3xl font-bold text-ellipsis overflow-hidden">
                 {metaData.name}
               </div>
               <div className="text-sm ml-4">#{token.tokenId}</div>
             </div>
-            <div className="text-lg mr-4 mb-1">Starting price</div>
-            <div className="w-2/3">
+            <div className="w-3/4 mx-auto flex flex-col">
+              <span className="text-lg mt-4 mb-2">Starting price</span>
               <PriceInputBox
                 value={nftPrice.value}
                 onChange={nftPrice.onChange}
@@ -127,33 +130,24 @@ export const AuctionContent = ({
                 icon="cryptocurrency-color:matic"
                 placeholder="0.000"
               />
-              <div className="text-lg mt-2 mb-1">Auction period</div>
-
-              <div className="space-y-4 flex flex-wrap md:flex-row items-center md:space-y-0">
-                <input
-                  className="border border-gray-600 text-xl md:text-lg font-redhat outline-none mb-5 px-2 py-1 w-full rounded-lg bg-gray-800 text-white"
-                  name="Timer Input"
-                  type="number"
-                  placeholder="Please set the auction period."
-                  onChange={handleChange}
-                  min={0}
-                />
-                  {isLoading && (
-                <button
+              <span className="text-lg mt-4 mb-2">Auction period</span>
+              <input
+                className="border border-gray-300 text-xl md:text-lg font-redhat outline-none mb-3 px-3 py-2 w-full rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white dark:border-gray-600"
+                name="Timer Input"
+                type="number"
+                placeholder="Please set the auction period."
+                onChange={handleChange}
+                min={0}
+              />
+              <div className="w-full lg:mt-4 mb-10">
+                <Button
+                  color="red"
+                  fontSize="md"
+                  fontWeight="bold"
                   onClick={handleClick}
-                  className="flex items-center justify-center bg-red-500 text-lg font-semibold font-redhat w-full py-2 md:text-xl rounded-lg text-white hover:bg-rose-500 hover:text-rose-100 transition duration-300 ease-in"
                 >
-                    <LoadingSpinner/> Registering..
-                </button>
-                  )}
-                  {!isLoading && (
-                    <button
-                    onClick={handleClick}
-                    className="bg-red-500 text-xl font-semibold font-redhat w-full py-2 md:text-xl rounded-lg text-white hover:bg-purple-500 hover:text-rose-100 transition duration-300 ease-in"
-                  >
-                    Register
-                  </button>
-                  )}
+                  {isLoading ? <><LoadingSpinner />Registering..</> : "Register"}
+                </Button>
               </div>
             </div>
           </div>

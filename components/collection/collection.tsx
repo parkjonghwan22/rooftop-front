@@ -114,6 +114,7 @@ export const CollectionBanner = ({ collectionData, totalItems, isCreator }: Bann
                 <CollectionStat value={collectionData.floorPrice} label="최저 거래가" />
                 <CollectionStat value={collectionData.totalVolume} label="총 거래량" />
                 <CollectionStat value={collectionData.creatorFee} label="작가 로열티" />
+                <CollectionStat value={collectionData.favorite.length} label="북마크" />
             </div>
         </div>
     )

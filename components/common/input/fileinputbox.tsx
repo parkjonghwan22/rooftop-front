@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react';
 import request from '@utils/request';
 import { toast } from 'react-toastify';
+import config from "../../../config"
 
 
 interface FileInputProps {

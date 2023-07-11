@@ -10,5 +10,7 @@ export interface StyledProps {
     color?: string;
     backgroundColor?: string;
     activatedColor?: string;
+    fontWeight?: string;
+    important?: string;
     children: React.ReactNode;
 };
