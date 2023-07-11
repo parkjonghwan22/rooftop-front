@@ -20,7 +20,7 @@ const LoadingSlider = () => {
     <Slider {...settings}>
       <div>
         <Image
-          src="http://localhost:3000/test7.png"
+          src="http://localhost:3000/test1.png"
           alt="test"
           width={1000}
           height={1000}
@@ -29,7 +29,7 @@ const LoadingSlider = () => {
       </div>
       <div>
         <Image
-          src="http://localhost:3000/test8.png"
+          src="http://localhost:3000/test2.png"
           alt="test"
           width={1000}
           height={1000}
@@ -38,7 +38,16 @@ const LoadingSlider = () => {
       </div>
       <div>
         <Image
-          src="http://localhost:3000/test2.png"
+          src="http://localhost:3000/test3.png"
+          alt="test"
+          width={1000}
+          height={1000}
+          className="object-fill w-80 h-80 rounded-full"
+        />
+      </div>
+      <div>
+        <Image
+          src="http://localhost:3000/test4.png"
           alt="test"
           width={1000}
           height={1000}
