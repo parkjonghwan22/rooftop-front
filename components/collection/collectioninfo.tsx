@@ -73,6 +73,7 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                 <CreateNft
                     setIsOpenModal={setIsOpenModal}
                     collectionAddress={collections[isIndex].address}
+                    collectionDescription={collections[isIndex].description}
                     royalty={collections[isIndex].creatorFee}
                 />
             </Modal>
