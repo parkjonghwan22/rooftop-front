@@ -13,6 +13,7 @@ interface ButtonProps {
 
 export const LogoGenerator = ({ state, setState, description }: ButtonProps) => {
   if (!description) return null;
+
   const [isLoading, setIsLoading] = useState(false);
 
   const options = {
@@ -41,23 +42,28 @@ export const LogoGenerator = ({ state, setState, description }: ButtonProps) => 
         body.append("file", blob, "generated_image.png");
 
         const { data } = await request.post("file/upload", body, {
-            headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": "multipart/form-data" },
         });
         if (data) {
-            setState(data.fileUrl)
-            setIsLoading(false);
+          setState(data.fileUrl);
+          setIsLoading(false);
         }
-
       }
     } catch (error) {
       console.error(error);
-    } 
+    }
   };
 
   return (
     <div>
       <Button color="red" onClick={handleApiRequest}>
-        {isLoading ? (<><LoadingSpinner />Pending...</>) : ("Auto Generate")}
+        {isLoading ? (
+          <>
+            <LoadingSpinner />Pending...
+          </>
+        ) : (
+          "Auto Generate"
+        )}
       </Button>
     </div>
   );

@@ -24,6 +24,7 @@ export const FileNftInputBox = ({ state, setState, id, name, type }: FileNftInpu
         const file = e.target.files?.[0]
         const buffer = await file.arrayBuffer()
         const bytes = new Uint8Array(buffer)
+        console.log(file, buffer, bytes)
 
         const body = new FormData()
         body.append('file', file)
