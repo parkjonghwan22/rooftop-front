@@ -56,7 +56,7 @@ interface CollectionProps {
     totalVolume: number
     floorPrice: number
     creatorFee: string
-    follows: number
+    follows: string[]
 }
 
 export const CollectionDatas = ({
@@ -65,7 +65,6 @@ export const CollectionDatas = ({
     creatorFee,
     follows,
 }: CollectionProps) => {
-
     return (
         <div className="mt-2 flex flex-row items-center space-x-6 invisible w-0 lg:visible lg:w-full">
             <>
@@ -80,7 +79,7 @@ export const CollectionDatas = ({
                     icon="heroicons-solid:receipt-tax"
                     text="작가 로열티"
                 />
-                <CollectionData data={follows} icon="mdi:heart" text="팔로워" />
+                <CollectionData data={follows.length} icon="mdi:heart" text="팔로워" />
             </>
         </div>
     )
