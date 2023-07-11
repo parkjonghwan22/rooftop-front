@@ -12,8 +12,6 @@ interface ButtonProps {
 }
 
 export const LogoGenerator = ({ state, setState, description }: ButtonProps) => {
-  if (!description) return null;
-
   const [isLoading, setIsLoading] = useState(false);
 
   const options = {
@@ -54,6 +52,7 @@ export const LogoGenerator = ({ state, setState, description }: ButtonProps) => 
     }
   };
 
+  if (!description) return null;
   return (
     <div>
       <Button color="red" onClick={handleApiRequest}>
