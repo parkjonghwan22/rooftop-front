@@ -39,16 +39,11 @@ export const NFTGenerator = ({ state, setState, description }: ButtonProps) => {
         const file = new File([blob], 'generated_image.png');
         const arrayBuffer = await file.arrayBuffer();
         const bytes = Array.from(new Uint8Array(arrayBuffer));
-
-        const contentType = file.type;
+        const contentType = 'image/png';
         const fileName = file.name.replace(/\.[^/.]+$/, '');
-        console.log(file, bytes, contentType, fileName)
 
         fetch('/api/verify-image', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
           body: JSON.stringify({
             bytes,
             contentType,

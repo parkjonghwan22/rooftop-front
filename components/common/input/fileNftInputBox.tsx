@@ -12,10 +12,10 @@ interface FileNftInputProps {
     setState: (state: string) => void
 }
 
-export const FileNftInputBox = ({ state, setState, id, name, type }: FileNftInputProps) => {
+export const FileNftInputBox = ({ state, setState }: FileNftInputProps) => {
     const pending = () => toast.info('Image Uploading...')
     const success = () => toast.success('Image upload successfully completed. Press the button to create your NFT')
-    const [previewImage, setPreviewImage] = useState('')
+    
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files || e.target.files.length === 0) {
             return
@@ -23,19 +23,17 @@ export const FileNftInputBox = ({ state, setState, id, name, type }: FileNftInpu
 
         const file = e.target.files?.[0]
         const buffer = await file.arrayBuffer()
-        const bytes = new Uint8Array(buffer)
-        console.log(file, buffer, bytes)
+        const bytes = Array.from(new Uint8Array(buffer))
 
         const body = new FormData()
         body.append('file', file)
-        console.log(body, file)
 
         try {
             pending()
             fetch('/api/verify-image', {
                 method: 'POST',
                 body: JSON.stringify({
-                    bytes: Array.from(bytes),
+                    bytes,
                     contentType: file.type,
                     fileName: file.name.replace(/\.[^/.]+$/, ''),
                 }),
@@ -43,8 +41,6 @@ export const FileNftInputBox = ({ state, setState, id, name, type }: FileNftInpu
                 .then((response) => response.json())
                 .then((data) => {
                     setState(data.IpfsHash)
-                    setPreviewImage(URL.createObjectURL(file))
-                    URL.revokeObjectURL(previewImage)
                     success()
                 })
                 .catch((error) => console.log(error))
@@ -62,7 +58,7 @@ export const FileNftInputBox = ({ state, setState, id, name, type }: FileNftInpu
             >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6 overflow-hidden rounded-lg">
                     {state ? (
-                        <img src={previewImage} />
+                        <img src={`https://ipfs.io/ipfs/${state}`} />
                     ) : (
                         <>
                             <Icon icon="bx:image-add" className="w-12 h-12 text-gray-400" />
