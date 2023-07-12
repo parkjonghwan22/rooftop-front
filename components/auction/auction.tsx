@@ -152,7 +152,6 @@ export const Auction = ({ token }: AuctionProps) => {
   useEffect(() => {
     getAuction();
     handleTimerStart(newTimer);
-    console.log(token);
   }, [token, newTimer]);
 
   return (

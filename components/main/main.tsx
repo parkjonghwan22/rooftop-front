@@ -17,7 +17,6 @@ const Main = () => {
   const getNfts = async (collectionAddress: string) => {
     try {
       const response = await market.getAllTokensInCollection(collectionAddress);
-      console.log(response)
       const result = response.map((proxy: any) => {
         const obj = {
           id: Number(proxy[0]),

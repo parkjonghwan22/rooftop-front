@@ -81,7 +81,7 @@ const NFTItem = ({ token ,activity }: { token: TokenData,activity: ActivityData[
 
 export const MyNFT = ({ tokenData, activity }: { tokenData: TokenData[]; activity: ActivityData[] }) => {
     const sortedData = tokenData ? tokenData.sort((a, b) => b.id - a.id) : []
-    console.log("tokenData MyNFT :: " , tokenData )
+    // console.log("tokenData MyNFT :: " , tokenData )
     return (
         <>
             <MynftsWrap>

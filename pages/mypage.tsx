@@ -47,7 +47,7 @@ const MyPage = () => {
       const getFavorite = async () => {
         try {
             const { data } = await request.get(`collection?favorite=${address}`)
-            console.log('getAllCollectionData : ', data)
+            // console.log('getAllCollectionData : ', data)
             return data
         } catch (error: unknown) {
             throw new Error(error as string)

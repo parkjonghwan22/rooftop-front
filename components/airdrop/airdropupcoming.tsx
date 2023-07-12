@@ -51,32 +51,32 @@ const CollectionCard = ({ collection, airdrop }: CardProps) => {
 
 
 
-export const AirdropUpcoming = ({upcomingAirdrops} : {upcomingAirdrops : AirdropData[]}) => {
+  export const AirdropUpcoming = ({ upcomingAirdrops }: { upcomingAirdrops: AirdropData[] }) => {
     const queryClient = useQueryClient();
-    const { getCollection } = useCollection()
-
+    const { getCollection } = useCollection();
+  
     const fetchCollections = async () => {
-        const getCollections = upcomingAirdrops.map((airdrop) =>
-          queryClient.fetchQuery(['collection', airdrop.NFTaddress], () => getCollection(airdrop.NFTaddress))
-        );
-        return await Promise.all(getCollections);
-      };
-    
-      const { data: collectionData, isLoading: collectionLoading } = useQuery(['collections'], fetchCollections, {
-        enabled: !!upcomingAirdrops.length,
-      });
-
-    if (collectionLoading || !collectionData) return <LoadingSpinner2 />
+      const getCollections = upcomingAirdrops.slice(0, 3).map((airdrop) =>
+        queryClient.fetchQuery(['collection', airdrop.NFTaddress], () => getCollection(airdrop.NFTaddress))
+      );
+      return await Promise.all(getCollections);
+    };
+  
+    const { data: collectionData, isLoading: collectionLoading } = useQuery(['collections'], fetchCollections, {
+      enabled: !!upcomingAirdrops.length,
+    });
+  
+    if (collectionLoading || !collectionData) return <LoadingSpinner2 />;
     return (
-        <>
-            <div className="w-full lg:w-3/4 mx-auto justify-self-center text-3xl lg:text-4xl font-bold my-20 text-gray-800 dark:text-gray-100">
-                <h2 className="text-2xl md:text-2xl lg:text-3xl font-extrabold py-8 px-2 text-center w-full">Upcoming Events</h2>
-                <div className="flex flex-wrap justify-center mb-20">
-                    <CollectionCard collection={collectionData[0]} airdrop={upcomingAirdrops[0]} />
-                    <CollectionCard collection={collectionData[0]} airdrop={upcomingAirdrops[0]} />
-                    <CollectionCard collection={collectionData[0]} airdrop={upcomingAirdrops[0]} />
-                </div>
-            </div>
-        </>
-    )
-}
+      <>
+        <div className="w-full lg:w-3/4 mx-auto justify-self-center text-3xl lg:text-4xl font-bold my-20 text-gray-800 dark:text-gray-100">
+          <h2 className="text-2xl md:text-2xl lg:text-3xl font-extrabold py-8 px-2 text-center w-full">Upcoming Events</h2>
+          <div className="flex flex-wrap justify-center mb-20">
+            {upcomingAirdrops.slice(0, 3).map((airdrop, index) => (
+              <CollectionCard key={index} collection={collectionData[index]} airdrop={airdrop} />
+            ))}
+          </div>
+        </div>
+      </>
+    );
+  };

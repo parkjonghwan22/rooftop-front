@@ -29,7 +29,7 @@ export const ProfileCard = ({ user, tokenData, activity,collectionData}: Profile
   const [hours, setHours] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
   const [seconds, setSeconds] = useState<number>(0);
-  console.log("collectionData : ",collectionData)
+  // console.log("collectionData : ",collectionData)
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);

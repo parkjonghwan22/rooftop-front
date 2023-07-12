@@ -8,7 +8,7 @@ const Rankings = () => {
     const getAllCollectionData = async () => {
         try {
             const { data } = await request.get(`collection/`)
-            console.log('getAllCollectionData : ', data)
+            // console.log('getAllCollectionData : ', data)
             return data
         } catch (error: unknown) {
             throw new Error(error as string)
