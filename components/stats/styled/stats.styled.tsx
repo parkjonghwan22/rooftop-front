@@ -5,7 +5,7 @@ export const TitleCollectionDiv = tw.div`
 `
 
 export const TitleCollectionDiv2 = tw.div`
-    flex items-left justify-between w-full h-2/5 pt-10 flex-col
+    flex items-left justify-between w-full h-2/5 flex-col
 `
 
 export const TitleCollectionH2 = tw.h2`

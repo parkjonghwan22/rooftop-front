@@ -52,10 +52,10 @@ const SlideItem = ({ token }: { token: TokenData }) => {
               <span className="text-sm lg:text-lg text-green-600 dark:text-green-400">{convertKRW(token.price)}￦</span>
             </div>
             <div className="w-full flex justify-center lg:justify-start">
-              <div className="w-4/6 h-16 font-bold bg-red-500 lg:mr-10 rounded-lg cursor-pointer flex items-center hover:bg-gray-500 transition-all duration-150">
-                <div className="w-full text-center text-xl text-white">
+              <div className="w-4/6 h-16 font-bold bg-red-500 lg:mr-10 rounded-lg cursor-pointer flex items-center hover:bg-red-700 transition-all duration-150">
+                <div className="w-full text-center text-xl text-white font-mono">
                   <Link href={`/collections/${token.NFTaddress}/nft?id=${token.id}`}>
-                    Buy now
+                    BUY NOW
                   </Link>
                 </div>
                 <div className="w-24 h-full border-l-2 flex justify-center items-center">

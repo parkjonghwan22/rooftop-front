@@ -81,7 +81,7 @@ const ChartItem = ({ collection, index, sortColumn, setSortColumn }: CollectionC
                                 />
                             )}
                         </div>
-                        <div className="font-medium">{collection.name}</div>
+                        <div className="font-bold">{collection.name}</div>
                     </div>
                 </Link>
             </td>
@@ -188,7 +188,7 @@ const ChartList = ({ collectionDatas }: CollectionsProps) => {
             <RankingCollectionWrapper>
                 <div className="w-full overflow-x-auto">
                     <table className="table-auto w-3/4 lg:w-full">
-                        <thead className="text-xl font-semibold uppercase">
+                        <thead className="text-sm font-semibold uppercase">
                             <tr>
                                 <th className="p-2 whitespace-nowrap lg:w-1/3">
                                     <div className="font-semibold pl-10 text-left">

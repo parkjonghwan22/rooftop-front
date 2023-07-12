@@ -18,6 +18,7 @@ import { Auction, AuctionContent, Bid } from "@components/auction";
 import { Button } from "@components/common/button";
 import { UserAddress } from "@components/common/copy/address";
 import { CurrentPrice } from "./styled/nftsale.styled"
+import { VerifiedMarker } from "@components/common/marker/verify";
 
 interface NftProps {
     collectionData: CollectionData;
@@ -138,7 +139,10 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                                             className="h-full w-full rounded-full"
                                         />
                                     </div>
-                                    <span className="font-bold">{metaData.name}</span>
+                                    <span className="font-bold flex items-center">
+                                        <span className="mr-1">{collectionData.name}</span>    
+                                        {collectionData.verified && <VerifiedMarker />}
+                                    </span>
                                 </li>
                             </Link>
                             <h1 className="text-lg font-bold py-2">Description</h1>

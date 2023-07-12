@@ -38,9 +38,10 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                         src={collection.logo}
                         link={collection.url}
                         collectionAddress={collection.address}
+                        verified={collection.verified}
                     />
                     <SectionA>
-                        <CollectionName name={collection.name} verified={collection.verified} />
+                        <CollectionName name={collection.name} />
                         <Description description={collection.description} />
                         <CollectionDatas
                             creatorFee={collection.creatorFee}
@@ -57,6 +58,7 @@ export const CollectionInfo = ({ address }: { address: string }) => {
                             }}
                             color="blue"
                             size="w-28 h-10"
+                            style="absolute"
                         >
                             <Icon icon="carbon:intent-request-create" className="text-lg mr-1.5" />
                             New NFT

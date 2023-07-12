@@ -28,8 +28,8 @@ const CollectionCard = ({ collection }: { collection : CollectionData }) => {
     </div>
     <div className="rounded-b-lg w-72 h-32 mx-auto dark:bg-gray-800 shadow-lg opacity-90 ">
       <div className="text-xl pt-4 pb-4 font-bold flex items-center justify-center">
-        {collection.verified && <span className="mr-2"><VerifiedMarker /></span>}
         {collection.name}
+        {collection.verified && <span className="ml-2"><VerifiedMarker /></span>}
       </div>
       <div className="flex flex-wrap pl-5">
         <div className="w-1/2">

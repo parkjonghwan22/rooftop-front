@@ -13,18 +13,19 @@ export const SectionA = tw.div`
 `
 
 export const SectionB = tw.div`
-    flex w-1/5 flex-row-reverse items-center
+    flex w-1/5 flex-row-reverse items-center relative
 `
 
 interface LogoProps {
     src: string
     link: string
     collectionAddress: string
+    verified: boolean
 }
 
-export const Logo = ({ src, link, collectionAddress }: LogoProps) => {
+export const Logo = ({ src, link, collectionAddress, verified }: LogoProps) => {
     return (
-        <div className="min-w-40 cursor-pointer">
+        <div className="min-w-40 cursor-pointer relative">
             {/* <Link href={{ pathname: `${link}`, query: { ca: `${collectionAddress}` }}} as={link}> */}
             <Link href={`collections/${collectionAddress}`}>
                 <Image
@@ -35,15 +36,15 @@ export const Logo = ({ src, link, collectionAddress }: LogoProps) => {
                     className="w-40 h-40 rounded-md object-cover"
                 />
             </Link>
+            {verified && <div className="absolute top-[-5%] left-[-5%] w-[24px] h-[24px] rounded-full bg-white dark:bg-gray-800 flex items-center justify-center"><VerifiedMarker /></div>}
         </div>
     )
 }
 
-export const CollectionName = ({ name, verified }: { name: string; verified: boolean }) => {
+export const CollectionName = ({ name }: { name: string }) => {
     return (
         <div className="flex h-8 flex-row items-center">
             <div className="text-3xl font-semibold mr-1.5 whitespace-nowrap w-[160px] lg:w-[400px] text-ellipsis overflow-hidden">{name}</div>
-            {verified && <VerifiedMarker />}
         </div>
     )
 }
