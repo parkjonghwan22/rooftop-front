@@ -10,6 +10,7 @@ import request from '@utils/request'
 import { useQueryClient } from 'react-query'
 import { LoadingSpinner } from '@components/common/loading'
 import { AirdropSweeper } from '@components/airdrop/airdropsweeper'
+import { Button } from '@components/common/button'
 
 interface CollectionProps {
     collectionData: CollectionData
@@ -27,7 +28,7 @@ export const Collection = ({ collectionData, tokenData }: CollectionProps) => {
 
     return (
         <>
-            {collectionData && address &&  (
+            {collectionData && address && (
                 <CollectionBanner
                     collectionData={collectionData}
                     totalItems={tokenData ? tokenData.length : 0}
@@ -41,7 +42,6 @@ export const Collection = ({ collectionData, tokenData }: CollectionProps) => {
 
 export const CollectionBanner = ({ collectionData, totalItems, isCreator }: BannerProps) => {
     const { address } = useAccount()
-    const queryClient = useQueryClient()
     const [isCollectionLoading, setIsCollectionLoading] = useState(false)
     const [isFavorite, setIsFavorite] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
@@ -51,7 +51,7 @@ export const CollectionBanner = ({ collectionData, totalItems, isCreator }: Bann
 
         try {
             setIsCollectionLoading(true)
-            const {data} = await request.post(`collection/follow`, {
+            const { data } = await request.post(`collection/follow`, {
                 address,
                 collection_address: collectionData.address,
             })
@@ -80,32 +80,35 @@ export const CollectionBanner = ({ collectionData, totalItems, isCreator }: Bann
                     src="https://horizon-tailwind-react-git-tailwind-components-horizon-ui.vercel.app/static/media/banner.ef572d78f29b0fee0a09.png"
                     className="absolute flex h-32 w-full justify-center rounded-xl bg-cover"
                 />
+                {!isCreator &&
+                    <div className="absolute w-[44px] h-[44px] bg-white dark:bg-gray-800 rounded-full right-[2%] top-[10%]">
+                        <div className="pt-1.5">
+                            {isCollectionLoading ?
+                                <div className="flex text-center justify-center pt-1.5 pl-3.5">
+                                    <LoadingSpinner />
+                                </div> :
+                                <div className="flex items-center justify-center text-center">
+                                    <div onClick={() => followHandler()}>
+                                        <Icon
+                                            icon={isFavorite ? "noto-v1:star" : "fluent:star-add-24-regular"}
+                                            className="text-gray-700 dark:text-gray-200 cursor-pointer text-[30px]"
+                                        />
+                                    </div>
+                                </div>}
+                        </div>
+                    </div>
+                }
                 <div className="absolute -bottom-12 flex h-[120px] w-[120px] items-center justify-center rounded-full border-[4px] border-white bg-red-400 dark:!border-navy-700">
                     <img src={collectionData.logo} alt="" className="h-full w-full rounded-full" />
                 </div>
             </div>
+
             <div className="mt-16 flex flex-col items-center">
                 <div className="flex items-center mb-1 ml-4">
                     <h4 className="text-xl font-bold text-navy-700 dark:text-white mr-1">
                         {collectionData.name}
                     </h4>
                     {collectionData.verified && <VerifiedMarker />}
-                    {!isCreator &&
-                        <div className="flex">
-                             {isCollectionLoading ?
-                              <div className="flex text-center pl-2">
-                                <LoadingSpinner/>
-                              </div> :
-                                <div className="flex items-center text-center">
-                                    <div onClick={() => followHandler()}>
-                                        <Icon
-                                            icon={isFavorite ? "noto-v1:star" : "fluent:star-add-24-regular"}
-                                            className="text-gray-600 dark:text-gray-300 cursor-pointer text-[30px]"
-                                        />
-                                    </div>
-                                </div>}
-                        </div>
-                    }
                 </div>
                 <p className="text-base font-normal text-gray-500">{collectionData.description}</p>
             </div>
