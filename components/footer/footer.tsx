@@ -12,7 +12,7 @@ const Footer = () => {
             <div className="container px-5 py-6 mx-auto flex items-center sm:flex-row flex-col">
                 <a className="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
                     <Icon icon="cryptocurrency:matic" className="text-3xl text-red-500" />
-                    <span className="ml-3 text-xl dark:text-white">ROOFTOP</span>
+                    <span className="ml-3 text-xl dark:text-white font-mono">ROOFTOP</span>
                 </a>
                 <p className="text-md text-gray-500 sm:ml-6 sm:mt-0 mt-4">
                     © 2023 KGA - Blockchain 8

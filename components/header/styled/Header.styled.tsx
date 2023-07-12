@@ -27,7 +27,7 @@ export const TitleContainer = () => {
                 <Icon icon="simple-icons:databricks" className="text-2xl" />
             </Logo> */}
             <Icon icon="cryptocurrency:matic" className="text-3xl text-red-500" />
-            <span className="pl-2 self-center hidden lg:block lg:text-xl font-semibold whitespace-nowrap dark:text-white">
+            <span className="pl-2 self-center hidden lg:block lg:text-xl font-semibold whitespace-nowrap dark:text-white font-mono">
                 ROOFTOP
             </span>
         </div>

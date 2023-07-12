@@ -110,7 +110,7 @@ export const CreateNft = ({ setIsOpenModal, collectionAddress, royalty, collecti
                         id="description"
                         placeholder="Please introduce your NFT"
                     />
-                    <NftLabel htmlFor="NftImage">Add Image</NftLabel>
+                    <NftLabel htmlFor="NftImage">NFT Image</NftLabel>
                     <NFTGenerator state={nftImage} setState={setNftImage} description={collectionDescription} />
                     <FileNftInputBox
                         state={nftImage}

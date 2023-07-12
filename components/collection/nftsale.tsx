@@ -80,9 +80,11 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                         <div className="lg:flex lg:items-start">
                             <div className="lg:w-[576px]  overflow-hidden rounded-lg relative">
                                 {token.sold &&
-                                    <div className="w-full h-full bg-gray-700 dark:bg-slate-500 opacity-75 absolute">
-                                        <div className="text-[50px] md:text-[72px] font-bold text-gray-300 dark:text-gray-800 -rotate-12 absolute translate-y-[90%] translate-x-[100%]">
-                                            SOLD<br></br>OUT !
+                                    <div className="w-full h-full bg-gray-700 dark:bg-slate-800 opacity-75 absolute">
+                                        <div className="flex flex-col text-[108px] md:text-[156px] font-mono font-bold text-gray-400 dark:text-gray-500 -rotate-12 absolute translate-y-[25%] translate-x-[25%]">
+                                            {/* SOLD<br></br>OUT! */}
+                                            <span>SOLD</span>
+                                            <span className="mt-[-66px]">OUT!</span>
                                         </div>
                                     </div>}
                                 <Image

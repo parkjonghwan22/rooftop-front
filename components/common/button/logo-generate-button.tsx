@@ -61,7 +61,7 @@ export const LogoGenerator = ({ state, setState, description }: ButtonProps) => 
             <LoadingSpinner />Pending...
           </>
         ) : (
-          "Auto Generate"
+          "AI Generate"
         )}
       </Button>
     </div>

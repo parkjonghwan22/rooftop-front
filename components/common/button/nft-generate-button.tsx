@@ -53,6 +53,7 @@ export const NFTGenerator = ({ state, setState, description }: ButtonProps) => {
           .then((response) => response.json())
           .then((data) => {
             setState(data.IpfsHash);
+            setIsLoading(false);
           })
           .catch((error) => console.log(error));    
       }
@@ -70,7 +71,7 @@ export const NFTGenerator = ({ state, setState, description }: ButtonProps) => {
             <LoadingSpinner />Pending...
           </>
         ) : (
-          "Auto Generate"
+          "AI Generate"
         )}
       </Button>
     </div>
