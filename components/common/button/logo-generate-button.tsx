@@ -50,6 +50,7 @@ export const LogoGenerator = ({ state, setState, description }: ButtonProps) => 
       }
     } catch (error) {
       console.error(error);
+      setIsLoading(false);
     }
   };
 
