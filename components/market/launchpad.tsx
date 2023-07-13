@@ -108,9 +108,9 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
     }
   };
 
-  useEffect(() => {
-    if (signer) console.log(factory, provider, signer);
-  }, [factory, provider, signer]);
+  // useEffect(() => {
+  //   if (signer) console.log(factory, provider, signer);
+  // }, [factory, provider, signer]);
 
   return (
     <>

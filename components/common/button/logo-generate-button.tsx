@@ -33,7 +33,7 @@ export const LogoGenerator = ({ state, setState, description }: ButtonProps) => 
 
     try {
       const response = await axios.request(options);
-      if (response.data.openai.status === "success") {
+      if (response.data.stabilityai.status === "success") {
         const base64Image = response.data.openai.items[0].image;
         const blob = await fetch(`data:image/png;base64,${base64Image}`).then((res) => res.blob());
 
