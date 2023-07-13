@@ -18,7 +18,7 @@ export const LogoGenerator = ({ state, setState, description }: ButtonProps) => 
     method: "POST",
     url: "https://api.edenai.run/v2/image/generation",
     headers: {
-      authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNmRhM2E0NDQtYjM3NS00YmI0LTliYTYtNjc3Y2Y2NGJkNDY5IiwidHlwZSI6ImFwaV90b2tlbiJ9.rhbuXVvCn6AcNK3lLG3XGw1u0G74VgK70D92bLlQR9M`,
+      authorization: `Bearer ${config.EDEN_API_TOKEN}`,
     },
     data: {
       providers: "openai",
