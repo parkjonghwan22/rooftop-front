@@ -14,7 +14,7 @@ interface CollectionProps {
 }
 
 const ChartItem = ({ collection, index }: { collection: CollectionData; index: number }) => {
-  const TdStyled = tw.td` py-4 whitespace-nowrap text-ellipsis overflow-hidden dark:bg-gray-700`
+  const TdStyled = tw.td` py-4 whitespace-nowrap text-ellipsis overflow-hidden`
 
   const { getTradeSummary } = useEvent()
 
@@ -28,8 +28,7 @@ const ChartItem = ({ collection, index }: { collection: CollectionData; index: n
 
   if (summary === undefined) return <></>
   return (
-    <tr className="w-full flex items-center justify-between border-b border-gray-200 dark:border-gray-600">
-      <div className="flex items-center">
+    <tr className="w-full grid-col border-b border-gray-200 dark:border-gray-600 relative">
         <TdStyled className="px-4">
           <div className="text-center text-gray-700 dark:text-gray-400">#{index + 1}</div>
         </TdStyled>
@@ -66,14 +65,13 @@ const ChartItem = ({ collection, index }: { collection: CollectionData; index: n
             Volume : {collection.totalVolume}
           </div>
         </TdStyled>
-      </div>
-      <TdStyled className="px-6 lg:visible invisible">
+      <TdStyled className="px-6 invisible lg:visible absolute right-0 top-[25%]">
         {Number(summary.percentage) === 0 ?
           <div className="px-2 inline-flex text-2xl leading-7 text-gray-500 dark:text-gray-400">
             <Icon icon="carbon:undefined-filled" />
           </div>
           : Number(summary.percentage) > 0 ?
-            <div className="px-2 inline-flex text-lg leading-7 font-semibold rounded-full text-green-600 dark:text-green-500">
+            <div className="px-2 inline-flex text-md xl:text-lg leading-7 font-semibold rounded-full text-green-600 dark:text-cyan-500">
               {`+` + Number(summary.percentage) + `%`}
             </div>
             :
