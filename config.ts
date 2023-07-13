@@ -1,4 +1,4 @@
- // const config = {
+//  const config = {
 //   APP_URL: "http://localhost:3000",
 //   API_URL: "http://localhost:3005",
 //   PINATA_API_KEY: process.env.PINATA_API_KEY,

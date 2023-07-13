@@ -24809,12 +24809,12 @@
         }
       },
       "links": {},
-      "address": "0xca29ccda98a24fAD49c6b064FF082B74c0019e8b",
-      "transactionHash": "0xfb3c6a66cd42b6222caa2b39f8934d18e4f4e4e600602fd89f8f771b9aed254e"
+      "address": "0x1896a60Fe985649aC6cacef2331deA8feF3Ea92E",
+      "transactionHash": "0x79872938b072c1d54e2ad13935186e507ebff5009a0b0cbfe4580b6551604050"
     }
   },
   "schemaVersion": "3.4.14",
-  "updatedAt": "2023-07-12T01:41:51.836Z",
+  "updatedAt": "2023-07-13T07:48:05.725Z",
   "networkType": "ethereum",
   "devdoc": {
     "events": {
