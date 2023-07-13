@@ -21,7 +21,7 @@ export const NFTGenerator = ({ state, setState, description }: ButtonProps) => {
         authorization: `Bearer ${config.EDEN_API_TOKEN}`,    
     },
     data: {
-      providers: "stabilityai",
+      providers: "openai",
       text: description,
       resolution: "512x512",
     },
@@ -32,8 +32,8 @@ export const NFTGenerator = ({ state, setState, description }: ButtonProps) => {
 
     try {
       const response = await axios.request(options);
-      if (response.data.stabilityai.status === "success") {
-        const base64Image = response.data.stabilityai.items[0].image;
+      if (response.data.openai.status === "success") {
+        const base64Image = response.data.openai.items[0].image;
         const blob = await fetch(`data:image/png;base64,${base64Image}`).then((res) => res.blob());
 
         const file = new File([blob], 'generated_image.png');
