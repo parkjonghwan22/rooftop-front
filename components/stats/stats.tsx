@@ -1,6 +1,7 @@
 import { CollectionData } from '@utils/types/nft.interface'
 import request from '@utils/request'
 import Link from 'next/link'
+import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { useAccount } from 'wagmi'
 import { RankingCollectionWrapper, TitleCollectionDiv, TitleCollectionDiv2, TitleCollectionH2 } from './styled/stats.styled'
@@ -66,11 +67,12 @@ const ChartItem = ({ collection, index }: CollectionChangeProps) => {
           <div className="flex items-center">
             <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
               {collection.logo && (
-                <img
+                <Image
                   className="rounded-full"
                   src={collection.logo}
-                  width="40"
-                  height="40"
+                  alt="logo"
+                  width={1000}
+                  height={1000}
                 />
               )}
             </div>

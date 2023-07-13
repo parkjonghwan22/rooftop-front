@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import { CollectionData, TokenData } from '@utils/types/nft.interface'
 import { NFTCard } from './nftcard'
 import { CollectionStat } from './styled/collection.styled'
@@ -99,7 +100,7 @@ export const CollectionBanner = ({ collectionData, totalItems, isCreator }: Bann
                     </div>
                 }
                 <div className="absolute -bottom-12 flex h-[120px] w-[120px] items-center justify-center rounded-full border-[4px] border-white bg-red-400 dark:!border-navy-700">
-                    <img src={collectionData.logo} alt="" className="h-full w-full rounded-full" />
+                    <Image src={collectionData.logo} alt="logo" width={1000} height={1000} className="h-full w-full rounded-full" />
                 </div>
             </div>
 
