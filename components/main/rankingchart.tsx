@@ -71,11 +71,11 @@ const ChartItem = ({ collection, index }: { collection: CollectionData; index: n
             <Icon icon="carbon:undefined-filled" />
           </div>
           : Number(summary.percentage) > 0 ?
-            <div className="px-2 inline-flex text-md xl:text-lg leading-7 font-semibold rounded-full text-green-600 dark:text-cyan-500">
+            <div className="px-2 inline-flex text-md leading-7 font-semibold rounded-full text-green-600 dark:text-cyan-500">
               {`+` + Number(summary.percentage) + `%`}
             </div>
             :
-            <div className="px-2 inline-flex text-lg leading-7 font-semibold rounded-full text-red-600">
+            <div className="px-2 inline-flex text-md leading-7 font-semibold rounded-full text-red-600">
               {Number(summary.percentage) + `%`}
             </div>
         }
