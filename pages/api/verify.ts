@@ -6,7 +6,7 @@ import config from '../../config'
 const uploadImage = async (req: NextApiRequest, res: NextApiResponse) => {
     const pinata_api_key = config.PINATA_API_KEY
     const pinata_secret_api_key = config.PINATA_SECRET_API_KEY
-    console.log(pinata_api_key)
+
 
     if (req.method === 'POST') {
         try {

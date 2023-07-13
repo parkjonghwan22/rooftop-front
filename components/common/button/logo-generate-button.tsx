@@ -11,6 +11,7 @@ interface ButtonProps {
   description: string | undefined;
 }
 
+
 export const LogoGenerator = ({ state, setState, description }: ButtonProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
