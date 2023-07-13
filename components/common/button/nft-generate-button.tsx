@@ -21,7 +21,7 @@ export const NFTGenerator = ({ state, setState, description }: ButtonProps) => {
         authorization: `Bearer ${config.EDEN_API_TOKEN}`,    
     },
     data: {
-      providers: "openai",
+      providers: "stabilityai",
       text: description,
       resolution: "512x512",
     },
