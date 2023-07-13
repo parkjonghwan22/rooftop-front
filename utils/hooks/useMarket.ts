@@ -2,10 +2,11 @@ import { ethers } from "ethers";
 import MarketABI from '@contracts/Marketplace.json';
 import { useState, useEffect } from "react";
 import request from "@utils/request";
-import { useAccount } from "wagmi";
+import { useAccount, useNetwork } from "wagmi";
 
 export const useMarket = () => {
   const { address } = useAccount()
+  const { chain } = useNetwork()
   const [market, setMarket] = useState<any>(null);
   const [latestId, setLatestId] = useState<number | null>(null);
   const [owner, setOwner] = useState(null);
@@ -70,9 +71,11 @@ export const useMarket = () => {
   };
 
   useEffect(() => {
-    if (window.ethereum && address ) {
-      const walletProvider = new ethers.BrowserProvider(window.ethereum as any, 80001);
+    const rpcProvider = new ethers.JsonRpcProvider("https://polygon-mumbai.infura.io/v3/4effc98f83904a0a84a2e32bfb93ef2a")
+    const walletProvider = new ethers.BrowserProvider(window.ethereum as any, 80001);
 
+    if (window.ethereum && address && chain && chain.id === 80001) {
+      
       const fetchMarket = async () => {
         const signer = await walletProvider.getSigner();
         const marketInstance = await new ethers.Contract(marketAddress, MarketABI.abi, signer)
@@ -81,7 +84,11 @@ export const useMarket = () => {
         setMarket(marketInstance);
       };
       fetchMarket();
+    } else {
+      const marketInstance = new ethers.Contract(marketAddress, MarketABI.abi, rpcProvider)
+      setMarket(marketInstance)
     }
+
   }, []);
 
   // useEffect(() => {

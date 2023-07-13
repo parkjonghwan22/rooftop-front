@@ -6,7 +6,7 @@ import tw from 'tailwind-styled-components'
 import { LoadingSpinner } from '../loading';
 
 export const SearchContainer = tw.nav`
-   flex flex-wrap items-center text-base justify-center md:w-1/3 hidden md:block
+   flex flex-wrap items-center text-base justify-center md:w-1/3 lg:ml-[-60px] lg:mr-[60px] hidden md:block
 `
 
 export const SearchBox = () => {

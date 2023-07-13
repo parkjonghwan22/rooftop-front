@@ -11,6 +11,7 @@ export interface CollectionData {
     verified: boolean;
     floorPrice: number;
     totalVolume: number;
+    totalSales: number;
     favorite:string[];
     createdAt: Date;
     updatedAt: Date;
