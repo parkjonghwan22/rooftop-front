@@ -1,7 +1,7 @@
 import tw from 'tailwind-styled-components'
 
 export const TitleCollectionDiv = tw.div`
-  mx-auto w-5/6 pb-6 border-solid border-3 border-indigo-800 border-b border-gray-300 dark:border-gray-500
+  mx-auto w-5/6 pb-6 border-solid border-3 border-indigo-800
 `
 
 // export const TitleCollectionDiv = tw.div`

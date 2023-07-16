@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { Chart2 } from "./styled/chart.styled";
-import { Icon } from "@iconify/react";
 import { CollectionData, TokenData, ActivityData } from "@utils/types/nft.interface";
 import Link from "next/link";
 import { useMarket } from "@utils/hooks/useMarket";
@@ -19,20 +18,25 @@ import { Button } from "@components/common/button";
 import { UserAddress } from "@components/common/copy/address";
 import { CurrentPrice } from "./styled/nftsale.styled"
 import { VerifiedMarker } from "@components/common/marker/verify";
+import { useQueryClient } from 'react-query';
+
 
 interface NftProps {
     collectionData: CollectionData;
     token: TokenData;
     activity: ActivityData[];
+    id: string;
 }
 
-export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
+export const NFTSale = ({ collectionData, token, activity, id }: NftProps) => {
     const { address } = useAccount();
     const { market, convertToWei, updateCollection } = useMarket();
     const { decodeTransfer } = useDecode();
     const { metaData, imageUrl, isLoading } = useIpfs(token);
-    const [isOpenModal, setIsOpenModal] = useState(false);
+    const queryClient = useQueryClient();
+
     const [isBuyLoading, setIsBuyLoading] = useState(false);
+    const [isOpenModal, setIsOpenModal] = useState(false);
     const [modalContent, setModalContent] = useState<string | null>(null);
 
     const handleOpenModal = (content: string) => {
@@ -65,6 +69,9 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                     setIsBuyLoading(false);
                     toast.success("NFT transaction was successful!");
                     updateCollection(token.NFTaddress);
+
+                    queryClient.invalidateQueries(['nfts', id]);
+                    queryClient.invalidateQueries(['activity', id]);
                 }
             }
         } catch (e) {
@@ -80,14 +87,12 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                     <div className="lg:col-span-3 lg:row-end-1">
                         <div className="lg:flex lg:items-start">
                             <div className="lg:w-[576px]  overflow-hidden rounded-lg relative">
-                                {token.sold &&
-                                    <div className="w-full h-full bg-gray-700 dark:bg-slate-800 opacity-75 absolute">
-                                        <div className="flex flex-col text-[108px] md:text-[156px] font-mono font-bold text-gray-400 dark:text-gray-500 -rotate-12 absolute translate-y-[25%] translate-x-[25%]">
-                                            {/* SOLD<br></br>OUT! */}
-                                            <span>SOLD</span>
-                                            <span className="mt-[-66px]">OUT!</span>
-                                        </div>
-                                    </div>}
+                                {
+                                    token.sold &&
+                                    <div className="w-full h-full bg-gray-700 dark:bg-slate-800 opacity-80 absolute">
+                                        <Image src="http://localhost:3000/sold_out.png" alt="soldOut" width={720} height={720} className="absolute top-[25%]" />
+                                    </div>
+                                }
                                 <Image
                                     src={imageUrl ? imageUrl : "https://dummyimage.com/480x480/ccc/000"}
                                     alt="nft image"
@@ -140,7 +145,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                                         />
                                     </div>
                                     <span className="font-bold flex items-center">
-                                        <span className="mr-1">{collectionData.name}</span>    
+                                        <span className="mr-1">{collectionData.name}</span>
                                         {collectionData.verified && <VerifiedMarker />}
                                     </span>
                                 </li>
@@ -151,7 +156,7 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
                             </li>
 
                             <h1 className="text-lg font-bold py-2">
-                                {(token.highestBid !== 0) ? `HighestBidder` : `Owner`}
+                                {(token.highestBid !== 0) ? `Current Highest Bidder` : `Owner`}
                             </h1>
                             <li className="flex items-center text-left text-sm font-medium text-gray-600  dark:text-gray-400 px-3">
                                 <UserAddress address={(token.highestBid !== 0) ? token.highestBidder : token.seller} />
@@ -177,13 +182,14 @@ export const NFTSale = ({ collectionData, token, activity }: NftProps) => {
             {modalContent && isOpenModal && (
                 <Modal isOpenModal={isOpenModal} setIsOpenModal={setIsOpenModal} width="24rem">
                     {modalContent === "ReSale" && (
-                        <ReSale token={token} setIsOpenModal={setIsOpenModal} />
+                        <ReSale token={token} setIsOpenModal={setIsOpenModal} id={id} />
                     )}
                     {modalContent === "Bid" && (
-                        <Bid token={token} setIsOpenModal={setIsOpenModal} />
+                        <Bid token={token} setIsOpenModal={setIsOpenModal} id={id} />
                     )}
                 </Modal>
             )}
         </>
     );
 };
+

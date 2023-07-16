@@ -2,12 +2,14 @@ import request from "@utils/request";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { UserType } from "@utils/types/user.interface"
+import config from "../../config"
 
 export const useSign = () => {
     const { address, isConnected } = useAccount()
     const [isLoading, setIsLoading] = useState(true)
     const [isDefinitelyConnected, setIsDefinitelyConnected] = useState(false);
     const [user, setUser] = useState<UserType | null>(null)
+    const [isOwner, setIsOwner] = useState(false)
     const [currentAddress, setCurrentAddress] = useState<`0x${string}` | undefined>()
 
     const getUser = async () => {
@@ -22,6 +24,7 @@ export const useSign = () => {
         }
     };
 
+
     useEffect(() => {
         if (isConnected) {
             setIsDefinitelyConnected(true);
@@ -32,5 +35,13 @@ export const useSign = () => {
         }
     }, [address]);
 
-    return { user, address: currentAddress, isConnected: isDefinitelyConnected, isLoading }
+    useEffect(() => {
+        if (currentAddress === config.OWNER) {
+            setIsOwner(true);
+        } else {
+            setIsOwner(false);
+        }
+    }, [currentAddress]);
+
+    return { user, isOwner, address: currentAddress, isConnected: isDefinitelyConnected, isLoading }
 }

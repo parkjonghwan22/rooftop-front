@@ -5,11 +5,10 @@ import request from "@utils/request";
 import { useAccount, useNetwork } from "wagmi";
 
 export const useMarket = () => {
-  const { address } = useAccount()
+  const { address, isConnected } = useAccount()
   const { chain } = useNetwork()
   const [market, setMarket] = useState<any>(null);
   const [latestId, setLatestId] = useState<number | null>(null);
-  const [owner, setOwner] = useState(null);
   const marketAddress = MarketABI.networks[80001].address
   const marketInterface = new ethers.Interface(MarketABI.abi);
 
@@ -33,13 +32,6 @@ export const useMarket = () => {
     const wei = ethers.parseUnits(number.toString(), decimals)
     return wei.toString()
   }
-
-  // const getLatestId = async () => {
-  //   if (!market) return null
-  //   const result = await market.getLatestId()
-  //   const parsedResult = Number(result)
-  //   return parsedResult
-  // }
 
   const getLowestPrice = async (address: string) => {
     if (!market) return null
@@ -79,8 +71,8 @@ export const useMarket = () => {
       const fetchMarket = async () => {
         const signer = await walletProvider.getSigner();
         const marketInstance = await new ethers.Contract(marketAddress, MarketABI.abi, signer)
-        const owner = await marketInstance.owner()
-        setOwner(owner)
+        // const owner = await marketInstance.owner()
+        // setOwner(owner)
         setMarket(marketInstance);
       };
       fetchMarket();
@@ -91,22 +83,9 @@ export const useMarket = () => {
 
   }, []);
 
-  // useEffect(() => {
-  //   const fetchLatestId = async () => {
-  //     if (market) {
-  //       const id = await getLatestId();
-  //       setLatestId(id);
-  //     }
-  //   };
-
-  //   fetchLatestId();
-  // }, [market]);
-
   return {
     market,
-    owner,
     marketAddress: market?.target,
-    // latestId,
     decodeEvent,
     convertToWei,
     updateCollection

@@ -1,6 +1,7 @@
 import { Button } from "@components/common/button";
 import { PriceInputBox } from "@components/common/input";
 import { LoadingSpinner } from "@components/common/loading";
+import { Icon } from "@iconify/react";
 import { useInput } from "@utils/hooks/useInput";
 import { useIpfs } from "@utils/hooks/useIpfs";
 import { useMarket } from "@utils/hooks/useMarket";
@@ -45,16 +46,16 @@ export const AuctionContent = ({
         duration
       );
 
-      console.log("startAuction ====", startAuction)
+      // console.log("startAuction ====", startAuction)
       const receipt = await startAuction.wait();
-      console.log("receipt ==== ", receipt);
+      // console.log("receipt ==== ", receipt);
 
       if (receipt) {
         try {
           setIsLoading(false)
           setIsOpenModal(false)
           setAuctionEnded(false)
-          toast.success("Success Start Auction")
+          toast.success("Auction has started")
 
           const currentTime = new Date()
           const endTime = new Date(currentTime.getTime() + duration * 1000)
@@ -69,7 +70,7 @@ export const AuctionContent = ({
             endTime: endTimeISO
           })
 
-          console.log('data ==========', data)
+          // console.log('data ==========', data)
           return data
 
         } catch (e: any) {
@@ -122,7 +123,7 @@ export const AuctionContent = ({
               <div className="text-sm ml-4">#{token.tokenId}</div>
             </div>
             <div className="w-3/4 mx-auto flex flex-col">
-              <span className="text-lg mt-4 mb-2">Starting price</span>
+              <span className="text-lg mt-4 mb-2">Opening price</span>
               <PriceInputBox
                 value={nftPrice.value}
                 onChange={nftPrice.onChange}
@@ -130,15 +131,20 @@ export const AuctionContent = ({
                 icon="cryptocurrency-color:matic"
                 placeholder="0.000"
               />
-              <span className="text-lg mt-4 mb-2">Auction period</span>
-              <input
-                className="border border-gray-300 text-xl md:text-lg font-redhat outline-none mb-3 px-3 py-2 w-full rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white dark:border-gray-600"
+              <span className="text-lg mt-4 mb-2">Set end time (min.)</span>
+              <div className="relative">
+                <div className="absolute top-3.5 left-0 flex items-center pl-2.5 pointer-events-none">
+                  <Icon icon="material-symbols:timer" className="text-gray-500 text-xl" />
+                </div>
+                <input
+                className="pl-8 border border-gray-300 text-xl md:text-lg font-redhat outline-none mb-3 px-3 py-2 w-full rounded-lg bg-white dark:bg-gray-800 text-black dark:text-white dark:border-gray-600"
                 name="Timer Input"
                 type="number"
-                placeholder="Please set the auction period."
+                placeholder="0"
                 onChange={handleChange}
                 min={0}
               />
+              </div>
               <div className="w-full lg:mt-4 mb-10">
                 <Button
                   color="red"

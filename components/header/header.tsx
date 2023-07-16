@@ -3,9 +3,8 @@ import { Icon } from '@iconify/react'
 import { Modal } from '@components/common/modal/Modal'
 import { useEffect, useState } from 'react'
 import ConnectWallet from '@components/sign/connect'
-import { useAccount, useDisconnect } from 'wagmi'
+import { useAccount, useConnect, useDisconnect, useNetwork } from 'wagmi'
 import { DropDownBtn } from '@components/dropdown/dropdown'
-import request from '@utils/request'
 import { LoadingSpinner } from '@components/common/loading'
 import { UserType } from '@utils/types/user.interface'
 import Link from 'next/link'
@@ -13,13 +12,14 @@ import { CartButton } from '@components/common/button'
 import { SearchContainer, SearchBox } from '@components/common/search/search'
 import { useSign } from '@utils/hooks/useSign'
 import { useScroll } from '@utils/hooks/useScroll'
+import { Banner } from '@components/common/banner/banner'
 
 const Header = () => {
     const { user, isLoading, isConnected } = useSign()
     const { isScrolling } = useScroll()
     const { disconnect } = useDisconnect()
+    const { chain } = useNetwork()
     const [isOpenModal, setIsOpenModal] = useState(false)
-
 
     return (
         <>
@@ -70,6 +70,9 @@ const Header = () => {
                 >
                     <ConnectWallet />
                 </Modal>
+            )}
+            {isConnected && chain && chain.id !== 80001 && (
+                <Banner color="red">To use Rooftop, please switch to Mumbai network</Banner>
             )}
         </>
     )

@@ -10,22 +10,24 @@ import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 import { LoadingSpinner } from "@components/common/loading";
 import { Button } from "@components/common/button";
-
+import { useQueryClient } from 'react-query';
 
 interface BidProps {
   token: TokenData;
   setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+  id: string;
 }
 
-export const Bid = ({ token, setIsOpenModal } : BidProps) => {
+export const Bid = ({ token, setIsOpenModal, id } : BidProps) => {
   const { address } = useAccount();
   const [isLoading, setIsLoading] = useState(false);
   const { metaData, imageUrl } = useIpfs(token);
   const [remainingTime, setRemainingTime] = useState(0)
   const { market } = useMarket();
+  const queryClient = useQueryClient();
   const nftPrice = useInput("");
 
-  const success = () => toast.success('Success Place Bid !!')
+  const success = () => toast.success('Success Place Bid')
 
   const handleBid = async () => {
     try{
@@ -44,6 +46,7 @@ export const Bid = ({ token, setIsOpenModal } : BidProps) => {
         setIsLoading(false)
         success()
         setIsOpenModal(false)
+        queryClient.invalidateQueries(['nfts', id]);
       }
 
     } catch(e:any) {

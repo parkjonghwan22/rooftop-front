@@ -104,7 +104,7 @@ export const RankingChart = ({ collectionDatas, activityDatas }: CollectionProps
   return (
     <div className="flex flex-col w-3/4 mt-20 mb-10 overflow-hidden">
       <header className="border-b border-gray-100 dark:bg-gray-800 dark:border-gray-500 rounded-t-lg text-gray-700 dark:text-gray-100">
-        <div className="px-5 py-4 flex font-mono">
+        <div className="px-5 py-4 flex">
           <div
             className={`font-semibold text-2xl mr-10 cursor-pointer ${selectedSort === 'trending'
                 ? 'text-red-500 dark:text-yellow-400'
@@ -112,7 +112,7 @@ export const RankingChart = ({ collectionDatas, activityDatas }: CollectionProps
               }`}
             onClick={() => setSelectedSort('trending')}
           >
-            TRENDING
+            Trending
           </div>
           <div
             className={`font-semibold text-2xl cursor-pointer ${selectedSort === 'top'
@@ -121,7 +121,7 @@ export const RankingChart = ({ collectionDatas, activityDatas }: CollectionProps
               }`}
             onClick={() => setSelectedSort('top')}
           >
-            TOP
+            Top
           </div>
         </div>
       </header>

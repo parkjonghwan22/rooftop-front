@@ -77,10 +77,9 @@ const NftPage = () => {
   return (
     <RootLayout>
       {(isLoading || !tokenData || !activityData) && <LoadingSpinner2 />}
-      <NFTSale collectionData={collectionData} token={tokenData} activity={activityData} />
+      <NFTSale collectionData={collectionData} token={tokenData} activity={activityData} id={id as string} />
     </RootLayout>
   );
 }
 
 export default NftPage
-

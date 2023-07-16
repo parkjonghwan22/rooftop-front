@@ -61,14 +61,13 @@ const ChartItem = ({ collection, index }: CollectionChangeProps) => {
 
   if (summary === undefined) return null;
   return (
-    <tr className="h-24 text-lg md:text-xl bg-white dark:bg-gray-700">
+<tr className={`h-[88px] text-lg md:text-xl ${index % 2 !== 0 ? 'bg-gray-100 dark:bg-gray-800' : 'bg-white dark:bg-gray-800'}`}>
       <td className="p-2 whitespace-nowrap w-[40%]">
         <Link href={`/collections/${collection.address}`}>
           <div className="flex items-center">
-            <div className="w-10 h-10 flex-shrink-0 mr-2 sm:mr-3">
+            <div className="w-10 h-10 lg:w-14 lg:h-14 flex-shrink-0 mr-2 sm:mr-3 border-2 rounded-xl border-gray-300 overflow-hidden">
               {collection.logo && (
                 <Image
-                  className="rounded-full"
                   src={collection.logo}
                   alt="logo"
                   width={1000}
@@ -181,7 +180,7 @@ const ChartList = ({ collectionDatas }: CollectionsProps) => {
         </TitleCollectionDiv2>
       </TitleCollectionDiv>
       <RankingCollectionWrapper>
-        <div className="w-full overflow-x-auto bg-gray-300 dark:bg-gray-800 rounded-lg">
+        <div className="w-full overflow-x-auto bg-gray-300 dark:bg-gray-900 rounded-lg">
           <table className="table-auto w-3/4 lg:w-full">
             <thead className="text-sm font-semibold uppercase text-gray-600 dark:text-gray-300">
               <tr>

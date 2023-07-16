@@ -5,6 +5,7 @@ import { useCollection } from "@utils/hooks/useCollection"
 import { LoadingSpinner2 } from "@components/common/loading"
 import { AddressInput, EventTimer } from "./";
 import { useMarket } from "@utils/hooks/useMarket";
+import { useSign } from "@utils/hooks/useSign";
 import { useAccount } from "wagmi";
 import { Button } from "@components/common/button";
 import { Icon } from "@iconify/react";
@@ -15,7 +16,8 @@ interface AirdropProps {
 }
 
 export const AirdropCurrent = ({ airdrop, leaderBoard }: AirdropProps) => {
-    const { market, owner } = useMarket()
+    const { market } = useMarket()
+    const { isOwner } = useSign()
     const { getCollection } = useCollection();
     const { address } = useAccount()
     const queryClient = useQueryClient();
@@ -45,10 +47,10 @@ export const AirdropCurrent = ({ airdrop, leaderBoard }: AirdropProps) => {
         }
     );
 
-    if (collectionLoading || !collectionData || !address || !owner) return <LoadingSpinner2 />
+    if (collectionLoading || !collectionData || !address) return <LoadingSpinner2 />
     return (
         <>
-            {address === owner && <div className="w-full lg:w-3/4 mx-auto flex justify-end mb-5">
+            {isOwner && <div className="w-full lg:w-3/4 mx-auto flex justify-end mb-5">
                 <Button onClick={handleAirdrop} color="purple" fontWeight="bold" fontSize="lg" size="w-40">
                     <Icon icon="mingcute:airdrop-fill" className="mr-2" />
                     Airdrop

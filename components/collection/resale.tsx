@@ -8,18 +8,21 @@ import { TokenData } from "@utils/types/nft.interface";
 import { ethers } from "ethers";
 import Image from "next/image";
 import React, { useState } from "react";
+import { useQueryClient } from 'react-query';
 import { toast } from "react-toastify";
 
 
 interface NftProps {
   token: TokenData;
   setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>
+  id: string;
 }
 
-export const ReSale = ({ token, setIsOpenModal }: NftProps) => {
+export const ReSale = ({ token, setIsOpenModal, id }: NftProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const { metaData, imageUrl } = useIpfs(token);
   const { market } = useMarket();
+  const queryClient = useQueryClient();
   const nftPrice = useInput("");
 
   const success = () => toast.success('NFT Upload Successfully!')
@@ -46,6 +49,7 @@ export const ReSale = ({ token, setIsOpenModal }: NftProps) => {
         setIsLoading(false)
         success()
         setIsOpenModal(false)
+        queryClient.invalidateQueries(['nfts', id]);
       }
 
     } catch (e: any) {

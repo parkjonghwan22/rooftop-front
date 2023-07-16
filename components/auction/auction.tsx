@@ -28,6 +28,7 @@ export const Auction = ({ token }: AuctionProps) => {
   const { market } = useMarket();
 
   const isRegister =
+    !token.sold &&
     address &&
     address === token.seller &&
     !auctionEnded &&
@@ -61,13 +62,13 @@ export const Auction = ({ token }: AuctionProps) => {
       // }
 
       const endTime = Number(new Date(data.endTime).getTime());
-      console.log(endTime);
+      // console.log(endTime);
       const currentTime = Number(new Date().getTime());
-      console.log(currentTime);
-      console.log(endTime - currentTime);
+      // console.log(currentTime);
+      // console.log(endTime - currentTime);
       if (endTime <= currentTime) {
         setAuctionEnded(true);
-        console.log("경매가 종료되었습니다");
+        // console.log("경매가 종료되었습니다");
       }
       if (endTime > currentTime) {
         setNewTimer(Math.floor((endTime - currentTime) / 1000));
