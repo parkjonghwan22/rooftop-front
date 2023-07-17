@@ -65,7 +65,7 @@ export const NFTGenerator = ({ state, setState, description }: ButtonProps) => {
   if (!description) return <LoadingSpinner />;
   return (
     <div>
-      <Button color="red" size="w-36" style="mr-0" onClick={handleApiRequest}>
+      <Button color="red" onClick={handleApiRequest}>
         {isLoading ? (
           <>
             <LoadingSpinner />Pending...
