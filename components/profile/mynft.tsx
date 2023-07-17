@@ -7,12 +7,12 @@ import { LoadingSpinner } from '@components/common/loading'
 import { useCoinGecko } from '@utils/hooks/useCoingecko'
 import { Icon } from '@iconify/react'
 
-const NFTItem = ({ token ,activity }: { token: TokenData,activity: ActivityData[] }) => {
+const NFTItem = ({ token, activity }: { token: TokenData, activity: ActivityData[] }) => {
     const { metaData, imageUrl, isLoading } = useIpfs(token)
     const { convertKRW } = useCoinGecko()
     let filterActivity;
     if (activity && activity.length > 0) {
-      filterActivity = activity.find((item) => item.to === token.seller && item.id === token.id);
+        filterActivity = activity.find((item) => item.to === token.seller && item.id === token.id);
     }
     const filterPrice = filterActivity?.price || 0
     const todayKrwPrice = convertKRW(filterPrice) // 오늘 환율계산가격
@@ -26,6 +26,7 @@ const NFTItem = ({ token ,activity }: { token: TokenData,activity: ActivityData[
     손실액 = (13.147 - 13.069) * 1 = 0.078
     손실율 = (0.078 / (13.069 * 1)) * 100 = 0.596%
     */
+
     if (isLoading) return <LoadingSpinner />
     return (
         <>
@@ -59,13 +60,13 @@ const NFTItem = ({ token ,activity }: { token: TokenData,activity: ActivityData[
                                 [&::-webkit-progress-bar]:rounded-lg 
                                 [&::-webkit-progress-value]:rounded-lg
                                 [&::-webkit-progress-bar]:bg-slate-300
-                                [&::-webkit-progress-value]:${lossRate >= 0 ? `bg-green-500` : `bg-violet-400`}
+                                [&::-webkit-progress-value]:bg-violet-400
                                 [&::-moz-progress-bar]:bg-violet-400
                                 `
                                 }
                             />
                         </div>
-                        <span className="text-md lg:text-md font-semibold ml-2 text-center mt-2">
+                        <span className={`text-md lg:text-md font-semibold ml-2 text-center mt-2 ${lossRate < 0 ? 'text-red-500 dark:text-red-400' : 'text-cyan-600 dark:text-cyan-500'}`}>
                             {Number(lossRate.toFixed(2))} %
                         </span>
                     </div>
@@ -87,7 +88,7 @@ export const MyNFT = ({ tokenData, activity }: { tokenData: TokenData[]; activit
             <MynftsWrap>
                 <div className="flex flex-col justify-center mt-2 w-full">
                     {sortedData.map((token) => (
-                        <NFTItem key={token.id} token={token} activity={activity}/>
+                        <NFTItem key={token.id} token={token} activity={activity} />
                     ))}
                 </div>
             </MynftsWrap>
