@@ -3,7 +3,7 @@ import tw from "tailwind-styled-components"
 import { Icon } from '@iconify/react';
 import { Button } from "@components/common/button";
 import { Modal } from "@components/common/modal/Modal";
-import { LaunchPad } from "@components/market/launchpad";
+import { LaunchPad } from "@components/collection";
 
 
 export const CreateCollection = () => {
