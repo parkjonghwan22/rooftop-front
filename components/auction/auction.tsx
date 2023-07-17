@@ -9,12 +9,15 @@ import { useAccount } from "wagmi";
 import { toast } from "react-toastify";
 import { LoadingSpinner } from "@components/common/loading";
 import { Button } from "@components/common/button";
+import { useQueryClient } from 'react-query';
+
 
 interface AuctionProps {
   token: TokenData;
+  id: string;
 }
 
-export const Auction = ({ token }: AuctionProps) => {
+export const Auction = ({ token, id }: AuctionProps) => {
   const { address } = useAccount();
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [days, setDays] = useState<number>(0);
@@ -24,6 +27,7 @@ export const Auction = ({ token }: AuctionProps) => {
   const [newTimer, setNewTimer] = useState<number>(0);
   const [auctionEnded, setAuctionEnded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const { market } = useMarket();
 
@@ -121,6 +125,7 @@ export const Auction = ({ token }: AuctionProps) => {
           console.log(`등록된 경매가 해제됬습니다`);
           setIsLoading(false);
           successCancel();
+          queryClient.invalidateQueries(['nfts', id]);
         } catch (e: any) {
           console.log(e.message);
         }
@@ -144,6 +149,7 @@ export const Auction = ({ token }: AuctionProps) => {
         await request.delete(`auction/${token.id}`);
         setIsLoading(false);
         successEnd();
+        queryClient.invalidateQueries(['nfts', id]);
       }
     } catch (e: any) {
       console.log(e.message);
@@ -227,6 +233,7 @@ export const Auction = ({ token }: AuctionProps) => {
             setIsOpenModal={setIsOpenModal}
             handleTimerStart={handleTimerStart}
             setAuctionEnded={setAuctionEnded}
+            id={id}
           />
         </Modal>
       )}

@@ -162,7 +162,7 @@ export const NFTSale = ({ collectionData, token, activity, id }: NftProps) => {
                                 <UserAddress address={(token.highestBid !== 0) ? token.highestBidder : token.seller} />
                             </li>
                         </ul>
-                        <Auction token={token} />
+                        <Auction token={token} id={id} />
                     </div>
                     <div className="lg:col-span-5">
                         <div className="my-5 flow-root">

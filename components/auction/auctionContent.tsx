@@ -11,12 +11,14 @@ import { ethers } from "ethers";
 
 import Image from "next/image";
 import { useRef, useState } from "react";
+import { useQueryClient } from "react-query";
 import { toast } from "react-toastify";
 
 interface NftProps {
   token: TokenData;
   setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>;
   setAuctionEnded: React.Dispatch<React.SetStateAction<boolean>>;
+  id: string;
 }
 
 export const AuctionContent = ({
@@ -24,13 +26,16 @@ export const AuctionContent = ({
   setIsOpenModal,
   setAuctionEnded,
   handleTimerStart,
+  id
 }: NftProps & { handleTimerStart: (time: number) => void }) => {
+  const queryClient = useQueryClient();
   const [isLoading, setIsLoading] = useState(false);
   const { metaData, imageUrl } = useIpfs(token);
   const { market } = useMarket();
   const nftPrice = useInput("");
   const [newTime, setNewTime] = useState<number>(0);
   const updateTimeRef = useRef<NodeJS.Timeout>();
+
 
   const handleClick = async () => {
     try {
@@ -56,6 +61,7 @@ export const AuctionContent = ({
           setIsOpenModal(false)
           setAuctionEnded(false)
           toast.success("Auction has started")
+          queryClient.invalidateQueries(['nfts', id]);
 
           const currentTime = new Date()
           const endTime = new Date(currentTime.getTime() + duration * 1000)
