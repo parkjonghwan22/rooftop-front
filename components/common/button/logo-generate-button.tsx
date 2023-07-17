@@ -57,7 +57,7 @@ export const LogoGenerator = ({ state, setState, description }: ButtonProps) => 
   if (!description) return null;
   return (
     <div>
-      <Button color="red" onClick={handleApiRequest}>
+      <Button color="red" size="w-36" style="mr-0" onClick={handleApiRequest}>
         {isLoading ? (
           <>
             <LoadingSpinner />Pending...

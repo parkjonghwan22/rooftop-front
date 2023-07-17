@@ -172,8 +172,10 @@ export const LaunchPad = ({ setIsOpenModal }: LaunchPadProps) => {
             onChange={handleCheckBox}
             selectedOption={creatorFee}
           />
-          <Label htmlFor="logo">Thumbnail</Label>
-          <LogoGenerator state={collectionLogo} setState={setCollectionLogo} description={collectionDescription.value} />
+          <div className="flex justify-between pt-4">
+            <Label htmlFor="logo">Thumbnail</Label>
+            <LogoGenerator state={collectionLogo} setState={setCollectionLogo} description={collectionDescription.value} />
+          </div>
           <FileInputBox state={collectionLogo} setState={setCollectionLogo} />
           {isLoading ? (
             <Button type="submit" color="blue" disabled>
