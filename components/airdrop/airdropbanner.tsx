@@ -38,6 +38,7 @@ export const AirdropCurrent = ({ airdrop, leaderBoard }: AirdropProps) => {
             console.log(e)
         }
     }
+    console.log(airdrop.price)
 
     const { data: collectionData, isLoading: collectionLoading } = useQuery(
         ['collection', airdrop?.NFTaddress],
@@ -71,8 +72,9 @@ export const AirdropCurrent = ({ airdrop, leaderBoard }: AirdropProps) => {
                         <div className="max-w-[375px] text-start text-4xl font-semibold leading-[45px] sm:whitespace-nowrap">
                             {collectionData.name}
                         </div>
-                        <div className="flex items-center font-medium text-md lg:text-xl text-gray-300">
-                            {collectionData.description}
+                        <div className="">
+                            <span className="text-gray-300">Mint Price</span>
+                            <span className="flex items-center font-medium text-md lg:text-xl">{(airdrop.price/ 10 ** 18)} MATIC</span>
                         </div>
                     </div>
                     <EventTimer airdrop={airdrop} />
